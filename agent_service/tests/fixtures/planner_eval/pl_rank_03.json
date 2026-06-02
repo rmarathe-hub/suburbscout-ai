@@ -1,0 +1,12 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "budget_max": 900000,
+        "requires_coastal": true
+      },
+      "limit": 10
+    }
+  ]
+}

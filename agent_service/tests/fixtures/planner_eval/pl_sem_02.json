@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "semantic_search",
+      "query_text": "towns with a small-town New England feel",
+      "top_k": 15
+    }
+  ]
+}

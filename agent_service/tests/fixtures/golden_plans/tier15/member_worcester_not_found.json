@@ -1,0 +1,8 @@
+{
+  "ops": [
+    {
+      "op": "lookup",
+      "items": [{ "town": "Worchester", "field": "summary" }]
+    }
+  ]
+}

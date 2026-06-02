@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": ["Newton", "Needham", "Wellesley", "Acton", "Concord"],
+      "columns": ["drive_minutes_to_boston", "school_score"]
+    }
+  ]
+}

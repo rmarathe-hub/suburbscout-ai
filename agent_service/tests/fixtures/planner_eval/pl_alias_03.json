@@ -1,0 +1,13 @@
+{
+  "ops": [
+    {
+      "op": "lookup",
+      "items": [
+        {
+          "town": "Manchester-by-the-Sea",
+          "field": "summary"
+        }
+      ]
+    }
+  ]
+}

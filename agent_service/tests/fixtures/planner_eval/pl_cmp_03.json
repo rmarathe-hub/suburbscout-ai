@@ -1,0 +1,15 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Framingham",
+        "Natick"
+      ],
+      "columns": [
+        "safety_score",
+        "school_score"
+      ]
+    }
+  ]
+}

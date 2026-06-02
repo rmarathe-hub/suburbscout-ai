@@ -1,0 +1,11 @@
+{
+  "ops": [
+    {
+      "op": "lookup",
+      "items": [
+        { "town": "Maynard", "field": "commute" }
+      ]
+    }
+  ],
+  "user_intent_summary": "Maynard commute to Boston"
+}

@@ -1,0 +1,17 @@
+{
+  "ops": [
+    {
+      "op": "semantic_search",
+      "query_text": "quiet affordable family suburb",
+      "top_k": 15
+    },
+    {
+      "op": "rank",
+      "preferences": {
+        "budget_max": 800000
+      },
+      "limit": 5,
+      "use_semantic_candidates": true
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "semantic_search",
+      "query_text": "sleepy residential neighborhoods",
+      "top_k": 15
+    }
+  ]
+}

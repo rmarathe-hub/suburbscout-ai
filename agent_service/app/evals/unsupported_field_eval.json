@@ -1,0 +1,1207 @@
+{
+  "description": "Unsupported-field eval \u2014 single town + out-of-schema attribute",
+  "prompt_count": 169,
+  "by_category": {
+    "control_supported": 6,
+    "demographics": 12,
+    "food_culture": 10,
+    "healthcare": 10,
+    "jobs": 10,
+    "legal_zoning": 10,
+    "lifestyle": 15,
+    "live_market": 12,
+    "neighborhood": 10,
+    "recreation": 10,
+    "risk_environment": 12,
+    "safety_granular": 10,
+    "school_detail": 10,
+    "taxes": 10,
+    "transit": 12,
+    "utilities": 10
+  },
+  "cases": [
+    {
+      "id": "lifestyle_01",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Shrewsbury walkable?"
+    },
+    {
+      "id": "lifestyle_02",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Newton have good restaurants?"
+    },
+    {
+      "id": "lifestyle_03",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Concord touristy?"
+    },
+    {
+      "id": "lifestyle_04",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Salem snobby?"
+    },
+    {
+      "id": "lifestyle_05",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Lynn sketchy?"
+    },
+    {
+      "id": "lifestyle_06",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Brookline urban?"
+    },
+    {
+      "id": "lifestyle_07",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Westford boring?"
+    },
+    {
+      "id": "lifestyle_08",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Framingham have a real downtown?"
+    },
+    {
+      "id": "lifestyle_09",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Quincy good for nightlife?"
+    },
+    {
+      "id": "lifestyle_10",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Acton rural or suburban?"
+    },
+    {
+      "id": "lifestyle_11",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Wellesley elitist?"
+    },
+    {
+      "id": "lifestyle_12",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Plymouth tourist-heavy?"
+    },
+    {
+      "id": "lifestyle_13",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Burlington pedestrian-friendly?"
+    },
+    {
+      "id": "lifestyle_14",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Chelsea have a lively town center?"
+    },
+    {
+      "id": "lifestyle_15",
+      "category": "lifestyle",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Peabody good for young professionals?"
+    },
+    {
+      "id": "transit_01",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Worcester good for public transit?"
+    },
+    {
+      "id": "transit_02",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Lexington have easy MBTA access?"
+    },
+    {
+      "id": "transit_03",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Waltham car-dependent?"
+    },
+    {
+      "id": "transit_04",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Can I take the train from Needham?"
+    },
+    {
+      "id": "transit_05",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Beverly have commuter rail access in your data?"
+    },
+    {
+      "id": "transit_06",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Hingham good without a car?"
+    },
+    {
+      "id": "transit_07",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Marblehead have subway access?"
+    },
+    {
+      "id": "transit_08",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Natick bad for transit?"
+    },
+    {
+      "id": "transit_09",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "How is parking in Arlington?"
+    },
+    {
+      "id": "transit_10",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Somerville good for bus access?"
+    },
+    {
+      "id": "transit_11",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Shrewsbury have rush hour traffic?"
+    },
+    {
+      "id": "transit_12",
+      "category": "transit",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Newton good for bike commute?"
+    },
+    {
+      "id": "demographics_01",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Concord diverse?"
+    },
+    {
+      "id": "demographics_02",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Salem have a big Indian population?"
+    },
+    {
+      "id": "demographics_03",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Lynn liberal?"
+    },
+    {
+      "id": "demographics_04",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Brookline conservative?"
+    },
+    {
+      "id": "demographics_05",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Westford mostly immigrant?"
+    },
+    {
+      "id": "demographics_06",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Framingham have a large Asian population?"
+    },
+    {
+      "id": "demographics_07",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Quincy low-income?"
+    },
+    {
+      "id": "demographics_08",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Acton highly educated?"
+    },
+    {
+      "id": "demographics_09",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Wellesley have many young families?"
+    },
+    {
+      "id": "demographics_10",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Plymouth religiously diverse?"
+    },
+    {
+      "id": "demographics_11",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Burlington mostly college-educated?"
+    },
+    {
+      "id": "demographics_12",
+      "category": "demographics",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Chelsea have a large Latino population?"
+    },
+    {
+      "id": "risk_environment_01",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Peabody mountainous?"
+    },
+    {
+      "id": "risk_environment_02",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Worcester at flood risk?"
+    },
+    {
+      "id": "risk_environment_03",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Lexington have coastal flooding risk?"
+    },
+    {
+      "id": "risk_environment_04",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Waltham polluted?"
+    },
+    {
+      "id": "risk_environment_05",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Needham noisy because of highways?"
+    },
+    {
+      "id": "risk_environment_06",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Beverly hilly?"
+    },
+    {
+      "id": "risk_environment_07",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Hingham forested?"
+    },
+    {
+      "id": "risk_environment_08",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Marblehead vulnerable to sea-level rise?"
+    },
+    {
+      "id": "risk_environment_09",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Natick have bad air quality?"
+    },
+    {
+      "id": "risk_environment_10",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Arlington risky for storms?"
+    },
+    {
+      "id": "risk_environment_11",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Somerville have wetland conservation land?"
+    },
+    {
+      "id": "risk_environment_12",
+      "category": "risk_environment",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Shrewsbury flat or hilly?"
+    },
+    {
+      "id": "live_market_01",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there homes for sale in Newton right now?"
+    },
+    {
+      "id": "live_market_02",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Concord appreciating fast?"
+    },
+    {
+      "id": "live_market_03",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Will Salem home values go up?"
+    },
+    {
+      "id": "live_market_04",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "What are current rents in Lynn?"
+    },
+    {
+      "id": "live_market_05",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Brookline's crime rate still current?"
+    },
+    {
+      "id": "live_market_06",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there bidding wars in Westford?"
+    },
+    {
+      "id": "live_market_07",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Framingham a good investment?"
+    },
+    {
+      "id": "live_market_08",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are prices dropping in Quincy?"
+    },
+    {
+      "id": "live_market_09",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "How many houses are on the market in Acton?"
+    },
+    {
+      "id": "live_market_10",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "What is today's market like in Wellesley?"
+    },
+    {
+      "id": "live_market_11",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there Zillow listings for Plymouth now?"
+    },
+    {
+      "id": "live_market_12",
+      "category": "live_market",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Burlington's home price forecast strong?"
+    },
+    {
+      "id": "neighborhood_01",
+      "category": "neighborhood",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "What is the best neighborhood in Chelsea?"
+    },
+    {
+      "id": "neighborhood_02",
+      "category": "neighborhood",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Which part of Peabody is safest?"
+    },
+    {
+      "id": "neighborhood_03",
+      "category": "neighborhood",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are schools different by neighborhood in Worcester?"
+    },
+    {
+      "id": "neighborhood_04",
+      "category": "neighborhood",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is downtown Lexington safer than the outskirts?"
+    },
+    {
+      "id": "neighborhood_05",
+      "category": "neighborhood",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "What are the best streets in Waltham?"
+    },
+    {
+      "id": "neighborhood_06",
+      "category": "neighborhood",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Needham have dangerous blocks?"
+    },
+    {
+      "id": "neighborhood_07",
+      "category": "neighborhood",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Which part of Beverly should I avoid?"
+    },
+    {
+      "id": "neighborhood_08",
+      "category": "neighborhood",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "What elementary school zone is best in Hingham?"
+    },
+    {
+      "id": "neighborhood_09",
+      "category": "neighborhood",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is north Marblehead better than south Marblehead?"
+    },
+    {
+      "id": "neighborhood_10",
+      "category": "neighborhood",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Natick have zip-code-level data?"
+    },
+    {
+      "id": "school_detail_01",
+      "category": "school_detail",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Which elementary school in Arlington is best?"
+    },
+    {
+      "id": "school_detail_02",
+      "category": "school_detail",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Somerville have good special education?"
+    },
+    {
+      "id": "school_detail_03",
+      "category": "school_detail",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "How are AP classes in Shrewsbury?"
+    },
+    {
+      "id": "school_detail_04",
+      "category": "school_detail",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Newton have good school sports?"
+    },
+    {
+      "id": "school_detail_05",
+      "category": "school_detail",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is there bullying in Concord schools?"
+    },
+    {
+      "id": "school_detail_06",
+      "category": "school_detail",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Which school zone in Salem is best?"
+    },
+    {
+      "id": "school_detail_07",
+      "category": "school_detail",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there good private schools near Lynn?"
+    },
+    {
+      "id": "school_detail_08",
+      "category": "school_detail",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Brookline have good daycare options?"
+    },
+    {
+      "id": "school_detail_09",
+      "category": "school_detail",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "What is the class size in Westford?"
+    },
+    {
+      "id": "school_detail_10",
+      "category": "school_detail",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Framingham have good school buses?"
+    },
+    {
+      "id": "safety_granular_01",
+      "category": "safety_granular",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is downtown Quincy safe at night?"
+    },
+    {
+      "id": "safety_granular_02",
+      "category": "safety_granular",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there car break-ins in Acton?"
+    },
+    {
+      "id": "safety_granular_03",
+      "category": "safety_granular",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Wellesley safe to walk at night?"
+    },
+    {
+      "id": "safety_granular_04",
+      "category": "safety_granular",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Plymouth have recent crime spikes?"
+    },
+    {
+      "id": "safety_granular_05",
+      "category": "safety_granular",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is there gang activity in Burlington?"
+    },
+    {
+      "id": "safety_granular_06",
+      "category": "safety_granular",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there unsafe neighborhoods in Chelsea?"
+    },
+    {
+      "id": "safety_granular_07",
+      "category": "safety_granular",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "How fast is police response in Peabody?"
+    },
+    {
+      "id": "safety_granular_08",
+      "category": "safety_granular",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Worcester mall area safe at night?"
+    },
+    {
+      "id": "safety_granular_09",
+      "category": "safety_granular",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Lexington have package theft?"
+    },
+    {
+      "id": "safety_granular_10",
+      "category": "safety_granular",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Waltham safer now than last year?"
+    },
+    {
+      "id": "utilities_01",
+      "category": "utilities",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Needham have fiber internet?"
+    },
+    {
+      "id": "utilities_02",
+      "category": "utilities",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is cell service good in Beverly?"
+    },
+    {
+      "id": "utilities_03",
+      "category": "utilities",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Hingham get power outages?"
+    },
+    {
+      "id": "utilities_04",
+      "category": "utilities",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are roads bad in Marblehead?"
+    },
+    {
+      "id": "utilities_05",
+      "category": "utilities",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Natick have septic issues?"
+    },
+    {
+      "id": "utilities_06",
+      "category": "utilities",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "How is snow plowing in Arlington?"
+    },
+    {
+      "id": "utilities_07",
+      "category": "utilities",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Somerville good for town services?"
+    },
+    {
+      "id": "utilities_08",
+      "category": "utilities",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Shrewsbury have sewer problems?"
+    },
+    {
+      "id": "utilities_09",
+      "category": "utilities",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are building permits easy in Newton?"
+    },
+    {
+      "id": "utilities_10",
+      "category": "utilities",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Concord have bad potholes?"
+    },
+    {
+      "id": "taxes_01",
+      "category": "taxes",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "What are property taxes in Salem?"
+    },
+    {
+      "id": "taxes_02",
+      "category": "taxes",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Lynn expensive for taxes?"
+    },
+    {
+      "id": "taxes_03",
+      "category": "taxes",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Brookline have high water bills?"
+    },
+    {
+      "id": "taxes_04",
+      "category": "taxes",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Westford pass overrides?"
+    },
+    {
+      "id": "taxes_05",
+      "category": "taxes",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are Framingham town fees high?"
+    },
+    {
+      "id": "taxes_06",
+      "category": "taxes",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "What is Quincy's exact tax rate?"
+    },
+    {
+      "id": "taxes_07",
+      "category": "taxes",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Acton have municipal debt?"
+    },
+    {
+      "id": "taxes_08",
+      "category": "taxes",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are trash fees included in Wellesley?"
+    },
+    {
+      "id": "taxes_09",
+      "category": "taxes",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Plymouth have HOA-heavy neighborhoods?"
+    },
+    {
+      "id": "taxes_10",
+      "category": "taxes",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Burlington cheap after taxes?"
+    },
+    {
+      "id": "healthcare_01",
+      "category": "healthcare",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Chelsea have good hospitals nearby?"
+    },
+    {
+      "id": "healthcare_02",
+      "category": "healthcare",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Peabody good for pediatricians?"
+    },
+    {
+      "id": "healthcare_03",
+      "category": "healthcare",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Worcester close to urgent care?"
+    },
+    {
+      "id": "healthcare_04",
+      "category": "healthcare",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Lexington have senior services?"
+    },
+    {
+      "id": "healthcare_05",
+      "category": "healthcare",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there good doctors in Waltham?"
+    },
+    {
+      "id": "healthcare_06",
+      "category": "healthcare",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Needham close to a hospital?"
+    },
+    {
+      "id": "healthcare_07",
+      "category": "healthcare",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Beverly have pharmacies nearby?"
+    },
+    {
+      "id": "healthcare_08",
+      "category": "healthcare",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "How is ambulance access in Hingham?"
+    },
+    {
+      "id": "healthcare_09",
+      "category": "healthcare",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Marblehead good for healthcare?"
+    },
+    {
+      "id": "healthcare_10",
+      "category": "healthcare",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there mental health services in Natick?"
+    },
+    {
+      "id": "jobs_01",
+      "category": "jobs",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there tech jobs near Arlington?"
+    },
+    {
+      "id": "jobs_02",
+      "category": "jobs",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Somerville good for office jobs?"
+    },
+    {
+      "id": "jobs_03",
+      "category": "jobs",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Shrewsbury have local employment?"
+    },
+    {
+      "id": "jobs_04",
+      "category": "jobs",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Newton good for remote workers?"
+    },
+    {
+      "id": "jobs_05",
+      "category": "jobs",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Concord close to biotech jobs?"
+    },
+    {
+      "id": "jobs_06",
+      "category": "jobs",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there major employers in Salem?"
+    },
+    {
+      "id": "jobs_07",
+      "category": "jobs",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Lynn have job growth?"
+    },
+    {
+      "id": "jobs_08",
+      "category": "jobs",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Brookline good for local work?"
+    },
+    {
+      "id": "jobs_09",
+      "category": "jobs",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "How is unemployment in Westford?"
+    },
+    {
+      "id": "jobs_10",
+      "category": "jobs",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Framingham good for commuting to Cambridge?"
+    },
+    {
+      "id": "recreation_01",
+      "category": "recreation",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Quincy have good parks?"
+    },
+    {
+      "id": "recreation_02",
+      "category": "recreation",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Acton good for hiking?"
+    },
+    {
+      "id": "recreation_03",
+      "category": "recreation",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Wellesley have beaches?"
+    },
+    {
+      "id": "recreation_04",
+      "category": "recreation",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there lakes in Plymouth?"
+    },
+    {
+      "id": "recreation_05",
+      "category": "recreation",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Burlington have dog parks?"
+    },
+    {
+      "id": "recreation_06",
+      "category": "recreation",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Chelsea good for boating?"
+    },
+    {
+      "id": "recreation_07",
+      "category": "recreation",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Peabody have good gyms?"
+    },
+    {
+      "id": "recreation_08",
+      "category": "recreation",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there playgrounds in Worcester?"
+    },
+    {
+      "id": "recreation_09",
+      "category": "recreation",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Lexington good for outdoor recreation?"
+    },
+    {
+      "id": "recreation_10",
+      "category": "recreation",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Waltham have trails?"
+    },
+    {
+      "id": "food_culture_01",
+      "category": "food_culture",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Needham have Indian grocery stores?"
+    },
+    {
+      "id": "food_culture_02",
+      "category": "food_culture",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there temples near Beverly?"
+    },
+    {
+      "id": "food_culture_03",
+      "category": "food_culture",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Hingham have Asian markets?"
+    },
+    {
+      "id": "food_culture_04",
+      "category": "food_culture",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Marblehead have good restaurants?"
+    },
+    {
+      "id": "food_culture_05",
+      "category": "food_culture",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Natick good for Indian food?"
+    },
+    {
+      "id": "food_culture_06",
+      "category": "food_culture",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Arlington have cultural events?"
+    },
+    {
+      "id": "food_culture_07",
+      "category": "food_culture",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there halal restaurants in Somerville?"
+    },
+    {
+      "id": "food_culture_08",
+      "category": "food_culture",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Shrewsbury have farmers markets?"
+    },
+    {
+      "id": "food_culture_09",
+      "category": "food_culture",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Newton have a good library?"
+    },
+    {
+      "id": "food_culture_10",
+      "category": "food_culture",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Is Concord good for vegetarian food?"
+    },
+    {
+      "id": "legal_zoning_01",
+      "category": "legal_zoning",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Salem allow ADUs?"
+    },
+    {
+      "id": "legal_zoning_02",
+      "category": "legal_zoning",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Can I rent out a basement in Lynn?"
+    },
+    {
+      "id": "legal_zoning_03",
+      "category": "legal_zoning",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are short-term rentals allowed in Brookline?"
+    },
+    {
+      "id": "legal_zoning_04",
+      "category": "legal_zoning",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Westford have strict zoning?"
+    },
+    {
+      "id": "legal_zoning_05",
+      "category": "legal_zoning",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there tenant protections in Framingham?"
+    },
+    {
+      "id": "legal_zoning_06",
+      "category": "legal_zoning",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Quincy allow multifamily housing?"
+    },
+    {
+      "id": "legal_zoning_07",
+      "category": "legal_zoning",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Can I build an addition in Acton?"
+    },
+    {
+      "id": "legal_zoning_08",
+      "category": "legal_zoning",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are school enrollment rules strict in Wellesley?"
+    },
+    {
+      "id": "legal_zoning_09",
+      "category": "legal_zoning",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Does Plymouth allow accessory apartments?"
+    },
+    {
+      "id": "legal_zoning_10",
+      "category": "legal_zoning",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": true,
+      "prompt": "Are there rental restrictions in Burlington?"
+    },
+    {
+      "id": "ctrl_price",
+      "category": "control_supported",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": false,
+      "prompt": "What is Newton's home price in your data?"
+    },
+    {
+      "id": "ctrl_commute",
+      "category": "control_supported",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": false,
+      "prompt": "How far is Shrewsbury from Boston?"
+    },
+    {
+      "id": "ctrl_safety",
+      "category": "control_supported",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": false,
+      "prompt": "Is Salem safe?"
+    },
+    {
+      "id": "ctrl_school",
+      "category": "control_supported",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": false,
+      "prompt": "What is Acton's school score?"
+    },
+    {
+      "id": "ctrl_coastal",
+      "category": "control_supported",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": false,
+      "prompt": "Is Marblehead coastal in your data?"
+    },
+    {
+      "id": "ctrl_complete",
+      "category": "control_supported",
+      "expected_intent": "lookup_single_town",
+      "unsupported_field": false,
+      "prompt": "Is Westford partial-data or full-data?"
+    }
+  ]
+}

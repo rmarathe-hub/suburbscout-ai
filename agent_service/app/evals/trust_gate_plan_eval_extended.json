@@ -1,0 +1,86 @@
+{
+  "description": "Extended trust-gate cases for verification artifacts",
+  "cases": [
+    {
+      "id": "tg_placeholder_01",
+      "category": "placeholder_town",
+      "prompt": "What is the commute for town_name_1?",
+      "expect_gate": "invalid_plan_town",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "lookup",
+            "items": [{ "town": "town_name_1", "field": "commute" }]
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_semantic_rank_leak",
+      "category": "semantic_rank_limit",
+      "prompt": "Quiet suburbs under 800k",
+      "expect_gate": null,
+      "expect_blocks": false,
+      "expect_execution_status": "ok",
+      "expect_semantic_rank_limited": true,
+      "plan": {
+        "ops": [
+          {
+            "op": "semantic_search",
+            "query_text": "quiet suburb",
+            "top_k": 10
+          },
+          {
+            "op": "rank",
+            "preferences": { "budget_max": 800000 },
+            "limit": 5,
+            "use_semantic_candidates": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_semantic_rank_ok",
+      "category": "semantic_rank_limit",
+      "prompt": "Family-friendly suburbs under 900k",
+      "expect_gate": null,
+      "expect_blocks": false,
+      "expect_execution_status": "ok",
+      "expect_semantic_rank_limited": true,
+      "plan": {
+        "ops": [
+          {
+            "op": "semantic_search",
+            "query_text": "family friendly",
+            "top_k": 10
+          },
+          {
+            "op": "rank",
+            "preferences": { "budget_max": 900000 },
+            "limit": 5,
+            "use_semantic_candidates": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_walk_03",
+      "category": "unsupported_compare",
+      "prompt": "Which has better nightlife, Cambridge or Somerville?",
+      "expect_gate": "unsupported_compare",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "compare",
+            "towns": ["Cambridge", "Somerville"],
+            "columns": ["latest_home_price"]
+          }
+        ]
+      }
+    }
+  ]
+}

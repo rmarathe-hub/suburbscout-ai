@@ -1,0 +1,126 @@
+{
+  "description": "Golden QueryPlans for executor regression (Phase 3). Maps to phase2_eval / tier15 prompts.",
+  "cases": [
+    {
+      "id": "ml_01",
+      "source": "phase2",
+      "prompt": "What is commute from Maynard, housing cost in Newton?",
+      "plan_file": "phase2/ml_01.json",
+      "expect_status": "ok",
+      "lookup_items_found_min": 2,
+      "snippets_contain": ["maynard", "newton"]
+    },
+    {
+      "id": "ml_06",
+      "source": "phase2",
+      "prompt": "compare schools of westboro, commute from gardner, ...",
+      "plan_file": "phase2/ml_06.json",
+      "expect_status": "ok",
+      "lookup_items_found_min": 6,
+      "lookup_towns_found": ["Westborough", "Gardner", "Concord", "Newton", "Everett"]
+    },
+    {
+      "id": "mc_03",
+      "source": "phase2",
+      "plan_file": "phase2/mc_03.json",
+      "expect_status": "ok",
+      "compare_rows_min": 3,
+      "compare_towns": ["Newton", "Needham", "Wellesley"]
+    },
+    {
+      "id": "mc_05",
+      "source": "phase2",
+      "plan_file": "phase2/mc_05.json",
+      "expect_status": "ok",
+      "compare_rows_min": 5
+    },
+    {
+      "id": "mc_10",
+      "source": "phase2",
+      "plan_file": "phase2/mc_10.json",
+      "expect_status": "ok",
+      "compare_rows_min": 10
+    },
+    {
+      "id": "mc_20",
+      "source": "phase2",
+      "plan_file": "phase2/mc_20.json",
+      "expect_status": "ok",
+      "compare_rows_min": 20
+    },
+    {
+      "id": "ctrl_2town",
+      "source": "phase2",
+      "plan_file": "phase2/ctrl_2town.json",
+      "expect_status": "ok",
+      "compare_rows_min": 2
+    },
+    {
+      "id": "ctrl_1town_2field",
+      "source": "phase2",
+      "plan_file": "phase2/ctrl_1town_2field.json",
+      "expect_status": "partial",
+      "lookup_items_found_min": 2,
+      "comment": "Newton school_score is null in suburbs.json — partial is correct"
+    },
+    {
+      "id": "ctrl_gate_21",
+      "source": "phase2",
+      "plan_file": "phase2/ctrl_gate_21_invalid.json",
+      "expect_validation_error": true
+    },
+    {
+      "id": "tier15_excl_rank",
+      "source": "tier15",
+      "prompt": "Towns under 700k but not Sharon",
+      "plan_file": "tier15/excl_rank_01.json",
+      "expect_status": "ok",
+      "rank_matches_min": 1,
+      "rank_excludes_town": "Sharon"
+    },
+    {
+      "id": "tier15_acton_commute",
+      "source": "tier15",
+      "plan_file": "tier15/ctrl_acton_commute.json",
+      "expect_status": "ok",
+      "snippets_contain": ["acton"]
+    },
+    {
+      "id": "tier15_worcester",
+      "source": "tier15",
+      "plan_file": "tier15/member_worcester_not_found.json",
+      "expect_status": "not_found",
+      "message_code": "town_not_in_dataset"
+    },
+    {
+      "id": "tier15_unsupported_zillow",
+      "source": "tier15",
+      "plan_file": "tier15/unsupported_zillow.json",
+      "expect_status": "out_of_scope",
+      "message_code": "unsupported_request"
+    },
+    {
+      "id": "semantic_coastal",
+      "source": "semantic",
+      "plan_file": "semantic/coastal_vibe.json",
+      "expect_status": "ok",
+      "semantic_candidates_min": 1,
+      "requires_live_embeddings": true
+    },
+    {
+      "id": "executor_rank_no_rows",
+      "source": "executor",
+      "plan_file": "executor/rank_no_rows.json",
+      "expect_status": "no_rows",
+      "message_code": "no_matching_towns"
+    },
+    {
+      "id": "executor_semantic_rank_offline",
+      "source": "executor",
+      "plan_file": "executor/semantic_then_rank.json",
+      "expect_status_in": ["ok", "partial", "no_rows"],
+      "requires_live_embeddings": true,
+      "comment": "covered by test_executor_golden_extended with mock"
+    }
+  ]
+}

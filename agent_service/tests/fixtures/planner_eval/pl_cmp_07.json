@@ -1,0 +1,14 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Brookline",
+        "Newton"
+      ],
+      "columns": [
+        "safety_score"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1299 @@
+{
+  "version": "phase1_1",
+  "description": "Property-based quality eval prompts for SuburbScout orchestrator",
+  "target_pass_rate": 0.85,
+  "cases": [
+    {
+      "id": "lookup_gardner_commute",
+      "category": "lookup",
+      "prompt": "commute for Gardner",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": true,
+        "mentions_town": "Gardner",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "lookup_gardner_dataset",
+      "category": "lookup",
+      "prompt": "is Gardner in your dataset",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": true,
+        "mentions_town": "Gardner",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "lookup_shrewsbury_crime",
+      "category": "lookup",
+      "prompt": "crime rate in Shrewsbury",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": true,
+        "mentions_town": "Shrewsbury",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "lookup_acton_price",
+      "category": "lookup",
+      "prompt": "price in Acton",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": true,
+        "mentions_town": "Acton",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "lookup_sharon_schools",
+      "category": "lookup",
+      "prompt": "school score for Sharon",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": true,
+        "mentions_town": "Sharon",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "lookup_framingham_pop",
+      "category": "lookup",
+      "prompt": "population for Framingham",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": true,
+        "mentions_town": "Framingham",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "lookup_weston_facts",
+      "category": "lookup",
+      "prompt": "tell me about Weston",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": true,
+        "mentions_town": "Weston",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "lookup_rockport_coastal",
+      "category": "lookup",
+      "prompt": "is Rockport in your dataset",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": true,
+        "mentions_town": "Rockport",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "lookup_charlton_commute",
+      "category": "lookup",
+      "prompt": "commute for Charlton",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Charlton",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "lookup_charlton_dataset",
+      "category": "lookup",
+      "prompt": "is Charlton in your dataset",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Charlton",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "compare_acton_framingham",
+      "category": "compare",
+      "prompt": "Compare Acton and Framingham",
+      "expect_intent": "compare_towns",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_comparison": true,
+        "compare_towns": [
+          "Acton",
+          "Framingham"
+        ],
+        "no_top_matches": true,
+        "validation_valid": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "compare_walpole_sharon",
+      "category": "compare",
+      "prompt": "Walpole vs Sharon",
+      "expect_intent": "compare_towns",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_comparison": true,
+        "compare_towns": [
+          "Walpole",
+          "Sharon"
+        ],
+        "no_top_matches": true,
+        "validation_valid": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "compare_newton_brookline",
+      "category": "compare",
+      "prompt": "Compare Newton and Brookline",
+      "expect_intent": "compare_towns",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_comparison": true,
+        "compare_towns": [
+          "Newton",
+          "Brookline"
+        ],
+        "no_top_matches": true,
+        "validation_valid": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "compare_lexington_concord",
+      "category": "compare",
+      "prompt": "Lexington vs Concord",
+      "expect_intent": "compare_towns",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_comparison": true,
+        "compare_towns": [
+          "Lexington",
+          "Concord"
+        ],
+        "no_top_matches": true,
+        "validation_valid": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "compare_medfield_dover",
+      "category": "compare",
+      "prompt": "Compare Medfield and Dover",
+      "expect_intent": "compare_towns",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_comparison": true,
+        "compare_towns": [
+          "Medfield",
+          "Dover"
+        ],
+        "no_top_matches": true,
+        "validation_valid": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "compare_lynn_peabody",
+      "category": "compare",
+      "prompt": "Compare Lynn and Peabody",
+      "expect_intent": "compare_towns",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_comparison": true,
+        "compare_towns": [
+          "Lynn",
+          "Peabody"
+        ],
+        "no_top_matches": true,
+        "validation_valid": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "compare_scituate_duxbury",
+      "category": "compare",
+      "prompt": "Compare Scituate and Duxbury",
+      "expect_intent": "compare_towns",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_comparison": true,
+        "compare_towns": [
+          "Scituate",
+          "Duxbury"
+        ],
+        "no_top_matches": true,
+        "validation_valid": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "compare_reading_woburn",
+      "category": "compare",
+      "prompt": "Reading vs Woburn",
+      "expect_intent": "compare_towns",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_comparison": true,
+        "compare_towns": [
+          "Reading",
+          "Woburn"
+        ],
+        "no_top_matches": true,
+        "validation_valid": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "budget_900k_schools",
+      "category": "budget",
+      "prompt": "Safe suburb under $900k with good schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_price_lte": 900000,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "budget_650k",
+      "category": "budget",
+      "prompt": "Find a town under $650k with decent schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_price_lte": 650000,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "budget_750k_affordable",
+      "category": "budget",
+      "prompt": "Affordable suburb under 750k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_price_lte": 750000,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "budget_500k",
+      "category": "budget",
+      "prompt": "town under $500k with good schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_price_lte": 500000,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "budget_850k_safe",
+      "category": "budget",
+      "prompt": "safe town under 850k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_price_lte": 850000,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "budget_600k",
+      "category": "budget",
+      "prompt": "homes under 600000 near Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_price_lte": 600000,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "budget_950k",
+      "category": "budget",
+      "prompt": "suburb under $950k with good schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_price_lte": 950000,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "budget_700k",
+      "category": "budget",
+      "prompt": "family suburb under 700k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_price_lte": 700000,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "budget_900k_middlesex",
+      "category": "budget",
+      "prompt": "Middlesex town under $900k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_price_lte": 900000,
+        "has_final_recommendation": true,
+        "all_county": "Middlesex",
+        "require_matches": true
+      }
+    },
+    {
+      "id": "budget_800k_commute",
+      "category": "budget",
+      "prompt": "under $800k with decent commute",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_price_lte": 800000,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "commute_middlesex_30",
+      "category": "commute",
+      "prompt": "in Middlesex county, 30 mins away from Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_county": "Middlesex",
+        "all_commute_lte": 30,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "commute_under_30",
+      "category": "commute",
+      "prompt": "under 30 min commute to Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_commute_lte": 30,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "commute_over_45",
+      "category": "commute",
+      "prompt": "towns over 45 minutes from Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_commute_gte": 45,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "commute_max_25",
+      "category": "commute",
+      "prompt": "max 25 min commute to Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_commute_lte": 25,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "commute_within_20",
+      "category": "commute",
+      "prompt": "within 20 minutes of Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_commute_lte": 20,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "commute_35_max",
+      "category": "commute",
+      "prompt": "35 min commute max to Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_commute_lte": 35,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "commute_over_50",
+      "category": "commute",
+      "prompt": "towns over 50 min from Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_commute_gte": 50,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "commute_40_schools",
+      "category": "commute",
+      "prompt": "under 40 min commute with good schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_commute_lte": 40,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "coastal_900k",
+      "category": "coastal",
+      "prompt": "coastal town under 900k with good schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_coastal": true,
+        "has_final_recommendation": true,
+        "all_price_lte": 900000,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "coastal_schools",
+      "category": "coastal",
+      "prompt": "coastal suburb with good schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_coastal": true,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "coastal_find",
+      "category": "coastal",
+      "prompt": "Find a coastal suburb near Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_coastal": true,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "coastal_affordable",
+      "category": "coastal",
+      "prompt": "near ocean but affordable",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_coastal": true,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "coastal_700k",
+      "category": "coastal",
+      "prompt": "coastal town under 700k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_coastal": true,
+        "has_final_recommendation": true,
+        "all_price_lte": 700000,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "coastal_commute_45",
+      "category": "coastal",
+      "prompt": "coastal town under 45 min commute",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_coastal": true,
+        "has_final_recommendation": true,
+        "all_commute_lte": 45,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "coastal_safe",
+      "category": "coastal",
+      "prompt": "safe coastal town under 900k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_coastal": true,
+        "has_final_recommendation": true,
+        "all_price_lte": 900000,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "coastal_north_shore",
+      "category": "coastal",
+      "prompt": "coastal North Shore town",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "all_coastal": true,
+        "has_final_recommendation": true,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "region_north_shore",
+      "category": "region",
+      "prompt": "North Shore family-friendly suburb with strong schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_region": "North Shore / northeast suburbs",
+        "require_matches": true
+      }
+    },
+    {
+      "id": "region_metrowest",
+      "category": "region",
+      "prompt": "MetroWest suburb with good schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_region": "MetroWest",
+        "require_matches": true
+      }
+    },
+    {
+      "id": "region_south_shore",
+      "category": "region",
+      "prompt": "South Shore family town",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_region": "South Shore",
+        "require_matches": true
+      }
+    },
+    {
+      "id": "region_essex",
+      "category": "region",
+      "prompt": "Essex county suburb under 900k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_county": "Essex",
+        "all_price_lte": 900000,
+        "require_matches": true
+      }
+    },
+    {
+      "id": "region_norfolk",
+      "category": "region",
+      "prompt": "Norfolk county town with good schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_county": "Norfolk",
+        "require_matches": true
+      }
+    },
+    {
+      "id": "region_middlesex",
+      "category": "region",
+      "prompt": "Middlesex county suburb",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_county": "Middlesex",
+        "require_matches": true
+      }
+    },
+    {
+      "id": "region_worcester_commutable",
+      "category": "region",
+      "prompt": "Worcester-area town still commutable to Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_region": "Worcester-area but still Boston-commutable for some",
+        "require_matches": true
+      }
+    },
+    {
+      "id": "region_inner_metro",
+      "category": "region",
+      "prompt": "Core Boston inner metro suburb",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true,
+        "all_region": "Core Boston + inner metro",
+        "require_matches": true
+      }
+    },
+    {
+      "id": "relative_safer_cheaper",
+      "category": "relative_filters",
+      "prompt": "safer than Lynn but cheaper than Newton",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "require_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "relative_safer_lynn",
+      "category": "relative_filters",
+      "prompt": "town safer than Lynn under 900k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "require_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "relative_cheaper_newton",
+      "category": "relative_filters",
+      "prompt": "cheaper than Newton with good schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "require_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "relative_quieter_cambridge",
+      "category": "relative_filters",
+      "prompt": "not too far from Boston but quieter than Cambridge",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "require_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "relative_safer_chelsea",
+      "category": "relative_filters",
+      "prompt": "safer than Chelsea under 800k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "require_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "relative_cheaper_wellesley",
+      "category": "relative_filters",
+      "prompt": "cheaper than Wellesley with good schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "require_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "crime_high_near_boston",
+      "category": "high_crime",
+      "prompt": "high crime towns near Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "require_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "crime_highest_nearby",
+      "category": "high_crime",
+      "prompt": "which towns have the highest crime near Boston",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "require_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "crime_high_commute",
+      "category": "high_crime",
+      "prompt": "high crime towns under 30 min commute",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "require_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "crime_high_essex",
+      "category": "high_crime",
+      "prompt": "high crime towns in Essex county",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "require_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "unknown_charlton_lookup",
+      "category": "unknown_town",
+      "prompt": "commute for Charlton",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Charlton",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "unknown_charlton_member",
+      "category": "unknown_town",
+      "prompt": "is Charlton in your 200-town list",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Charlton",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "unknown_lowell_lookup",
+      "category": "unknown_town",
+      "prompt": "price in Pittsfield",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Pittsfield",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "unknown_springfield",
+      "category": "unknown_town",
+      "prompt": "schools in Springfield",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Springfield",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "unknown_worcester_city",
+      "category": "unknown_town",
+      "prompt": "crime in Amherst",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Amherst",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "unknown_hartford",
+      "category": "unknown_town",
+      "prompt": "commute for Hartford",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Hartford",
+        "no_top_matches": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "typo_actn",
+      "category": "typo",
+      "prompt": "commute for Actn",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Actn",
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "typo_sharon",
+      "category": "typo",
+      "prompt": "price in Sharron",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Sharron",
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "typo_framingham",
+      "category": "typo",
+      "prompt": "schools in Framinghm",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Framinghm",
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "typo_gardner",
+      "category": "typo",
+      "prompt": "facts about Gardnr",
+      "expect_intent": "lookup_single_town",
+      "must_satisfy": {
+        "orchestrated": true,
+        "lookup_found": false,
+        "mentions_town": "Gardnr",
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "semantic_coastal_feel",
+      "category": "semantic",
+      "prompt": "Quiet town with a coastal feel and good schools",
+      "expect_intent": "recommend_semantic",
+      "must_satisfy": {
+        "orchestrated": true,
+        "semantic_attempted": true,
+        "semantic_candidates_or_error": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "semantic_like_lexington",
+      "category": "semantic",
+      "prompt": "Something like Lexington but cheaper with good schools",
+      "expect_intent": "recommend_semantic",
+      "must_satisfy": {
+        "orchestrated": true,
+        "semantic_attempted": true,
+        "semantic_candidates_or_error": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "semantic_walkable",
+      "category": "semantic",
+      "prompt": "Walkable downtown feel under $800k",
+      "expect_intent": "recommend_semantic",
+      "must_satisfy": {
+        "orchestrated": true,
+        "semantic_attempted": true,
+        "semantic_candidates_or_error": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "semantic_charming",
+      "category": "semantic",
+      "prompt": "charming small-town feel with good schools",
+      "expect_intent": "recommend_semantic",
+      "must_satisfy": {
+        "orchestrated": true,
+        "semantic_attempted": true,
+        "semantic_candidates_or_error": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "semantic_wellesley_cheaper",
+      "category": "semantic",
+      "prompt": "towns like Wellesley but I only have 650k",
+      "expect_intent": "recommend_semantic",
+      "must_satisfy": {
+        "orchestrated": true,
+        "semantic_attempted": true,
+        "semantic_candidates_or_error": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "semantic_vibe_schools",
+      "category": "semantic",
+      "prompt": "family-friendly vibe with strong schools under 900k",
+      "expect_intent": "recommend_semantic",
+      "must_satisfy": {
+        "orchestrated": true,
+        "semantic_attempted": true,
+        "semantic_candidates_or_error": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "semantic_quaint",
+      "category": "semantic",
+      "prompt": "quaint New England town feel near Boston",
+      "expect_intent": "recommend_semantic",
+      "must_satisfy": {
+        "orchestrated": true,
+        "semantic_attempted": true,
+        "semantic_candidates_or_error": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "semantic_community",
+      "category": "semantic",
+      "prompt": "town with a strong sense of community and good schools",
+      "expect_intent": "recommend_semantic",
+      "must_satisfy": {
+        "orchestrated": true,
+        "semantic_attempted": true,
+        "semantic_candidates_or_error": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "semantic_atmosphere",
+      "category": "semantic",
+      "prompt": "quiet atmosphere under 850k",
+      "expect_intent": "recommend_semantic",
+      "must_satisfy": {
+        "orchestrated": true,
+        "semantic_attempted": true,
+        "semantic_candidates_or_error": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "semantic_like_concord",
+      "category": "semantic",
+      "prompt": "something like Concord but more affordable",
+      "expect_intent": "recommend_semantic",
+      "must_satisfy": {
+        "orchestrated": true,
+        "semantic_attempted": true,
+        "semantic_candidates_or_error": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "no_match_coastal_200k",
+      "category": "no_match",
+      "prompt": "coastal town under $200k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "no_matches_ok": true
+      }
+    },
+    {
+      "id": "no_match_middlesex_coastal_300k",
+      "category": "no_match",
+      "prompt": "coastal Middlesex town under $300k",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "no_matches_ok": true
+      }
+    },
+    {
+      "id": "no_match_10min_coastal",
+      "category": "no_match",
+      "prompt": "coastal town under 10 min commute",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "no_matches_ok": true
+      }
+    },
+    {
+      "id": "no_match_impossible_budget",
+      "category": "no_match",
+      "prompt": "safe suburb under $100k with great schools",
+      "expect_intent": "recommend_structured",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "no_matches_ok": true
+      }
+    },
+    {
+      "id": "datalimit_zillow",
+      "category": "data_limit",
+      "prompt": "do you have Zillow prices today",
+      "expect_intent": "data_limit_question",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "message_contains": [
+          "zillow"
+        ],
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "datalimit_redfin",
+      "category": "data_limit",
+      "prompt": "show me live Redfin listings for Acton",
+      "expect_intent": "data_limit_question",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "message_contains": [
+          "redfin"
+        ],
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "datalimit_mls",
+      "category": "data_limit",
+      "prompt": "pull MLS listings right now",
+      "expect_intent": "data_limit_question",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "message_contains": [
+          "mls"
+        ],
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "datalimit_realtime",
+      "category": "data_limit",
+      "prompt": "real-time housing prices for Newton",
+      "expect_intent": "data_limit_question",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "message_contains": [
+          "real"
+        ],
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "datalimit_realtor",
+      "category": "data_limit",
+      "prompt": "Realtor.com live data for Sharon",
+      "expect_intent": "data_limit_question",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "message_contains": [
+          "realtor"
+        ],
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "clarify_work_westborough",
+      "category": "clarification",
+      "prompt": "I work in Westborough",
+      "expect_intent": "needs_clarification",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "message_contains": [
+          "Westborough"
+        ],
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "clarify_live_cambridge",
+      "category": "clarification",
+      "prompt": "I live in Cambridge",
+      "expect_intent": "needs_clarification",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "message_contains": [
+          "Cambridge"
+        ],
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "clarify_work_burlington",
+      "category": "clarification",
+      "prompt": "I work at Burlington",
+      "expect_intent": "needs_clarification",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "message_contains": [
+          "Burlington"
+        ],
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "unsupported_recipe",
+      "category": "unsupported",
+      "prompt": "write me a recipe for pasta",
+      "expect_intent": "unsupported",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "unsupported_weather",
+      "category": "unsupported",
+      "prompt": "weather in Miami today",
+      "expect_intent": "unsupported",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "unsupported_poem",
+      "category": "unsupported",
+      "prompt": "write me a poem about Boston",
+      "expect_intent": "unsupported",
+      "must_satisfy": {
+        "orchestrated": true,
+        "has_final_recommendation": true,
+        "no_top_matches": true
+      }
+    },
+    {
+      "id": "explain_sharon_westford",
+      "category": "explain",
+      "prompt": "why did Sharon beat Westford",
+      "expect_intent": "explain_ranking",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "explain_acton_framingham",
+      "category": "explain",
+      "prompt": "why is Acton ranked above Framingham for schools",
+      "expect_intent": "explain_ranking",
+      "must_satisfy": {
+        "orchestrated": true,
+        "validation_valid": true,
+        "has_final_recommendation": true
+      }
+    }
+  ]
+}

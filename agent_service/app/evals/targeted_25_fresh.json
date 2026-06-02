@@ -1,0 +1,466 @@
+{
+  "description": "Pre-Phase-2 hardening targeted regression \u2014 25 duplicate-clean prompts",
+  "seed": 20260604,
+  "target_pass_count": 24,
+  "by_category": {
+    "town_resolution": 5,
+    "pullup_lookup": 4,
+    "inverted_crime": 5,
+    "neighborhood": 5,
+    "semantic_lifestyle": 6
+  },
+  "cases": [
+    {
+      "id": "tgt25_20260604_001",
+      "category": "town_resolution",
+      "prompt": "Open Reading.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_expect": {
+          "expected_op": "lookup",
+          "expected_town": "Reading",
+          "forbidden_towns": [
+            "North Reading"
+          ]
+        },
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_002",
+      "category": "town_resolution",
+      "prompt": "Open North Reading.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_expect": {
+          "expected_op": "lookup",
+          "expected_town": "North Reading",
+          "forbidden_towns": [
+            "Reading"
+          ]
+        },
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_003",
+      "category": "town_resolution",
+      "prompt": "Pull up Reading.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_expect": {
+          "expected_op": "lookup",
+          "expected_town": "Reading",
+          "forbidden_towns": [
+            "North Reading"
+          ]
+        },
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_004",
+      "category": "town_resolution",
+      "prompt": "Would North Readng resolve?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_expect": {
+          "expected_op": "membership",
+          "expected_town": "North Reading"
+        },
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_005",
+      "category": "town_resolution",
+      "prompt": "Does Westboro map to Westborough?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_expect": {
+          "expected_op": "membership",
+          "expected_town": "Westborough"
+        },
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_006",
+      "category": "pullup_lookup",
+      "prompt": "Bring up Stoneham.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_007",
+      "category": "pullup_lookup",
+      "prompt": "Open Framingham.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_008",
+      "category": "pullup_lookup",
+      "prompt": "Show me Dedham.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_009",
+      "category": "pullup_lookup",
+      "prompt": "Pull up Westborro.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_010",
+      "category": "inverted_crime",
+      "prompt": "I am fine with higher crime if homes are affordable.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "rank"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_011",
+      "category": "inverted_crime",
+      "prompt": "Safety can slip if the town is cheap enough.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "rank"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_012",
+      "category": "inverted_crime",
+      "prompt": "Prioritize low prices over low crime.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "rank"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_013",
+      "category": "inverted_crime",
+      "prompt": "I can accept worse safety for affordability.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "rank"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_014",
+      "category": "inverted_crime",
+      "prompt": "Affordability matters more than crime stats.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "rank"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_015",
+      "category": "neighborhood",
+      "prompt": "Which neighborhood in Brookline is best for kids?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    },
+    {
+      "id": "tgt25_20260604_016",
+      "category": "neighborhood",
+      "prompt": "Safest area inside Newton for families.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    },
+    {
+      "id": "tgt25_20260604_017",
+      "category": "neighborhood",
+      "prompt": "Best part of Somerville to live in.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    },
+    {
+      "id": "tgt25_20260604_018",
+      "category": "neighborhood",
+      "prompt": "Neighborhoods in Cambridge with good schools.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    },
+    {
+      "id": "tgt25_20260604_019",
+      "category": "neighborhood",
+      "prompt": "Which part of Arlington should we avoid?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    },
+    {
+      "id": "tgt25_20260604_020",
+      "category": "semantic_lifestyle",
+      "prompt": "Suburbs similar to Newton for young families.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_021",
+      "category": "semantic_lifestyle",
+      "prompt": "Towns like Brookline for families.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_022",
+      "category": "semantic_lifestyle",
+      "prompt": "Hingham-like suburbs for young professionals.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_023",
+      "category": "semantic_lifestyle",
+      "prompt": "Similar to Concord for raising kids.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_024",
+      "category": "semantic_lifestyle",
+      "prompt": "Lexington-like towns for raising children.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "tgt25_20260604_025",
+      "category": "semantic_lifestyle",
+      "prompt": "Places like Wellesley for family-friendly living.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    }
+  ]
+}

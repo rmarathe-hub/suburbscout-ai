@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "unsupported",
+      "category": "live_market",
+      "reason": "User asked for current Zillow home listings."
+    }
+  ]
+}

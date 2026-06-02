@@ -1,0 +1,17 @@
+{
+  "ops": [
+    {
+      "op": "semantic_search",
+      "query_text": "family-friendly suburb",
+      "top_k": 12
+    },
+    {
+      "op": "rank",
+      "preferences": {
+        "budget_max": 550000
+      },
+      "limit": 5,
+      "use_semantic_candidates": true
+    }
+  ]
+}

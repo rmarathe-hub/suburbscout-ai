@@ -1,0 +1,13 @@
+{
+  "ops": [
+    {
+      "op": "lookup",
+      "items": [
+        {
+          "town": "Lexington",
+          "field": "commute"
+        }
+      ]
+    }
+  ]
+}

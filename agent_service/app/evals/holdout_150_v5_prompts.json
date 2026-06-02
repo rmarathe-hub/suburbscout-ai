@@ -1,0 +1,1056 @@
+{
+  "description": "Holdout Set #5 \u2014 fresh 150 prompts (fifth phrasing variant)",
+  "prompt_count": 150,
+  "cases": [
+    {
+      "id": "A_lookup_01",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Bring up Gardner's entry from the suburb dataset."
+    },
+    {
+      "id": "A_lookup_02",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "What saved statistics are available for Shrewsbury?"
+    },
+    {
+      "id": "A_lookup_03",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Give me Acton's commute, price, and safety details."
+    },
+    {
+      "id": "A_lookup_04",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "In your data, does Burlington look expensive?"
+    },
+    {
+      "id": "A_lookup_05",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "What information is incomplete for Worcester?"
+    },
+    {
+      "id": "A_lookup_06",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Show the main numbers you store for Westford."
+    },
+    {
+      "id": "A_lookup_07",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Is Salem on the risky side according to your safety data?"
+    },
+    {
+      "id": "A_lookup_08",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "What median price do you have attached to Quincy?"
+    },
+    {
+      "id": "A_lookup_09",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Does Framingham have any missing dataset fields?"
+    },
+    {
+      "id": "A_lookup_10",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "How far is Rockport from South Station in your data?"
+    },
+    {
+      "id": "A_lookup_11",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Is there a school score recorded for Newton?"
+    },
+    {
+      "id": "A_lookup_12",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "What is Chelsea's safety profile?"
+    },
+    {
+      "id": "A_lookup_13",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Give me a quick data-based summary of Lynn."
+    },
+    {
+      "id": "A_lookup_14",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "How long would Plymouth take to Boston?"
+    },
+    {
+      "id": "A_lookup_15",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "What do Ipswich's school and crime numbers look like?"
+    },
+    {
+      "id": "A_lookup_16",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Is Lowell listed as a full-data town?"
+    },
+    {
+      "id": "A_lookup_17",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Pull North Reading's school score."
+    },
+    {
+      "id": "A_lookup_18",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Does Beverly have a coastal tag?"
+    },
+    {
+      "id": "A_lookup_19",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "What home value is stored for Concord?"
+    },
+    {
+      "id": "A_lookup_20",
+      "category": "A_lookup",
+      "category_label": "A. Lookup / single-town facts",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Is Peabody treated as inland?"
+    },
+    {
+      "id": "B_membership_01",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Would Westboro return a valid result?"
+    },
+    {
+      "id": "B_membership_02",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Is Foxboro an accepted alias?"
+    },
+    {
+      "id": "B_membership_03",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Do you have Foxborough in the actual data?"
+    },
+    {
+      "id": "B_membership_04",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Can Marlborough be searched?"
+    },
+    {
+      "id": "B_membership_05",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Is Marlboro understood as Marlborough?"
+    },
+    {
+      "id": "B_membership_06",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Does Northboro point to Northborough?"
+    },
+    {
+      "id": "B_membership_07",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Is Northborough directly supported?"
+    },
+    {
+      "id": "B_membership_08",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Does the dataset include Dover?"
+    },
+    {
+      "id": "B_membership_09",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Is Stow one of the suburbs in scope?"
+    },
+    {
+      "id": "B_membership_10",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Are Maynard recommendations possible?"
+    },
+    {
+      "id": "B_membership_11",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Is Hudson usable in this app?"
+    },
+    {
+      "id": "B_membership_12",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "refuse_out_of_scope",
+      "prompt": "Would Providence be considered out of bounds?"
+    },
+    {
+      "id": "B_membership_13",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "refuse_out_of_scope",
+      "prompt": "Is Nashua ignored because it is not in Massachusetts?"
+    },
+    {
+      "id": "B_membership_14",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "refuse_out_of_scope",
+      "prompt": "Is Springfield outside the curated Boston-area towns?"
+    },
+    {
+      "id": "B_membership_15",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "refuse_out_of_scope",
+      "prompt": "Is Amherst outside this suburb tool?"
+    },
+    {
+      "id": "B_membership_16",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "refuse_out_of_scope",
+      "prompt": "Does your town list include Cape Cod communities?"
+    },
+    {
+      "id": "B_membership_17",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "refuse_out_of_scope",
+      "prompt": "Can this system answer for non-MA towns?"
+    },
+    {
+      "id": "B_membership_18",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Was Worcester included in the 200-town load?"
+    },
+    {
+      "id": "B_membership_19",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "dataset_membership",
+      "prompt": "Is Manchester-by-the-Sea the canonical spelling?"
+    },
+    {
+      "id": "B_membership_20",
+      "category": "B_membership",
+      "category_label": "B. Membership / scope / aliases",
+      "expected_intent": "refuse_out_of_scope",
+      "prompt": "What answer do you give for a town you cannot find?"
+    },
+    {
+      "id": "C_typo_01",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Pull up Shrewsberyy."
+    },
+    {
+      "id": "C_typo_02",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "dataset_membership",
+      "prompt": "Is Worcster searchable?"
+    },
+    {
+      "id": "C_typo_03",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Give me Burlingtn's price."
+    },
+    {
+      "id": "C_typo_04",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "compare_towns",
+      "prompt": "Compare Framingam and Natick on schools."
+    },
+    {
+      "id": "C_typo_05",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "dataset_membership",
+      "prompt": "Is Westforrd recognized?"
+    },
+    {
+      "id": "C_typo_06",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "lookup_single_town",
+      "prompt": "What is Marlborogh's safety score?"
+    },
+    {
+      "id": "C_typo_07",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "compare_towns",
+      "prompt": "Lexingtn vs Winchester for commute."
+    },
+    {
+      "id": "C_typo_08",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Do you have Manchster-by-the-Sea?"
+    },
+    {
+      "id": "C_typo_09",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Is Swampscot coastal or inland?"
+    },
+    {
+      "id": "C_typo_10",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "lookup_single_town",
+      "prompt": "What does Wellesely cost?"
+    },
+    {
+      "id": "C_typo_11",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "compare_towns",
+      "prompt": "Needam vs Dedham for affordability."
+    },
+    {
+      "id": "C_typo_12",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Is Brooklinee in the data?"
+    },
+    {
+      "id": "C_typo_13",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Chelsia safety rating?"
+    },
+    {
+      "id": "C_typo_14",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "lookup_single_town",
+      "prompt": "How far is Somervill from Boston?"
+    },
+    {
+      "id": "C_typo_15",
+      "category": "C_typo",
+      "category_label": "C. Typos / fuzzy town names",
+      "expected_intent": "compare_towns",
+      "prompt": "North Readin compared with Reading."
+    },
+    {
+      "id": "D_compare_01",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Acton and Concord: which one is safer?"
+    },
+    {
+      "id": "D_compare_02",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Revere or Lynn \u2014 which has the higher crime number?"
+    },
+    {
+      "id": "D_compare_03",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "For schools and safety, would you choose Sharon or Westford?"
+    },
+    {
+      "id": "D_compare_04",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Is Waltham less dangerous than Burlington?"
+    },
+    {
+      "id": "D_compare_05",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Quincy versus Milton: which is lower cost?"
+    },
+    {
+      "id": "D_compare_06",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Which costs more, Needham or Newton?"
+    },
+    {
+      "id": "D_compare_07",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Does Gloucester have a shorter commute than Rockport?"
+    },
+    {
+      "id": "D_compare_08",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Beverly or Salem for lower crime?"
+    },
+    {
+      "id": "D_compare_09",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Is Brookline less affordable than Cambridge?"
+    },
+    {
+      "id": "D_compare_10",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Marblehead compared to Swampscott \u2014 which is cheaper?"
+    },
+    {
+      "id": "D_compare_11",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Reading vs Stoneham, who wins on school score?"
+    },
+    {
+      "id": "D_compare_12",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Is Shrewsbury safer than Worcester?"
+    },
+    {
+      "id": "D_compare_13",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Arlington or Lexington for stronger schools?"
+    },
+    {
+      "id": "D_compare_14",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Does Quincy have a price advantage over Milton?"
+    },
+    {
+      "id": "D_compare_15",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "If value matters, Braintree or Weymouth?"
+    },
+    {
+      "id": "D_compare_16",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Which gets to Boston faster, Malden or Medford?"
+    },
+    {
+      "id": "D_compare_17",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Everett or Chelsea \u2014 which has worse safety?"
+    },
+    {
+      "id": "D_compare_18",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Framingham vs Wellesley if I care mostly about price."
+    },
+    {
+      "id": "D_compare_19",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "Salem compared with Peabody: which is waterfront/coastal?"
+    },
+    {
+      "id": "D_compare_20",
+      "category": "D_compare",
+      "category_label": "D. Natural comparison questions",
+      "expected_intent": "compare_towns",
+      "prompt": "For family living, Beverly or Lynn?"
+    },
+    {
+      "id": "E_budget_01",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Find places at 650k or below with not-bad safety."
+    },
+    {
+      "id": "E_budget_02",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Only show towns under 850k that include home-price data."
+    },
+    {
+      "id": "E_budget_03",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Give me options no more expensive than $700k."
+    },
+    {
+      "id": "E_budget_04",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "My housing limit is 950k and schools matter most."
+    },
+    {
+      "id": "E_budget_05",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Show towns below 575k where Boston is still reachable."
+    },
+    {
+      "id": "E_budget_06",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "If my ceiling is 450k, what towns qualify?"
+    },
+    {
+      "id": "E_budget_07",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Best school towns under $1.2 million."
+    },
+    {
+      "id": "E_budget_08",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Keep results under $1M and remove partial-data towns."
+    },
+    {
+      "id": "E_budget_09",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Cheapest reasonable towns, but avoid the worst safety cases."
+    },
+    {
+      "id": "E_budget_10",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Under 725k with schools that are not weak."
+    },
+    {
+      "id": "E_budget_11",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Find the best towns with a 550k cap."
+    },
+    {
+      "id": "E_budget_12",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "I'll spend up to 900k for a high-quality town."
+    },
+    {
+      "id": "E_budget_13",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Do not include anything above 800k."
+    },
+    {
+      "id": "E_budget_14",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Complete-record towns only, under 600k."
+    },
+    {
+      "id": "E_budget_15",
+      "category": "E_budget",
+      "category_label": "E. Budget / affordability constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Show realistic tradeoffs below 700k."
+    },
+    {
+      "id": "F_commute_01",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "I need towns inside a 20-minute Boston commute."
+    },
+    {
+      "id": "F_commute_02",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Which places are half an hour or less from Boston?"
+    },
+    {
+      "id": "F_commute_03",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Show me towns in the 30 to 45 minute range."
+    },
+    {
+      "id": "F_commute_04",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "I'm okay being 45 minutes or farther from Boston."
+    },
+    {
+      "id": "F_commute_05",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Keep drive time to Boston at 40 minutes max."
+    },
+    {
+      "id": "F_commute_06",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "I prefer outer suburbs over inner suburbs."
+    },
+    {
+      "id": "F_commute_07",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Long commute is okay if the schools are strong."
+    },
+    {
+      "id": "F_commute_08",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Find towns from 25 through 35 minutes away."
+    },
+    {
+      "id": "F_commute_09",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "I care about low cost and a short Boston drive."
+    },
+    {
+      "id": "F_commute_10",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Search under 50 minutes and under $750k."
+    },
+    {
+      "id": "F_commute_11",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Close to Boston but not unsafe \u2014 what works?"
+    },
+    {
+      "id": "F_commute_12",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Give me cheaper towns beyond a 50-minute commute."
+    },
+    {
+      "id": "F_commute_13",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Skip the close-in towns."
+    },
+    {
+      "id": "F_commute_14",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "Which towns are roughly 40\u201360 minutes out?"
+    },
+    {
+      "id": "F_commute_15",
+      "category": "F_commute",
+      "category_label": "F. Commute / distance constraints",
+      "expected_intent": "recommend_structured",
+      "prompt": "I'm willing to accept a worse commute for affordability."
+    },
+    {
+      "id": "G_coastal_01",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "Coastal only, below 950k."
+    },
+    {
+      "id": "G_coastal_02",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "Give me safe-ish towns near the water."
+    },
+    {
+      "id": "G_coastal_03",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "North Shore choices that are not insanely priced."
+    },
+    {
+      "id": "G_coastal_04",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "Family-focused South Shore recommendations."
+    },
+    {
+      "id": "G_coastal_05",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "I want coastal without an urban feel."
+    },
+    {
+      "id": "G_coastal_06",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "Beach-adjacent towns below 850k."
+    },
+    {
+      "id": "G_coastal_07",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Is Salem flagged as coastal?"
+    },
+    {
+      "id": "G_coastal_08",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Is Beverly waterfront/coastal in the data?"
+    },
+    {
+      "id": "G_coastal_09",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Is Reading tagged inland?"
+    },
+    {
+      "id": "G_coastal_10",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "lookup_single_town",
+      "prompt": "Boxford is inland, right?"
+    },
+    {
+      "id": "G_coastal_11",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "Coastal towns with stronger schools."
+    },
+    {
+      "id": "G_coastal_12",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "North Shore towns that are safer than average."
+    },
+    {
+      "id": "G_coastal_13",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "Affordable South Shore towns."
+    },
+    {
+      "id": "G_coastal_14",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "Water-adjacent and under a million."
+    },
+    {
+      "id": "G_coastal_15",
+      "category": "G_coastal",
+      "category_label": "G. Coastal / region filters",
+      "expected_intent": "recommend_structured",
+      "prompt": "I do not want inland towns in the list."
+    },
+    {
+      "id": "H_semantic_01",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Give me an upscale but calm suburb with strong schools."
+    },
+    {
+      "id": "H_semantic_02",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Concord-like but more affordable."
+    },
+    {
+      "id": "H_semantic_03",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Newton feels right, but the price is too high."
+    },
+    {
+      "id": "H_semantic_04",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Something with Brookline convenience but more suburban."
+    },
+    {
+      "id": "H_semantic_05",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "I want an old-town-center New England vibe."
+    },
+    {
+      "id": "H_semantic_06",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Quiet, connected, and not too isolated."
+    },
+    {
+      "id": "H_semantic_07",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "A suburb for educated families with good schools."
+    },
+    {
+      "id": "H_semantic_08",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Winchester-ish but cheaper."
+    },
+    {
+      "id": "H_semantic_09",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Give me a Wellesley alternative that costs less."
+    },
+    {
+      "id": "H_semantic_10",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Like Westford, but with an easier Boston commute."
+    },
+    {
+      "id": "H_semantic_11",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Calm, safe, family-oriented, and stable."
+    },
+    {
+      "id": "H_semantic_12",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Suburban feel with access to things nearby."
+    },
+    {
+      "id": "H_semantic_13",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Coastal vibe without millionaire pricing."
+    },
+    {
+      "id": "H_semantic_14",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Best balanced value suburb for a family."
+    },
+    {
+      "id": "H_semantic_15",
+      "category": "H_semantic",
+      "category_label": "H. Semantic / vibe prompts",
+      "expected_intent": "recommend_semantic",
+      "prompt": "Strong schools even if affordability takes a hit."
+    },
+    {
+      "id": "I_inverted_01",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "I'm okay with lower school scores if the town is cheaper."
+    },
+    {
+      "id": "I_inverted_02",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Find affordable towns where safety is a downside."
+    },
+    {
+      "id": "I_inverted_03",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Do not factor schools much; prioritize price and commute."
+    },
+    {
+      "id": "I_inverted_04",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Lower home prices, even with more crime."
+    },
+    {
+      "id": "I_inverted_05",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Show the absolute cheapest towns in the file."
+    },
+    {
+      "id": "I_inverted_06",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Fast commute matters more than safety."
+    },
+    {
+      "id": "I_inverted_07",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Lower-cost towns where school quality is weak."
+    },
+    {
+      "id": "I_inverted_08",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Sort affordable towns from highest crime downward."
+    },
+    {
+      "id": "I_inverted_09",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Cheap options, but tell me the bad parts."
+    },
+    {
+      "id": "I_inverted_10",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Show second-tier practical towns, not just the polished ones."
+    },
+    {
+      "id": "I_inverted_11",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Good commute, lower price, weak schools accepted."
+    },
+    {
+      "id": "I_inverted_12",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Affordable towns with real warnings attached."
+    },
+    {
+      "id": "I_inverted_13",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Under 600k, give me the most compromised options."
+    },
+    {
+      "id": "I_inverted_14",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "Which sub-700k towns have the worst safety scores?"
+    },
+    {
+      "id": "I_inverted_15",
+      "category": "I_inverted",
+      "category_label": "I. Inverted / tradeoff-heavy prompts",
+      "expected_intent": "recommend_structured",
+      "prompt": "I want cheap and close, even if the safety rating is poor."
+    }
+  ]
+}

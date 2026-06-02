@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "unsupported",
+      "category": "other",
+      "reason": "Out of scope: other"
+    }
+  ]
+}

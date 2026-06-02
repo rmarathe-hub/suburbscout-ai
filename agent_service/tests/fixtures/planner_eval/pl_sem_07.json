@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "semantic_search",
+      "query_text": "good for young professionals commuting",
+      "top_k": 15
+    }
+  ]
+}

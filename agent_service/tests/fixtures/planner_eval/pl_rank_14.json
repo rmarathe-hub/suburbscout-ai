@@ -1,0 +1,11 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "county_preference": "Middlesex"
+      },
+      "limit": 10
+    }
+  ]
+}

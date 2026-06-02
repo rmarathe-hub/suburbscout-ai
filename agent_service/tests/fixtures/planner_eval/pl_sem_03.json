@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "semantic_search",
+      "query_text": "suburbs that feel suburban but not too remote",
+      "top_k": 15
+    }
+  ]
+}

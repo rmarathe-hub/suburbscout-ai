@@ -1,0 +1,21 @@
+{
+  "ops": [
+    {
+      "op": "lookup",
+      "items": [
+        {
+          "town": "Wellesley",
+          "field": "price"
+        },
+        {
+          "town": "Lexington",
+          "field": "commute"
+        },
+        {
+          "town": "Arlington",
+          "field": "safety"
+        }
+      ]
+    }
+  ]
+}

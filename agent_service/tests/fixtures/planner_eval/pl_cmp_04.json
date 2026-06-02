@@ -1,0 +1,11 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Lynn",
+        "Revere"
+      ]
+    }
+  ]
+}

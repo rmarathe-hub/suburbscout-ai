@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "unsupported",
+      "category": "transit",
+      "reason": "Cannot rank by non-Boston commute destination."
+    }
+  ]
+}

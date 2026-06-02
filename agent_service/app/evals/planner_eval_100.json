@@ -1,0 +1,1558 @@
+{
+  "description": "Planner-only eval \u2014 100 NL prompts with expected QueryPlan JSON",
+  "prompt_count": 100,
+  "by_category": {
+    "lookup": 24,
+    "compare": 14,
+    "rank": 16,
+    "semantic_search": 8,
+    "semantic_rank": 6,
+    "unsupported": 8,
+    "unsupported_field": 8,
+    "commute_destination": 6,
+    "typo": 4,
+    "alias": 6
+  },
+  "targets": {
+    "operation_accuracy": 0.9,
+    "town_extraction_accuracy": 0.9,
+    "field_constraint_accuracy": 0.9
+  },
+  "cases": [
+    {
+      "id": "pl_lk_01",
+      "category": "lookup",
+      "prompt": "How long is the drive from Acton to Boston?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_01.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Acton",
+            "field": "commute"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_02",
+      "category": "lookup",
+      "prompt": "What is Newton's median home price in your data?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_02.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Newton",
+            "field": "price"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_03",
+      "category": "lookup",
+      "prompt": "Does Maynard have a school score saved?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_03.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Maynard",
+            "field": "school"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_04",
+      "category": "lookup",
+      "prompt": "What is Sharon's safety rating?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_04.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Sharon",
+            "field": "safety"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_05",
+      "category": "lookup",
+      "prompt": "Is Gloucester marked as coastal?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_05.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Gloucester",
+            "field": "coastal"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_06",
+      "category": "lookup",
+      "prompt": "What region is Concord in?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_06.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Concord",
+            "field": "region"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_07",
+      "category": "lookup",
+      "prompt": "What fields are missing for Framingham?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_07.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Framingham",
+            "field": "missing"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_08",
+      "category": "lookup",
+      "prompt": "Is Lexington full-data or partial?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_08.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Lexington",
+            "field": "tier"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_09",
+      "category": "lookup",
+      "prompt": "Give me a full summary for Wellesley.",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_09.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Wellesley",
+            "field": "summary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_10",
+      "category": "lookup",
+      "prompt": "Commute time for Brookline to South Station?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_10.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Brookline",
+            "field": "commute"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_11",
+      "category": "lookup",
+      "prompt": "How expensive is Needham?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_11.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Needham",
+            "field": "price"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_12",
+      "category": "lookup",
+      "prompt": "Crime info for Quincy.",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_12.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Quincy",
+            "field": "safety"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_13",
+      "category": "lookup",
+      "prompt": "School numbers for Salem.",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_13.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Salem",
+            "field": "school"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_14",
+      "category": "lookup",
+      "prompt": "Pull up everything you know about Burlington.",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_14.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Burlington",
+            "field": "summary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_15",
+      "category": "lookup",
+      "prompt": "How far is Natick from Boston?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_15.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Natick",
+            "field": "commute"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_16",
+      "category": "lookup",
+      "prompt": "Housing price for Westford.",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_16.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Westford",
+            "field": "price"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_17",
+      "category": "lookup",
+      "prompt": "Is Hingham coastal in your tags?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_17.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Hingham",
+            "field": "coastal"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_18",
+      "category": "lookup",
+      "prompt": "Safety score for Reading.",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_18.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Reading",
+            "field": "safety"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_19",
+      "category": "lookup",
+      "prompt": "What school metric do you have for Melrose?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_19.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Melrose",
+            "field": "school"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_lk_20",
+      "category": "lookup",
+      "prompt": "Drive minutes from Arlington to Boston?",
+      "plan_file": "tests/fixtures/planner_eval/pl_lk_20.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Arlington",
+            "field": "commute"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_ml_01",
+      "category": "lookup",
+      "prompt": "What is commute from Maynard and housing cost in Newton?",
+      "plan_file": "tests/fixtures/planner_eval/pl_ml_01.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Maynard",
+            "field": "commute"
+          },
+          {
+            "town": "Newton",
+            "field": "price"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_ml_02",
+      "category": "lookup",
+      "prompt": "School score for Acton and safety for Concord.",
+      "plan_file": "tests/fixtures/planner_eval/pl_ml_02.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Acton",
+            "field": "school"
+          },
+          {
+            "town": "Concord",
+            "field": "safety"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_01",
+      "category": "compare",
+      "prompt": "Compare Newton and Needham on price.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_01.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Newton",
+          "Needham"
+        ],
+        "compare_columns": [
+          "latest_home_price"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_02",
+      "category": "compare",
+      "prompt": "Which is closer to Boston, Acton or Concord?",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_02.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Acton",
+          "Concord"
+        ],
+        "compare_columns": [
+          "drive_minutes_to_boston"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_03",
+      "category": "compare",
+      "prompt": "Framingham vs Natick for safety and schools.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_03.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Framingham",
+          "Natick"
+        ],
+        "compare_columns": [
+          "safety_score",
+          "school_score"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_04",
+      "category": "compare",
+      "prompt": "Compare Lynn and Revere.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_04.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Lynn",
+          "Revere"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_05",
+      "category": "compare",
+      "prompt": "Lexington versus Winchester \u2014 price and schools.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_05.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Lexington",
+          "Winchester"
+        ],
+        "compare_columns": [
+          "latest_home_price",
+          "school_score"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_06",
+      "category": "compare",
+      "prompt": "Rockport and Gloucester coastal status.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_06.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Rockport",
+          "Gloucester"
+        ],
+        "compare_columns": [
+          "is_coastal"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_07",
+      "category": "compare",
+      "prompt": "Compare crime in Brookline and Newton.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_07.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Brookline",
+          "Newton"
+        ],
+        "compare_columns": [
+          "safety_score"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_08",
+      "category": "compare",
+      "prompt": "Quincy or Milton for a shorter Boston commute?",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_08.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Quincy",
+          "Milton"
+        ],
+        "compare_columns": [
+          "drive_minutes_to_boston"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_09",
+      "category": "compare",
+      "prompt": "Compare Newton, Needham, and Wellesley on schools.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_09.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Newton",
+          "Needham",
+          "Wellesley"
+        ],
+        "compare_columns": [
+          "school_score"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_10",
+      "category": "compare",
+      "prompt": "Westford vs Sharon on price and safety.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_10.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Westford",
+          "Sharon"
+        ],
+        "compare_columns": [
+          "latest_home_price",
+          "safety_score"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_11",
+      "category": "compare",
+      "prompt": "Cambridge vs Somerville on housing cost.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_11.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Cambridge",
+          "Somerville"
+        ],
+        "compare_columns": [
+          "latest_home_price"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_12",
+      "category": "compare",
+      "prompt": "Compare Hingham and Cohasset.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_12.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Hingham",
+          "Cohasset"
+        ],
+        "compare_columns": [
+          "is_coastal",
+          "latest_home_price"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_13",
+      "category": "compare",
+      "prompt": "North Reading versus Reading for schools and safety.",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_13.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "North Reading",
+          "Reading"
+        ],
+        "compare_columns": [
+          "school_score",
+          "safety_score"
+        ]
+      }
+    },
+    {
+      "id": "pl_cmp_14",
+      "category": "compare",
+      "prompt": "Dedham or Needham \u2014 which is cheaper?",
+      "plan_file": "tests/fixtures/planner_eval/pl_cmp_14.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Dedham",
+          "Needham"
+        ]
+      }
+    },
+    {
+      "id": "pl_rank_01",
+      "category": "rank",
+      "prompt": "Towns under $700k with good schools.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_01.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "budget_max": 700000
+        }
+      }
+    },
+    {
+      "id": "pl_rank_02",
+      "category": "rank",
+      "prompt": "Suburbs within 45 minutes of Boston.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_02.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "max_commute_minutes": 45
+        }
+      }
+    },
+    {
+      "id": "pl_rank_03",
+      "category": "rank",
+      "prompt": "Affordable coastal towns under $900k.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_03.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "budget_max": 900000,
+          "requires_coastal": true
+        }
+      }
+    },
+    {
+      "id": "pl_rank_04",
+      "category": "rank",
+      "prompt": "Best suburbs but not Sharon.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_04.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "exclude_towns": [
+            "Sharon"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pl_rank_05",
+      "category": "rank",
+      "prompt": "Cheap towns with strong schools.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_05.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "budget_max": 600000,
+          "school_priority": "high"
+        }
+      }
+    },
+    {
+      "id": "pl_rank_06",
+      "category": "rank",
+      "prompt": "Under $800k and within 35 minutes of Boston.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_06.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "max_commute_minutes": 35,
+          "budget_max": 800000
+        }
+      }
+    },
+    {
+      "id": "pl_rank_07",
+      "category": "rank",
+      "prompt": "Safest suburbs in your dataset.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_07.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "safety_priority": "high"
+        }
+      }
+    },
+    {
+      "id": "pl_rank_08",
+      "category": "rank",
+      "prompt": "Top North Shore towns.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_08.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "region_preference": "North Shore"
+        }
+      }
+    },
+    {
+      "id": "pl_rank_09",
+      "category": "rank",
+      "prompt": "Affordable with a reasonable Boston commute.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_09.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "budget_max": 750000,
+          "commute_priority": "high"
+        }
+      }
+    },
+    {
+      "id": "pl_rank_10",
+      "category": "rank",
+      "prompt": "Most affordable towns \u2014 top 5.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_10.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "affordability_priority": "high"
+        }
+      }
+    },
+    {
+      "id": "pl_rank_11",
+      "category": "rank",
+      "prompt": "Towns under $500k within 50 minutes of Boston.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_11.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "budget_max": 500000,
+          "max_commute_minutes": 50
+        }
+      }
+    },
+    {
+      "id": "pl_rank_12",
+      "category": "rank",
+      "prompt": "Best coastal suburbs in the dataset.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_12.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "requires_coastal": true
+        }
+      }
+    },
+    {
+      "id": "pl_rank_13",
+      "category": "rank",
+      "prompt": "Safe suburbs under $850k.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_13.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "budget_max": 850000,
+          "safety_priority": "high"
+        }
+      }
+    },
+    {
+      "id": "pl_rank_14",
+      "category": "rank",
+      "prompt": "Top Middlesex County towns.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_14.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "county_preference": "Middlesex"
+        }
+      }
+    },
+    {
+      "id": "pl_rank_15",
+      "category": "rank",
+      "prompt": "Towns with a 20\u201340 minute Boston commute.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_15.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "min_commute_minutes": 20,
+          "max_commute_minutes": 40
+        }
+      }
+    },
+    {
+      "id": "pl_rank_16",
+      "category": "rank",
+      "prompt": "Good schools and commute under $950k.",
+      "plan_file": "tests/fixtures/planner_eval/pl_rank_16.json",
+      "expect": {
+        "ops": [
+          "rank"
+        ],
+        "rank_preferences": {
+          "budget_max": 950000,
+          "school_priority": "high",
+          "commute_priority": "high"
+        }
+      }
+    },
+    {
+      "id": "pl_sem_01",
+      "category": "semantic_search",
+      "prompt": "Find suburbs that match: quiet family-friendly suburb near Boston",
+      "plan_file": "tests/fixtures/planner_eval/pl_sem_01.json",
+      "expect": {
+        "ops": [
+          "semantic_search"
+        ]
+      }
+    },
+    {
+      "id": "pl_sem_02",
+      "category": "semantic_search",
+      "prompt": "Find suburbs that match: towns with a small-town New England feel",
+      "plan_file": "tests/fixtures/planner_eval/pl_sem_02.json",
+      "expect": {
+        "ops": [
+          "semantic_search"
+        ]
+      }
+    },
+    {
+      "id": "pl_sem_03",
+      "category": "semantic_search",
+      "prompt": "Find suburbs that match: suburbs that feel suburban but not too remote",
+      "plan_file": "tests/fixtures/planner_eval/pl_sem_03.json",
+      "expect": {
+        "ops": [
+          "semantic_search"
+        ]
+      }
+    },
+    {
+      "id": "pl_sem_04",
+      "category": "semantic_search",
+      "prompt": "Find suburbs that match: walkable downtown vibe near Boston",
+      "plan_file": "tests/fixtures/planner_eval/pl_sem_04.json",
+      "expect": {
+        "ops": [
+          "semantic_search"
+        ]
+      }
+    },
+    {
+      "id": "pl_sem_05",
+      "category": "semantic_search",
+      "prompt": "Find suburbs that match: affordable starter-home suburbs",
+      "plan_file": "tests/fixtures/planner_eval/pl_sem_05.json",
+      "expect": {
+        "ops": [
+          "semantic_search"
+        ]
+      }
+    },
+    {
+      "id": "pl_sem_06",
+      "category": "semantic_search",
+      "prompt": "Find suburbs that match: coastal community feel",
+      "plan_file": "tests/fixtures/planner_eval/pl_sem_06.json",
+      "expect": {
+        "ops": [
+          "semantic_search"
+        ]
+      }
+    },
+    {
+      "id": "pl_sem_07",
+      "category": "semantic_search",
+      "prompt": "Find suburbs that match: good for young professionals commuting",
+      "plan_file": "tests/fixtures/planner_eval/pl_sem_07.json",
+      "expect": {
+        "ops": [
+          "semantic_search"
+        ]
+      }
+    },
+    {
+      "id": "pl_sem_08",
+      "category": "semantic_search",
+      "prompt": "Find suburbs that match: sleepy residential neighborhoods",
+      "plan_file": "tests/fixtures/planner_eval/pl_sem_08.json",
+      "expect": {
+        "ops": [
+          "semantic_search"
+        ]
+      }
+    },
+    {
+      "id": "pl_semrank_01",
+      "category": "semantic_rank",
+      "prompt": "Affordable family suburbs with a quiet vibe \u2014 show top matches.",
+      "plan_file": "tests/fixtures/planner_eval/pl_semrank_01.json",
+      "expect": {
+        "ops": [
+          "semantic_search",
+          "rank"
+        ],
+        "use_semantic_candidates": true,
+        "rank_preferences": {
+          "budget_max": 800000
+        }
+      }
+    },
+    {
+      "id": "pl_semrank_02",
+      "category": "semantic_rank",
+      "prompt": "Suburbs under $700k that feel family-friendly.",
+      "plan_file": "tests/fixtures/planner_eval/pl_semrank_02.json",
+      "expect": {
+        "ops": [
+          "semantic_search",
+          "rank"
+        ],
+        "use_semantic_candidates": true,
+        "rank_preferences": {
+          "budget_max": 700000
+        }
+      }
+    },
+    {
+      "id": "pl_semrank_03",
+      "category": "semantic_rank",
+      "prompt": "Suburbs under $900k that feel family-friendly.",
+      "plan_file": "tests/fixtures/planner_eval/pl_semrank_03.json",
+      "expect": {
+        "ops": [
+          "semantic_search",
+          "rank"
+        ],
+        "use_semantic_candidates": true,
+        "rank_preferences": {
+          "budget_max": 900000
+        }
+      }
+    },
+    {
+      "id": "pl_semrank_04",
+      "category": "semantic_rank",
+      "prompt": "Suburbs under $650k that feel family-friendly.",
+      "plan_file": "tests/fixtures/planner_eval/pl_semrank_04.json",
+      "expect": {
+        "ops": [
+          "semantic_search",
+          "rank"
+        ],
+        "use_semantic_candidates": true,
+        "rank_preferences": {
+          "budget_max": 650000
+        }
+      }
+    },
+    {
+      "id": "pl_semrank_05",
+      "category": "semantic_rank",
+      "prompt": "Suburbs under $550k that feel family-friendly.",
+      "plan_file": "tests/fixtures/planner_eval/pl_semrank_05.json",
+      "expect": {
+        "ops": [
+          "semantic_search",
+          "rank"
+        ],
+        "use_semantic_candidates": true,
+        "rank_preferences": {
+          "budget_max": 550000
+        }
+      }
+    },
+    {
+      "id": "pl_semrank_06",
+      "category": "semantic_rank",
+      "prompt": "Suburbs under $825k that feel family-friendly.",
+      "plan_file": "tests/fixtures/planner_eval/pl_semrank_06.json",
+      "expect": {
+        "ops": [
+          "semantic_search",
+          "rank"
+        ],
+        "use_semantic_candidates": true,
+        "rank_preferences": {
+          "budget_max": 825000
+        }
+      }
+    },
+    {
+      "id": "pl_unsup_01",
+      "category": "unsupported",
+      "prompt": "Show me current Zillow listings in Newton right now.",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsup_01.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "live_market"
+      }
+    },
+    {
+      "id": "pl_unsup_02",
+      "category": "unsupported",
+      "prompt": "What are homes selling for in Acton today on MLS?",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsup_02.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "live_market"
+      }
+    },
+    {
+      "id": "pl_unsup_03",
+      "category": "unsupported",
+      "prompt": "Best neighborhoods in Brookline for families.",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsup_03.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "neighborhood"
+      }
+    },
+    {
+      "id": "pl_unsup_04",
+      "category": "unsupported",
+      "prompt": "Which towns have the best MBTA access?",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsup_04.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "transit"
+      }
+    },
+    {
+      "id": "pl_unsup_05",
+      "category": "unsupported",
+      "prompt": "Most diverse suburbs near Boston.",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsup_05.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "demographics"
+      }
+    },
+    {
+      "id": "pl_unsup_06",
+      "category": "unsupported",
+      "prompt": "Rank towns by nightlife.",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsup_06.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "lifestyle"
+      }
+    },
+    {
+      "id": "pl_unsup_07",
+      "category": "unsupported",
+      "prompt": "Which elementary schools are best in Newton?",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsup_07.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "school_detail"
+      }
+    },
+    {
+      "id": "pl_unsup_08",
+      "category": "unsupported",
+      "prompt": "Predict home prices in Wellesley next year.",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsup_08.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "other"
+      }
+    },
+    {
+      "id": "pl_unsf_01",
+      "category": "unsupported_field",
+      "prompt": "Which is more walkable, Newton or Needham?",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsf_01.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "primary_op": "compare",
+        "ops_strict_order": false
+      }
+    },
+    {
+      "id": "pl_unsf_02",
+      "category": "unsupported_field",
+      "prompt": "Compare Framingham and Quincy on diversity.",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsf_02.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "primary_op": "compare",
+        "ops_strict_order": false
+      }
+    },
+    {
+      "id": "pl_unsf_03",
+      "category": "unsupported_field",
+      "prompt": "Is Salem more touristy than Plymouth?",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsf_03.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "primary_op": "compare",
+        "ops_strict_order": false
+      }
+    },
+    {
+      "id": "pl_unsf_04",
+      "category": "unsupported_field",
+      "prompt": "Newton vs Brookline for walkability.",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsf_04.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "primary_op": "compare",
+        "ops_strict_order": false
+      }
+    },
+    {
+      "id": "pl_unsf_05",
+      "category": "unsupported_field",
+      "prompt": "Which has better nightlife, Cambridge or Somerville?",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsf_05.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "primary_op": "compare",
+        "ops_strict_order": false
+      }
+    },
+    {
+      "id": "pl_unsf_06",
+      "category": "unsupported_field",
+      "prompt": "Compare Acton and Concord on walk score.",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsf_06.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "primary_op": "compare",
+        "ops_strict_order": false
+      }
+    },
+    {
+      "id": "pl_unsf_07",
+      "category": "unsupported_field",
+      "prompt": "Most walkable between Lexington and Winchester?",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsf_07.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "primary_op": "compare",
+        "ops_strict_order": false
+      }
+    },
+    {
+      "id": "pl_unsf_08",
+      "category": "unsupported_field",
+      "prompt": "Which is more diverse, Lynn or Revere?",
+      "plan_file": "tests/fixtures/planner_eval/pl_unsf_08.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "primary_op": "compare",
+        "ops_strict_order": false
+      }
+    },
+    {
+      "id": "pl_dest_01",
+      "category": "commute_destination",
+      "prompt": "Towns within 30 minutes of Cambridge",
+      "plan_file": "tests/fixtures/planner_eval/pl_dest_01.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "transit"
+      }
+    },
+    {
+      "id": "pl_dest_02",
+      "category": "commute_destination",
+      "prompt": "I work in Burlington, find affordable towns",
+      "plan_file": "tests/fixtures/planner_eval/pl_dest_02.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "transit"
+      }
+    },
+    {
+      "id": "pl_dest_03",
+      "category": "commute_destination",
+      "prompt": "How far is Acton from Cambridge?",
+      "plan_file": "tests/fixtures/planner_eval/pl_dest_03.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "transit"
+      }
+    },
+    {
+      "id": "pl_dest_04",
+      "category": "commute_destination",
+      "prompt": "Commute to Kendall Square under 40 minutes",
+      "plan_file": "tests/fixtures/planner_eval/pl_dest_04.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "transit"
+      }
+    },
+    {
+      "id": "pl_dest_05",
+      "category": "commute_destination",
+      "prompt": "Find towns near Worcester with good schools",
+      "plan_file": "tests/fixtures/planner_eval/pl_dest_05.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "transit"
+      }
+    },
+    {
+      "id": "pl_dest_06",
+      "category": "commute_destination",
+      "prompt": "How far is Shrewsbury from Worcester?",
+      "plan_file": "tests/fixtures/planner_eval/pl_dest_06.json",
+      "expect": {
+        "ops": [
+          "unsupported"
+        ],
+        "unsupported_category": "transit"
+      }
+    },
+    {
+      "id": "pl_typo_01",
+      "category": "typo",
+      "prompt": "Is Worchester in your dataset?",
+      "plan_file": "tests/fixtures/planner_eval/pl_typo_01.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Worcester",
+            "field": "summary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_typo_02",
+      "category": "typo",
+      "prompt": "What is Framinghan's commute?",
+      "plan_file": "tests/fixtures/planner_eval/pl_typo_02.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Framingham",
+            "field": "commute"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_typo_03",
+      "category": "typo",
+      "prompt": "Compare Westboro and Natick on price.",
+      "plan_file": "tests/fixtures/planner_eval/pl_typo_03.json",
+      "expect": {
+        "ops": [
+          "compare"
+        ],
+        "compare_towns": [
+          "Westborough",
+          "Natick"
+        ]
+      }
+    },
+    {
+      "id": "pl_typo_04",
+      "category": "typo",
+      "prompt": "School data for Lexinton.",
+      "plan_file": "tests/fixtures/planner_eval/pl_typo_04.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Lexington",
+            "field": "commute"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_ml_03",
+      "category": "lookup",
+      "prompt": "Price in Wellesley, commute in Lexington, safety in Arlington.",
+      "plan_file": "tests/fixtures/planner_eval/pl_ml_03.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Wellesley",
+            "field": "price"
+          },
+          {
+            "town": "Lexington",
+            "field": "commute"
+          },
+          {
+            "town": "Arlington",
+            "field": "safety"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_ml_04",
+      "category": "lookup",
+      "prompt": "Is Providence in your 200-town dataset?",
+      "plan_file": "tests/fixtures/planner_eval/pl_ml_04.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Providence",
+            "field": "summary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_alias_01",
+      "category": "alias",
+      "prompt": "Is Marlboro in the dataset?",
+      "plan_file": "tests/fixtures/planner_eval/pl_alias_01.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Marlborough",
+            "field": "summary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_alias_02",
+      "category": "alias",
+      "prompt": "Commute for Foxboro.",
+      "plan_file": "tests/fixtures/planner_eval/pl_alias_02.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Foxborough",
+            "field": "summary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_alias_03",
+      "category": "alias",
+      "prompt": "Coastal status for Manchester-by-the-Sea.",
+      "plan_file": "tests/fixtures/planner_eval/pl_alias_03.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Manchester-by-the-Sea",
+            "field": "summary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_alias_04",
+      "category": "alias",
+      "prompt": "Summarize Manchester by the Sea.",
+      "plan_file": "tests/fixtures/planner_eval/pl_alias_04.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Manchester-by-the-Sea",
+            "field": "summary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_alias_05",
+      "category": "alias",
+      "prompt": "School score for Northboro.",
+      "plan_file": "tests/fixtures/planner_eval/pl_alias_05.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Northborough",
+            "field": "summary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pl_alias_06",
+      "category": "alias",
+      "prompt": "Safety rating for Shrewsbry.",
+      "plan_file": "tests/fixtures/planner_eval/pl_alias_06.json",
+      "expect": {
+        "ops": [
+          "lookup"
+        ],
+        "lookup_items": [
+          {
+            "town": "Shrewsbury",
+            "field": "summary"
+          }
+        ]
+      }
+    }
+  ]
+}

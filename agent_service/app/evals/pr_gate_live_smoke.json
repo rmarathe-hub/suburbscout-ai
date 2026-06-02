@@ -1,0 +1,35 @@
+{
+  "description": "Three live Azure smoke prompts for Phase 2 PR gate (--live).",
+  "cases": [
+    {
+      "id": "pr_live_commute",
+      "prompt": "What is the commute from Maynard?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "plan_ops_contains": ["lookup"],
+        "execution_status_in": ["ok", "partial"]
+      }
+    },
+    {
+      "id": "pr_live_reading",
+      "prompt": "Open Reading.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "plan_expect": {
+          "expected_town": "Reading",
+          "forbidden_towns": ["North Reading"]
+        },
+        "execution_status_in": ["ok", "partial"]
+      }
+    },
+    {
+      "id": "pr_live_neighborhood",
+      "prompt": "Which neighborhood in Brookline is best for kids?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "execution_status_in": ["blocked", "out_of_scope"],
+        "expect_used_answer_llm": false
+      }
+    }
+  ]
+}

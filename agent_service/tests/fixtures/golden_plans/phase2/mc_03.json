@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": ["Newton", "Needham", "Wellesley"],
+      "columns": ["school_score"]
+    }
+  ]
+}

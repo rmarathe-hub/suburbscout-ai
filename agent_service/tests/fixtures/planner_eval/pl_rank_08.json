@@ -1,0 +1,11 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "region_preference": "North Shore"
+      },
+      "limit": 10
+    }
+  ]
+}

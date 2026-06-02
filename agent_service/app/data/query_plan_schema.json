@@ -1,0 +1,577 @@
+{
+  "$defs": {
+    "CompareOp": {
+      "properties": {
+        "op": {
+          "const": "compare",
+          "default": "compare",
+          "title": "Op",
+          "type": "string"
+        },
+        "towns": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 2,
+          "title": "Towns",
+          "type": "array"
+        },
+        "columns": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "suburbs.json column keys; defaults to core compare columns if omitted",
+          "title": "Columns"
+        }
+      },
+      "required": [
+        "towns"
+      ],
+      "title": "CompareOp",
+      "type": "object"
+    },
+    "LookupItem": {
+      "description": "One town + one logical field to retrieve.",
+      "properties": {
+        "town": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Town",
+          "type": "string"
+        },
+        "field": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Field",
+          "type": "string"
+        }
+      },
+      "required": [
+        "town",
+        "field"
+      ],
+      "title": "LookupItem",
+      "type": "object"
+    },
+    "LookupOp": {
+      "properties": {
+        "op": {
+          "const": "lookup",
+          "default": "lookup",
+          "title": "Op",
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/LookupItem"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "title": "LookupOp",
+      "type": "object"
+    },
+    "Preferences": {
+      "description": "Parsed user preferences for suburb ranking.",
+      "properties": {
+        "budget_max": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Budget Max"
+        },
+        "allow_stretch_options": {
+          "default": false,
+          "title": "Allow Stretch Options",
+          "type": "boolean"
+        },
+        "require_housing_for_budget": {
+          "default": true,
+          "title": "Require Housing For Budget",
+          "type": "boolean"
+        },
+        "school_priority": {
+          "anyOf": [
+            {
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "School Priority"
+        },
+        "safety_priority": {
+          "anyOf": [
+            {
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Safety Priority"
+        },
+        "commute_priority": {
+          "anyOf": [
+            {
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commute Priority"
+        },
+        "affordability_priority": {
+          "anyOf": [
+            {
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Affordability Priority"
+        },
+        "economic_priority": {
+          "anyOf": [
+            {
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Economic Priority"
+        },
+        "max_commute_minutes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Commute Minutes"
+        },
+        "min_commute_minutes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Commute Minutes"
+        },
+        "requires_coastal": {
+          "default": false,
+          "title": "Requires Coastal",
+          "type": "boolean"
+        },
+        "region_preference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region Preference"
+        },
+        "region_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region Key"
+        },
+        "county_preference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "County Preference"
+        },
+        "prefer_high_crime": {
+          "default": false,
+          "title": "Prefer High Crime",
+          "type": "boolean"
+        },
+        "prefer_low_school": {
+          "default": false,
+          "title": "Prefer Low School",
+          "type": "boolean"
+        },
+        "deprioritize_safety": {
+          "default": false,
+          "title": "Deprioritize Safety",
+          "type": "boolean"
+        },
+        "deprioritize_schools": {
+          "default": false,
+          "title": "Deprioritize Schools",
+          "type": "boolean"
+        },
+        "named_towns": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Named Towns"
+        },
+        "unknown_towns": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unknown Towns"
+        },
+        "safer_than_town": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Safer Than Town"
+        },
+        "cheaper_than_town": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cheaper Than Town"
+        },
+        "quieter_than_town": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quieter Than Town"
+        },
+        "similar_to_town": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Similar To Town"
+        },
+        "candidate_towns": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Candidate Towns"
+        },
+        "exclude_towns": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclude Towns"
+        },
+        "raw_query": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Query"
+        }
+      },
+      "title": "Preferences",
+      "type": "object"
+    },
+    "RankOp": {
+      "properties": {
+        "op": {
+          "const": "rank",
+          "default": "rank",
+          "title": "Op",
+          "type": "string"
+        },
+        "preferences": {
+          "$ref": "#/$defs/Preferences"
+        },
+        "limit": {
+          "default": 10,
+          "maximum": 30,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "use_semantic_candidates": {
+          "default": false,
+          "description": "If true, executor may intersect rank with prior semantic_search op in same plan",
+          "title": "Use Semantic Candidates",
+          "type": "boolean"
+        }
+      },
+      "title": "RankOp",
+      "type": "object"
+    },
+    "SemanticSearchOp": {
+      "properties": {
+        "op": {
+          "const": "semantic_search",
+          "default": "semantic_search",
+          "title": "Op",
+          "type": "string"
+        },
+        "query_text": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Query Text",
+          "type": "string"
+        },
+        "top_k": {
+          "default": 15,
+          "maximum": 30,
+          "minimum": 1,
+          "title": "Top K",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "query_text"
+      ],
+      "title": "SemanticSearchOp",
+      "type": "object"
+    },
+    "UnsupportedCategory": {
+      "description": "Out-of-scope request categories (aligned with lookup_schema).",
+      "enum": [
+        "live_market",
+        "neighborhood",
+        "safety_granular",
+        "school_detail",
+        "demographics",
+        "transit",
+        "lifestyle",
+        "other"
+      ],
+      "title": "UnsupportedCategory",
+      "type": "string"
+    },
+    "UnsupportedOp": {
+      "properties": {
+        "op": {
+          "const": "unsupported",
+          "default": "unsupported",
+          "title": "Op",
+          "type": "string"
+        },
+        "category": {
+          "$ref": "#/$defs/UnsupportedCategory",
+          "default": "other"
+        },
+        "reason": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "user_message_hint": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional short hint for answer stage; must not invent facts",
+          "title": "User Message Hint"
+        }
+      },
+      "required": [
+        "reason"
+      ],
+      "title": "UnsupportedOp",
+      "type": "object"
+    }
+  },
+  "description": "Ordered operations to run against suburbs.json (+ optional vector index).",
+  "properties": {
+    "ops": {
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "compare": "#/$defs/CompareOp",
+            "lookup": "#/$defs/LookupOp",
+            "rank": "#/$defs/RankOp",
+            "semantic_search": "#/$defs/SemanticSearchOp",
+            "unsupported": "#/$defs/UnsupportedOp"
+          },
+          "propertyName": "op"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/LookupOp"
+          },
+          {
+            "$ref": "#/$defs/CompareOp"
+          },
+          {
+            "$ref": "#/$defs/RankOp"
+          },
+          {
+            "$ref": "#/$defs/SemanticSearchOp"
+          },
+          {
+            "$ref": "#/$defs/UnsupportedOp"
+          }
+        ]
+      },
+      "maxItems": 12,
+      "minItems": 1,
+      "title": "Ops",
+      "type": "array"
+    },
+    "user_intent_summary": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Planner-only note; not shown to user as fact",
+      "title": "User Intent Summary"
+    }
+  },
+  "required": [
+    "ops"
+  ],
+  "title": "QueryPlan",
+  "type": "object"
+}

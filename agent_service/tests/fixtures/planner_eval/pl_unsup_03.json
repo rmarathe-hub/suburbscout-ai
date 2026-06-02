@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "unsupported",
+      "category": "neighborhood",
+      "reason": "Out of scope: neighborhood"
+    }
+  ]
+}

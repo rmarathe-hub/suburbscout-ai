@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": ["Newton", "Needham"],
+      "columns": ["drive_minutes_to_boston"]
+    }
+  ]
+}

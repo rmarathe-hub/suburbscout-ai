@@ -1,0 +1,27 @@
+{
+  "description": "Demo smoke test — 20 high-value prompts for live demo",
+  "prompt_count": 20,
+  "cases": [
+    {"id": "demo_01", "prompt": "Find towns under $700k within 40 minutes of Boston", "expect_intent": "recommend_structured"},
+    {"id": "demo_02", "prompt": "Recommend coastal towns under $900k", "expect_intent": "recommend_structured"},
+    {"id": "demo_03", "prompt": "How far is Acton from Boston?", "expect_intent": "lookup_single_town"},
+    {"id": "demo_04", "prompt": "Compare Newton and Needham on commute", "expect_intent": "compare_towns"},
+    {"id": "demo_05", "prompt": "Is Newton in the dataset?", "expect_intent": "dataset_membership"},
+    {"id": "demo_06", "prompt": "Towns within 30 minutes of Cambridge", "expect_gate": "commute_destination_rank"},
+    {"id": "demo_07", "prompt": "Which is more walkable, Newton or Brookline?", "expect_gate": "unsupported_compare"},
+    {"id": "demo_08", "prompt": "Compare Newton, Needham, and Wellesley on schools", "expect_intent": "compare_multi_town"},
+    {"id": "demo_09", "prompt": "Recommend towns under $600k but not Framingham", "expect_intent": "recommend_structured"},
+    {"id": "demo_10", "prompt": "Does Chelseaa have strong schools?", "expect_intent": "lookup_single_town"},
+    {"id": "demo_10b", "prompt": "What is commute from Maynard, housing cost in Newton?", "expect_intent": "lookup_multi_town"},
+    {"id": "demo_11", "prompt": "What towns should I consider?", "expect_intent": "needs_clarification"},
+    {"id": "demo_12", "prompt": "Waterfront towns in the dataset", "expect_intent": "recommend_structured"},
+    {"id": "demo_13", "prompt": "What are Newton's home price and school score?", "expect_intent": "lookup_single_town"},
+    {"id": "demo_14", "prompt": "Commute from Gardner and commute from Shrewsbury", "expect_intent": "compare_towns"},
+    {"id": "demo_15", "prompt": "Is Shrewsbury mountainous?", "expect_intent": "lookup_single_town", "unsupported_field": true},
+    {"id": "demo_16", "prompt": "Find towns similar to Wellesley but cheaper", "expect_intent": "recommend_semantic"},
+    {"id": "demo_17", "prompt": "Is Hull excluded?", "expect_intent": "lookup_single_town"},
+    {"id": "demo_18", "prompt": "Is Worchester supported?", "expect_intent": "dataset_membership"},
+    {"id": "demo_19", "prompt": "Compare commute from Gardner and Shrewsbury", "expect_intent": "compare_towns"},
+    {"id": "demo_20", "prompt": "What's the live Zillow price for Newton?", "expect_intent": "data_limit_question"}
+  ]
+}

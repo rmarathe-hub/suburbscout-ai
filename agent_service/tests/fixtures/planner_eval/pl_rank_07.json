@@ -1,0 +1,11 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "safety_priority": "high"
+      },
+      "limit": 10
+    }
+  ]
+}

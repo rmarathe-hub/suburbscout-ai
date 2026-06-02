@@ -1,0 +1,30 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Acton",
+        "Arlington",
+        "Bedford",
+        "Belmont",
+        "Beverly",
+        "Braintree",
+        "Burlington",
+        "Cambridge",
+        "Chelsea",
+        "Concord",
+        "Dedham",
+        "Dover",
+        "Framingham",
+        "Gardner",
+        "Gloucester",
+        "Hingham",
+        "Lexington",
+        "Lincoln",
+        "Lowell",
+        "Lynn"
+      ],
+      "columns": ["drive_minutes_to_boston"]
+    }
+  ]
+}

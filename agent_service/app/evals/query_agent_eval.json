@@ -1,0 +1,88 @@
+{
+  "description": "Query agent eval — golden prompts with execution/trust expectations (live LLM required)",
+  "prompt_count": 10,
+  "cases": [
+    {
+      "id": "qa_ml_01",
+      "category": "multi_lookup",
+      "prompt": "What is commute from Maynard, housing cost in Newton?",
+      "expect_execution_status": "ok",
+      "expect_trust_gate_null": true,
+      "must_satisfy": {
+        "query_agent": true,
+        "has_final_recommendation": true,
+        "mentions_town": "Maynard"
+      }
+    },
+    {
+      "id": "qa_mc_03",
+      "category": "compare",
+      "prompt": "Compare Newton, Needham, and Wellesley on schools",
+      "expect_execution_status": "ok",
+      "must_satisfy": {
+        "query_agent": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "qa_tier15_acton",
+      "category": "lookup",
+      "prompt": "How far is Acton from Boston?",
+      "expect_execution_status": "ok",
+      "must_satisfy": {
+        "query_agent": true,
+        "mentions_town": "Acton"
+      }
+    },
+    {
+      "id": "qa_not_found",
+      "category": "refusal",
+      "prompt": "Is Worchester in your dataset?",
+      "expect_execution_status": "not_found",
+      "must_satisfy": {
+        "query_agent": true,
+        "message_contains": ["dataset"]
+      }
+    },
+    {
+      "id": "qa_unsupported",
+      "category": "refusal",
+      "prompt": "Show me current Zillow listings in Newton right now",
+      "expect_execution_status": "out_of_scope",
+      "must_satisfy": {
+        "query_agent": true,
+        "message_contains": ["dataset"]
+      }
+    },
+    {
+      "id": "qa_walkability_gate",
+      "category": "trust_gate",
+      "prompt": "Which is more walkable, Newton or Needham?",
+      "expect_execution_status": "blocked",
+      "expect_trust_gate": "unsupported_compare",
+      "must_satisfy": {
+        "query_agent": true
+      }
+    },
+    {
+      "id": "qa_excl_rank",
+      "category": "rank",
+      "prompt": "Towns under 700k but not Sharon",
+      "expect_execution_status": "ok",
+      "must_satisfy": {
+        "query_agent": true,
+        "has_final_recommendation": true
+      }
+    },
+    {
+      "id": "qa_ctrl_2town",
+      "category": "compare",
+      "prompt": "Compare Newton and Needham on commute",
+      "expect_execution_status": "ok",
+      "must_satisfy": {
+        "query_agent": true,
+        "has_final_recommendation": true
+      }
+    }
+  ]
+}

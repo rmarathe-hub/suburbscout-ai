@@ -1,0 +1,282 @@
+{
+  "description": "Layer 3 — trust gates on hand-written QueryPlans (no LLM planner)",
+  "prompt_count": 32,
+  "target_pass_rate": 0.95,
+  "cases": [
+    {
+      "id": "tg_dest_rank_01",
+      "category": "commute_destination",
+      "prompt": "Towns within 30 minutes of Cambridge",
+      "expect_gate": "commute_destination_rank",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "rank",
+            "preferences": { "max_commute_minutes": 30 },
+            "limit": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_dest_rank_02",
+      "category": "commute_destination",
+      "prompt": "I work in Burlington, find affordable towns",
+      "expect_gate": "commute_destination_rank",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "rank",
+            "preferences": { "budget_max": 800000 },
+            "limit": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_dest_lookup_01",
+      "category": "commute_destination",
+      "prompt": "How far is Acton from Cambridge?",
+      "expect_gate": "commute_destination_lookup",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "lookup",
+            "items": [{ "town": "Acton", "field": "commute" }]
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_dest_lookup_02",
+      "category": "commute_destination",
+      "prompt": "How far is Shrewsbury from Worcester?",
+      "expect_gate": "commute_destination_lookup",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "lookup",
+            "items": [{ "town": "Shrewsbury", "field": "commute" }]
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_walk_01",
+      "category": "unsupported_compare",
+      "prompt": "Which is more walkable, Newton or Needham?",
+      "expect_gate": "unsupported_compare",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "compare",
+            "towns": ["Newton", "Needham"],
+            "columns": ["latest_home_price"]
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_walk_02",
+      "category": "unsupported_compare",
+      "prompt": "Compare Framingham and Quincy on diversity.",
+      "expect_gate": "unsupported_compare",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "compare",
+            "towns": ["Framingham", "Quincy"]
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_live_01",
+      "category": "live_market",
+      "prompt": "Show me current Zillow listings in Newton right now",
+      "expect_gate": "unsupported_rank",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "rank",
+            "preferences": {},
+            "limit": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_live_02",
+      "category": "live_market",
+      "prompt": "Show Zillow listings for Acton right now",
+      "expect_gate": "unsupported_rank",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "rank",
+            "preferences": {},
+            "limit": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_hood_01",
+      "category": "neighborhood",
+      "prompt": "What is the best neighborhood in Brookline for families?",
+      "expect_gate": "unsupported_neighborhood",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "rank",
+            "preferences": {},
+            "limit": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_rank_unsup_01",
+      "category": "unsupported_rank",
+      "prompt": "Most walkable towns near Boston",
+      "expect_gate": "unsupported_rank",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "rank",
+            "preferences": {},
+            "limit": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_rank_unsup_02",
+      "category": "unsupported_rank",
+      "prompt": "Best towns for MBTA access",
+      "expect_gate": "unsupported_rank",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "rank",
+            "preferences": {},
+            "limit": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_too_many_lookup",
+      "category": "too_many_towns",
+      "prompt": "Lookup commute for many towns at once",
+      "expect_gate": "too_many_lookups",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "ops": [
+          {
+            "op": "lookup",
+            "items": [
+              { "town": "Acton", "field": "commute" },
+              { "town": "Arlington", "field": "commute" },
+              { "town": "Bedford", "field": "commute" },
+              { "town": "Belmont", "field": "commute" },
+              { "town": "Beverly", "field": "commute" },
+              { "town": "Braintree", "field": "commute" },
+              { "town": "Burlington", "field": "commute" },
+              { "town": "Cambridge", "field": "commute" },
+              { "town": "Chelsea", "field": "commute" },
+              { "town": "Concord", "field": "commute" },
+              { "town": "Dedham", "field": "commute" },
+              { "town": "Dover", "field": "commute" },
+              { "town": "Framingham", "field": "commute" },
+              { "town": "Gardner", "field": "commute" },
+              { "town": "Gloucester", "field": "commute" },
+              { "town": "Hingham", "field": "commute" },
+              { "town": "Lexington", "field": "commute" },
+              { "town": "Lincoln", "field": "commute" },
+              { "town": "Lowell", "field": "commute" },
+              { "town": "Lynn", "field": "commute" }
+            ]
+          },
+          {
+            "op": "lookup",
+            "items": [{ "town": "Acton", "field": "school" }]
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_ok_lookup",
+      "category": "control_pass",
+      "prompt": "How far is Acton from Boston?",
+      "expect_gate": null,
+      "expect_blocks": false,
+      "expect_execution_status": "ok",
+      "plan": {
+        "ops": [
+          {
+            "op": "lookup",
+            "items": [{ "town": "Acton", "field": "commute" }]
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_ok_compare",
+      "category": "control_pass",
+      "prompt": "Compare Newton and Needham on price",
+      "expect_gate": null,
+      "expect_blocks": false,
+      "expect_execution_status": "ok",
+      "plan": {
+        "ops": [
+          {
+            "op": "compare",
+            "towns": ["Newton", "Needham"],
+            "columns": ["latest_home_price"]
+          }
+        ]
+      }
+    },
+    {
+      "id": "tg_ok_rank",
+      "category": "control_pass",
+      "prompt": "Towns under 700k",
+      "expect_gate": null,
+      "expect_blocks": false,
+      "expect_execution_status": "ok",
+      "plan": {
+        "ops": [
+          {
+            "op": "rank",
+            "preferences": { "budget_max": 700000 },
+            "limit": 10
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "semantic_search",
+      "query_text": "affordable starter-home suburbs",
+      "top_k": 15
+    }
+  ]
+}

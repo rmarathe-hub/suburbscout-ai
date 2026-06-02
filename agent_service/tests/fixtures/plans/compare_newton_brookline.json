@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": ["Newton", "Brookline"],
+      "columns": ["school_score", "latest_home_price", "drive_minutes_to_boston"]
+    }
+  ]
+}

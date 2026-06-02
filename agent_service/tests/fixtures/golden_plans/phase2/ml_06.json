@@ -1,0 +1,15 @@
+{
+  "ops": [
+    {
+      "op": "lookup",
+      "items": [
+        { "town": "Westborough", "field": "school" },
+        { "town": "Gardner", "field": "commute" },
+        { "town": "Concord", "field": "price" },
+        { "town": "Concord", "field": "school" },
+        { "town": "Newton", "field": "commute" },
+        { "town": "Everett", "field": "safety" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+region,town
+Core Boston + inner metro,Boston
+Core Boston + inner metro,Cambridge
+Core Boston + inner metro,Somerville
+Core Boston + inner metro,Brookline
+Core Boston + inner metro,Newton
+Core Boston + inner metro,Watertown
+Core Boston + inner metro,Waltham
+Core Boston + inner metro,Belmont
+Core Boston + inner metro,Arlington
+Core Boston + inner metro,Medford
+Core Boston + inner metro,Malden
+Core Boston + inner metro,Everett
+Core Boston + inner metro,Chelsea
+Core Boston + inner metro,Revere
+Core Boston + inner metro,Winthrop
+Core Boston + inner metro,Quincy
+Core Boston + inner metro,Milton
+Core Boston + inner metro,Dedham
+Core Boston + inner metro,Needham
+Core Boston + inner metro,Wellesley
+Core Boston + inner metro,Weston
+Core Boston + inner metro,Lexington
+Core Boston + inner metro,Winchester
+Core Boston + inner metro,Stoneham
+Core Boston + inner metro,Melrose
+Core Boston + inner metro,Wakefield
+Core Boston + inner metro,Saugus
+Core Boston + inner metro,Lynn
+Core Boston + inner metro,Nahant
+Core Boston + inner metro,Swampscott
+North Shore / northeast suburbs,Salem
+North Shore / northeast suburbs,Beverly
+North Shore / northeast suburbs,Peabody
+North Shore / northeast suburbs,Danvers
+North Shore / northeast suburbs,Marblehead
+North Shore / northeast suburbs,Lynnfield
+North Shore / northeast suburbs,Reading
+North Shore / northeast suburbs,North Reading
+North Shore / northeast suburbs,Wilmington
+North Shore / northeast suburbs,Burlington
+North Shore / northeast suburbs,Woburn
+North Shore / northeast suburbs,Andover
+North Shore / northeast suburbs,North Andover
+North Shore / northeast suburbs,Lawrence
+North Shore / northeast suburbs,Methuen
+North Shore / northeast suburbs,Haverhill
+North Shore / northeast suburbs,Groveland
+North Shore / northeast suburbs,Georgetown
+North Shore / northeast suburbs,Boxford
+North Shore / northeast suburbs,Middleton
+North Shore / northeast suburbs,Topsfield
+North Shore / northeast suburbs,Hamilton
+North Shore / northeast suburbs,Wenham
+North Shore / northeast suburbs,Manchester-by-the-Sea
+North Shore / northeast suburbs,Essex
+North Shore / northeast suburbs,Gloucester
+North Shore / northeast suburbs,Rockport
+North Shore / northeast suburbs,Ipswich
+North Shore / northeast suburbs,Rowley
+North Shore / northeast suburbs,Newbury
+North Shore / northeast suburbs,Newburyport
+North Shore / northeast suburbs,West Newbury
+North Shore / northeast suburbs,Amesbury
+North Shore / northeast suburbs,Salisbury
+North Shore / northeast suburbs,Merrimac
+Northwest / Middlesex / Route 2 / 495 belt,Bedford
+Northwest / Middlesex / Route 2 / 495 belt,Lincoln
+Northwest / Middlesex / Route 2 / 495 belt,Concord
+Northwest / Middlesex / Route 2 / 495 belt,Carlisle
+Northwest / Middlesex / Route 2 / 495 belt,Acton
+Northwest / Middlesex / Route 2 / 495 belt,Boxborough
+Northwest / Middlesex / Route 2 / 495 belt,Littleton
+Northwest / Middlesex / Route 2 / 495 belt,Westford
+Northwest / Middlesex / Route 2 / 495 belt,Chelmsford
+Northwest / Middlesex / Route 2 / 495 belt,Lowell
+Northwest / Middlesex / Route 2 / 495 belt,Dracut
+Northwest / Middlesex / Route 2 / 495 belt,Tewksbury
+Northwest / Middlesex / Route 2 / 495 belt,Billerica
+Northwest / Middlesex / Route 2 / 495 belt,Tyngsborough
+Northwest / Middlesex / Route 2 / 495 belt,Dunstable
+Northwest / Middlesex / Route 2 / 495 belt,Groton
+Northwest / Middlesex / Route 2 / 495 belt,Pepperell
+Northwest / Middlesex / Route 2 / 495 belt,Ayer
+Northwest / Middlesex / Route 2 / 495 belt,Shirley
+Northwest / Middlesex / Route 2 / 495 belt,Harvard
+Northwest / Middlesex / Route 2 / 495 belt,Stow
+Northwest / Middlesex / Route 2 / 495 belt,Maynard
+Northwest / Middlesex / Route 2 / 495 belt,Sudbury
+Northwest / Middlesex / Route 2 / 495 belt,Wayland
+Northwest / Middlesex / Route 2 / 495 belt,Hudson
+Northwest / Middlesex / Route 2 / 495 belt,Marlborough
+Northwest / Middlesex / Route 2 / 495 belt,Bolton
+Northwest / Middlesex / Route 2 / 495 belt,Berlin
+Northwest / Middlesex / Route 2 / 495 belt,Clinton
+Northwest / Middlesex / Route 2 / 495 belt,Lancaster
+Northwest / Middlesex / Route 2 / 495 belt,Sterling
+MetroWest,Natick
+MetroWest,Framingham
+MetroWest,Ashland
+MetroWest,Sherborn
+MetroWest,Dover
+MetroWest,Holliston
+MetroWest,Hopkinton
+MetroWest,Southborough
+MetroWest,Westborough
+MetroWest,Northborough
+MetroWest,Shrewsbury
+MetroWest,Grafton
+MetroWest,Upton
+MetroWest,Milford
+MetroWest,Hopedale
+MetroWest,Mendon
+MetroWest,Bellingham
+MetroWest,Medway
+MetroWest,Millis
+MetroWest,Medfield
+MetroWest,Norfolk
+MetroWest,Franklin
+MetroWest,Wrentham
+MetroWest,Plainville
+MetroWest,Foxborough
+MetroWest,Walpole
+MetroWest,Norwood
+MetroWest,Westwood
+MetroWest,Canton
+MetroWest,Sharon
+MetroWest,Stoughton
+MetroWest,Randolph
+MetroWest,Holbrook
+MetroWest,Avon
+South Shore,Braintree
+South Shore,Weymouth
+South Shore,Hingham
+South Shore,Hull
+South Shore,Cohasset
+South Shore,Scituate
+South Shore,Norwell
+South Shore,Hanover
+South Shore,Rockland
+South Shore,Abington
+South Shore,Whitman
+South Shore,Hanson
+South Shore,Pembroke
+South Shore,Marshfield
+South Shore,Duxbury
+South Shore,Kingston
+South Shore,Plymouth
+South Shore,Carver
+South Shore,Plympton
+South Shore,Halifax
+South Shore,East Bridgewater
+South Shore,West Bridgewater
+South Shore,Bridgewater
+South Shore,Brockton
+South Shore,Easton
+South Shore,Raynham
+South Shore,Middleborough
+South Shore,Lakeville
+Southeast / Route 24 / commuter edge,Mansfield
+Southeast / Route 24 / commuter edge,Norton
+Southeast / Route 24 / commuter edge,Attleboro
+Southeast / Route 24 / commuter edge,North Attleborough
+Southeast / Route 24 / commuter edge,Seekonk
+Southeast / Route 24 / commuter edge,Rehoboth
+Southeast / Route 24 / commuter edge,Swansea
+Southeast / Route 24 / commuter edge,Somerset
+Southeast / Route 24 / commuter edge,Dighton
+Southeast / Route 24 / commuter edge,Taunton
+Southeast / Route 24 / commuter edge,Berkley
+Southeast / Route 24 / commuter edge,Freetown
+Southeast / Route 24 / commuter edge,Fall River
+Southeast / Route 24 / commuter edge,New Bedford
+Southeast / Route 24 / commuter edge,Acushnet
+Southeast / Route 24 / commuter edge,Dartmouth
+Southeast / Route 24 / commuter edge,Fairhaven
+Southeast / Route 24 / commuter edge,Rochester
+Southeast / Route 24 / commuter edge,Mattapoisett
+Southeast / Route 24 / commuter edge,Marion
+Southeast / Route 24 / commuter edge,Wareham
+Worcester-area but still Boston-commutable for some,Worcester
+Worcester-area but still Boston-commutable for some,Auburn
+Worcester-area but still Boston-commutable for some,Millbury
+Worcester-area but still Boston-commutable for some,Sutton
+Worcester-area but still Boston-commutable for some,Northbridge
+Worcester-area but still Boston-commutable for some,Douglas
+Worcester-area but still Boston-commutable for some,Uxbridge
+Worcester-area but still Boston-commutable for some,Blackstone
+Worcester-area but still Boston-commutable for some,Millville
+Worcester-area but still Boston-commutable for some,Leicester
+Worcester-area but still Boston-commutable for some,Paxton
+Worcester-area but still Boston-commutable for some,Holden
+Worcester-area but still Boston-commutable for some,West Boylston
+Worcester-area but still Boston-commutable for some,Boylston
+Worcester-area but still Boston-commutable for some,Rutland
+Worcester-area but still Boston-commutable for some,Princeton
+Worcester-area but still Boston-commutable for some,Leominster
+Worcester-area but still Boston-commutable for some,Fitchburg
+Worcester-area but still Boston-commutable for some,Lunenburg
+Worcester-area but still Boston-commutable for some,Westminster
+Worcester-area but still Boston-commutable for some,Gardner

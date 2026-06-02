@@ -1,0 +1,1380 @@
+{
+  "description": "Fresh 75-question E2E holdout for query-agent verification",
+  "seed": 20260603,
+  "prompt_count": 75,
+  "targets": {
+    "final_pass_count": 68,
+    "final_pass_rate": 0.9067,
+    "hallucinated_unsupported_facts": 0,
+    "wrong_commute_destination_ranking": 0
+  },
+  "by_category": {
+    "membership_typo": 5,
+    "typo": 2,
+    "semantic": 10,
+    "coastal": 7,
+    "inverted": 5,
+    "commute": 10,
+    "unsupported": 6,
+    "membership": 3,
+    "lookup": 9,
+    "compare": 9,
+    "budget": 9
+  },
+  "cases": [
+    {
+      "id": "hold75_20260603_001",
+      "category": "membership_typo",
+      "prompt": "Would Wstford resolve to a town?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "plan_ops_max": 1,
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_002",
+      "category": "membership_typo",
+      "prompt": "Can I use North Readng?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "plan_ops_max": 1,
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_003",
+      "category": "membership_typo",
+      "prompt": "Does Westboro map to Westborough?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "plan_ops_max": 1,
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_004",
+      "category": "membership_typo",
+      "prompt": "Is Manchster-by-the-Sea recognized?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "plan_ops_max": 1,
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_005",
+      "category": "typo",
+      "prompt": "Pull up Chelmsfrd.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_006",
+      "category": "typo",
+      "prompt": "Marlborugh versus Burlington for safety.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "compare"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_007",
+      "category": "semantic",
+      "prompt": "Show towns with a Concord-like vibe but cheaper.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_008",
+      "category": "semantic",
+      "prompt": "Find suburbs similar to Hingham but less expensive.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_009",
+      "category": "semantic",
+      "prompt": "Give me a Brookline-like feel with lower prices.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_010",
+      "category": "coastal",
+      "prompt": "Show water-adjacent towns.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ],
+        "rank_requires_coastal": true
+      }
+    },
+    {
+      "id": "hold75_20260603_011",
+      "category": "coastal",
+      "prompt": "Beachy suburbs under $900k.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ],
+        "rank_requires_coastal": true
+      }
+    },
+    {
+      "id": "hold75_20260603_012",
+      "category": "inverted",
+      "prompt": "I do not care much about schools if the town is affordable.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_013",
+      "category": "inverted",
+      "prompt": "Safety can be mediocre, I mostly care about price.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_014",
+      "category": "commute",
+      "prompt": "Rank towns within 35 minutes of Cambridge.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_015",
+      "category": "unsupported",
+      "prompt": "Which is more walkable, Newton or Needham?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    },
+    {
+      "id": "hold75_20260603_016",
+      "category": "unsupported",
+      "prompt": "Show current Zillow listings in Acton.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    },
+    {
+      "id": "hold75_20260603_017",
+      "category": "membership",
+      "prompt": "Is Tewksbury part of your curated coverage?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "plan_ops_max": 1,
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_018",
+      "category": "membership",
+      "prompt": "Would you recognize Stow as a valid town name?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "plan_ops_max": 1,
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_019",
+      "category": "membership",
+      "prompt": "Is Littleton loaded in the dataset?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "plan_ops_max": 1,
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_020",
+      "category": "membership_typo",
+      "prompt": "Is Boxbourgh accepted spelling for Boxborough?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "plan_ops_max": 1,
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_021",
+      "category": "lookup",
+      "prompt": "What's the median home price in Wellesley?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_022",
+      "category": "lookup",
+      "prompt": "How long is the drive from Sudbury to Boston?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_023",
+      "category": "lookup",
+      "prompt": "Give me the school score for Sharon.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_024",
+      "category": "lookup",
+      "prompt": "Is Marblehead marked coastal in your data?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "membership"
+        ],
+        "plan_ops_max": 1,
+        "execution_status_in": [
+          "ok",
+          "not_found",
+          "out_of_scope",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_025",
+      "category": "lookup",
+      "prompt": "What safety score does Melrose have?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_026",
+      "category": "lookup",
+      "prompt": "Summarize Andover for me.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_027",
+      "category": "lookup",
+      "prompt": "Crime rate for Arlington \u2014 what do you have?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_028",
+      "category": "lookup",
+      "prompt": "Does Natick show up as North Shore or elsewhere region-wise?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_029",
+      "category": "lookup",
+      "prompt": "Home price year and value for Dover.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "lookup"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "not_found"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_030",
+      "category": "compare",
+      "prompt": "Newton or Needham \u2014 which has better schools?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "compare"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_031",
+      "category": "compare",
+      "prompt": "Compare Lexington and Winchester on safety and price.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "compare"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_032",
+      "category": "compare",
+      "prompt": "Is Brookline pricier than Somerville?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "compare"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_033",
+      "category": "compare",
+      "prompt": "Framingham vs Quincy on commute to Boston.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "compare"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_034",
+      "category": "compare",
+      "prompt": "Which is safer, Belmont or Watertown?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "compare"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_035",
+      "category": "compare",
+      "prompt": "Compare Arlington, Medford, and Malden on home price.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "compare"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_036",
+      "category": "compare",
+      "prompt": "Rockport versus Gloucester on coastal status and price.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "compare"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_037",
+      "category": "compare",
+      "prompt": "Bedford or Burlington for school scores.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "compare"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_038",
+      "category": "compare",
+      "prompt": "Is Sharon more affordable than Weston on median price?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "compare"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_039",
+      "category": "budget",
+      "prompt": "Suburbs under $650k with decent schools.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_040",
+      "category": "budget",
+      "prompt": "Where can I buy under $500k within an hour of Boston?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_041",
+      "category": "budget",
+      "prompt": "Affordable towns that are not tiny \u2014 budget cap $550k.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_042",
+      "category": "budget",
+      "prompt": "Best value towns if our ceiling is $725,000.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_043",
+      "category": "budget",
+      "prompt": "Recommend places under $600k, schools matter.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_044",
+      "category": "budget",
+      "prompt": "Towns realistically under $800k for a first home.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_045",
+      "category": "budget",
+      "prompt": "Stretch to $900k max \u2014 what fits?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_046",
+      "category": "budget",
+      "prompt": "Cheaper than Newton but still commutable.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_047",
+      "category": "budget",
+      "prompt": "Lowest median prices you track near Boston.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_048",
+      "category": "commute",
+      "prompt": "Under 45 minutes to South Station, prioritize schools.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_049",
+      "category": "commute",
+      "prompt": "Short commute towns, max 25 minutes driving.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_050",
+      "category": "commute",
+      "prompt": "I can do 50+ minutes if schools are strong.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_051",
+      "category": "commute",
+      "prompt": "Commute under 40 min and safe neighborhoods.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_052",
+      "category": "commute",
+      "prompt": "Towns between 20 and 35 minutes from Boston.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_053",
+      "category": "commute",
+      "prompt": "Quick commute is the top priority.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_054",
+      "category": "commute",
+      "prompt": "Farther out is fine \u2014 at least 40 minutes to Boston.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_055",
+      "category": "commute",
+      "prompt": "Max 30 minute drive, budget up to $1.2M.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_056",
+      "category": "commute",
+      "prompt": "Commute window 35\u201350 minutes, coastal optional.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_057",
+      "category": "coastal",
+      "prompt": "Ocean-adjacent options with good schools.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ],
+        "rank_requires_coastal": true
+      }
+    },
+    {
+      "id": "hold75_20260603_058",
+      "category": "coastal",
+      "prompt": "List seaside towns you track.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ],
+        "rank_requires_coastal": true
+      }
+    },
+    {
+      "id": "hold75_20260603_059",
+      "category": "coastal",
+      "prompt": "Waterfront communities under $1M.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ],
+        "rank_requires_coastal": true
+      }
+    },
+    {
+      "id": "hold75_20260603_060",
+      "category": "coastal",
+      "prompt": "Coastal suburbs with a shorter Boston commute.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ],
+        "rank_requires_coastal": true
+      }
+    },
+    {
+      "id": "hold75_20260603_061",
+      "category": "coastal",
+      "prompt": "Beach towns that are still somewhat affordable.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ],
+        "rank_requires_coastal": true
+      }
+    },
+    {
+      "id": "hold75_20260603_062",
+      "category": "semantic",
+      "prompt": "Quiet family suburbs with a Lexington feel.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_063",
+      "category": "semantic",
+      "prompt": "Towns that feel like Wellesley but less pricey.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_064",
+      "category": "semantic",
+      "prompt": "Something like Concord but closer to Boston.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_065",
+      "category": "semantic",
+      "prompt": "Suburbs with an Arlington vibe and good transit-ish commute.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_066",
+      "category": "semantic",
+      "prompt": "Places similar to Newton for young families.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_067",
+      "category": "semantic",
+      "prompt": "I want a Medfield-like town under $900k.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_068",
+      "category": "semantic",
+      "prompt": "Vibe match to Hingham, budget flexible.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains": [
+          "semantic_search"
+        ],
+        "require_semantic_rank_limited": true,
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_069",
+      "category": "inverted",
+      "prompt": "Crime can be higher if homes are cheap.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_070",
+      "category": "inverted",
+      "prompt": "School quality is secondary \u2014 affordability first.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_071",
+      "category": "inverted",
+      "prompt": "Don't weight safety heavily; show affordable options.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "plan_ops_contains_any": [
+          "rank",
+          "semantic_search"
+        ],
+        "execution_status_in": [
+          "ok",
+          "partial",
+          "no_rows",
+          "blocked"
+        ]
+      }
+    },
+    {
+      "id": "hold75_20260603_072",
+      "category": "unsupported",
+      "prompt": "Best nightlife towns near Boston.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    },
+    {
+      "id": "hold75_20260603_073",
+      "category": "unsupported",
+      "prompt": "Which neighborhood in Brookline is best for kids?",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    },
+    {
+      "id": "hold75_20260603_074",
+      "category": "unsupported",
+      "prompt": "Show me live Redfin listings in Cambridge.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    },
+    {
+      "id": "hold75_20260603_075",
+      "category": "unsupported",
+      "prompt": "Rank towns by walkability score.",
+      "expect": {
+        "forbid_hallucinated_facts": true,
+        "forbid_wrong_commute_rank": true,
+        "execution_status_in": [
+          "blocked",
+          "out_of_scope"
+        ],
+        "expect_used_answer_llm": false
+      }
+    }
+  ]
+}

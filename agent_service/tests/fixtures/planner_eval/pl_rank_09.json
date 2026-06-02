@@ -1,0 +1,12 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "budget_max": 750000,
+        "commute_priority": "high"
+      },
+      "limit": 10
+    }
+  ]
+}

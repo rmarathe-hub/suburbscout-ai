@@ -1,0 +1,115 @@
+{
+  "description": "Tier 1.5 routing + trust fixes",
+  "prompt_count": 17,
+  "cases": [
+    {
+      "id": "excl_dest_01",
+      "category": "exclude_destination",
+      "expect_intent": "recommend_structured",
+      "expect_gate": null,
+      "prompt": "Recommend towns under $600k but not Framingham"
+    },
+    {
+      "id": "excl_dest_02",
+      "category": "exclude_destination",
+      "expect_intent": "recommend_structured",
+      "expect_gate": null,
+      "prompt": "Find affordable towns within 40 minutes of Boston excluding Natick"
+    },
+    {
+      "id": "typo_01",
+      "category": "typo_lookup",
+      "expect_intent": "lookup_single_town",
+      "prompt": "Does Chelseaa have strong schools?"
+    },
+    {
+      "id": "typo_02",
+      "category": "typo_lookup",
+      "expect_intent": "lookup_single_town",
+      "accept_intents": [
+        "lookup_single_town",
+        "dataset_membership"
+      ],
+      "prompt": "Is Westborugh in the list?"
+    },
+    {
+      "id": "multi_lk_01",
+      "category": "multi_lookup",
+      "expect_intent": "compare_towns",
+      "prompt": "What is the commute from Gardner and what is the commute from Shrewsbury?"
+    },
+    {
+      "id": "multi_lk_02",
+      "category": "multi_lookup",
+      "expect_intent": "compare_towns",
+      "prompt": "Commute from Gardner and commute from Shrewsbury"
+    },
+    {
+      "id": "multi_fld_01",
+      "category": "multi_field",
+      "expect_intent": "lookup_single_town",
+      "prompt": "What are Newton's home price and school score?"
+    },
+    {
+      "id": "multi_fld_02",
+      "category": "multi_field",
+      "expect_intent": "lookup_single_town",
+      "prompt": "Tell me Acton's commute and safety score"
+    },
+    {
+      "id": "coastal_01",
+      "category": "coastal_list",
+      "expect_intent": "recommend_structured",
+      "prompt": "Waterfront towns in the dataset"
+    },
+    {
+      "id": "coastal_02",
+      "category": "coastal_list",
+      "expect_intent": "recommend_structured",
+      "prompt": "Which coastal towns do you have?"
+    },
+    {
+      "id": "open_01",
+      "category": "open_ended",
+      "expect_intent": "needs_clarification",
+      "prompt": "What towns should I consider?"
+    },
+    {
+      "id": "open_02",
+      "category": "open_ended",
+      "expect_intent": "needs_clarification",
+      "prompt": "What do you recommend?"
+    },
+    {
+      "id": "member_01",
+      "category": "membership",
+      "expect_intent": "dataset_membership",
+      "prompt": "Is Worchester supported?"
+    },
+    {
+      "id": "scope_01",
+      "category": "scope_lookup",
+      "expect_intent": "lookup_single_town",
+      "prompt": "Is Hull excluded?"
+    },
+    {
+      "id": "excl_rank_01",
+      "category": "exclude_rank",
+      "expect_intent": "recommend_structured",
+      "prompt": "Towns under 700k but not Sharon"
+    },
+    {
+      "id": "ctrl_01",
+      "category": "control",
+      "expect_intent": "recommend_structured",
+      "expect_gate": "commute_destination_rank",
+      "prompt": "Towns within 30 minutes of Cambridge"
+    },
+    {
+      "id": "ctrl_02",
+      "category": "control",
+      "expect_intent": "lookup_single_town",
+      "prompt": "How far is Acton from Boston?"
+    }
+  ]
+}

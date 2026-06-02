@@ -1,0 +1,20 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Acton",
+        "Arlington",
+        "Bedford",
+        "Belmont",
+        "Burlington",
+        "Concord",
+        "Lexington",
+        "Lincoln",
+        "Maynard",
+        "Waltham"
+      ],
+      "columns": ["latest_home_price", "drive_minutes_to_boston"]
+    }
+  ]
+}

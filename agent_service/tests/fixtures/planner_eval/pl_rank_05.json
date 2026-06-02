@@ -1,0 +1,12 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "budget_max": 600000,
+        "school_priority": "high"
+      },
+      "limit": 10
+    }
+  ]
+}

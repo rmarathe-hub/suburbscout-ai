@@ -1,0 +1,12 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "budget_max": 700000,
+        "exclude_towns": ["Sharon"]
+      },
+      "limit": 10
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "exclude_towns": [
+          "Sharon"
+        ]
+      },
+      "limit": 10
+    }
+  ]
+}

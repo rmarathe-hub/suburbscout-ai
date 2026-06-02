@@ -1,0 +1,15 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Westford",
+        "Sharon"
+      ],
+      "columns": [
+        "latest_home_price",
+        "safety_score"
+      ]
+    }
+  ]
+}

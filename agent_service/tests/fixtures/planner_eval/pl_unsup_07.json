@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "unsupported",
+      "category": "school_detail",
+      "reason": "Out of scope: school_detail"
+    }
+  ]
+}

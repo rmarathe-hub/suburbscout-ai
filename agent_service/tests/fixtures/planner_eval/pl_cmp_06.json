@@ -1,0 +1,14 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Rockport",
+        "Gloucester"
+      ],
+      "columns": [
+        "is_coastal"
+      ]
+    }
+  ]
+}

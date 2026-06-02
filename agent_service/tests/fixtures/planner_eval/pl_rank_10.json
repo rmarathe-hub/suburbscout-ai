@@ -1,0 +1,11 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "affordability_priority": "high"
+      },
+      "limit": 5
+    }
+  ]
+}

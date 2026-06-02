@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "unsupported",
+      "category": "transit",
+      "reason": "Non-Boston commute destination not in dataset."
+    }
+  ]
+}

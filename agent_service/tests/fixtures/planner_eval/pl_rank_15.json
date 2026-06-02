@@ -1,0 +1,12 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "min_commute_minutes": 20,
+        "max_commute_minutes": 40
+      },
+      "limit": 10
+    }
+  ]
+}

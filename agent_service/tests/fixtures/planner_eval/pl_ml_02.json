@@ -1,0 +1,17 @@
+{
+  "ops": [
+    {
+      "op": "lookup",
+      "items": [
+        {
+          "town": "Acton",
+          "field": "school"
+        },
+        {
+          "town": "Concord",
+          "field": "safety"
+        }
+      ]
+    }
+  ]
+}

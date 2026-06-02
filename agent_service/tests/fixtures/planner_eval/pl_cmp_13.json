@@ -1,0 +1,15 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "North Reading",
+        "Reading"
+      ],
+      "columns": [
+        "school_score",
+        "safety_score"
+      ]
+    }
+  ]
+}

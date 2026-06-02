@@ -1,0 +1,14 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Lexington",
+        "Winchester"
+      ],
+      "columns": [
+        "latest_home_price"
+      ]
+    }
+  ]
+}

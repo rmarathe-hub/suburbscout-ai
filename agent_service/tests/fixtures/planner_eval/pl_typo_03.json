@@ -1,0 +1,14 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Westborough",
+        "Natick"
+      ],
+      "columns": [
+        "latest_home_price"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Acton",
+        "Concord"
+      ],
+      "columns": [
+        "drive_minutes_to_boston"
+      ]
+    }
+  ]
+}

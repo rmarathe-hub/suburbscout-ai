@@ -1,0 +1,14 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Framingham",
+        "Quincy"
+      ],
+      "columns": [
+        "latest_home_price"
+      ]
+    }
+  ]
+}

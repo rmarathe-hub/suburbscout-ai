@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "unsupported",
+      "category": "transit",
+      "reason": "Out of scope: transit"
+    }
+  ]
+}

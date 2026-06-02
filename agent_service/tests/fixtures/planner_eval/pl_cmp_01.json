@@ -1,0 +1,14 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Newton",
+        "Needham"
+      ],
+      "columns": [
+        "latest_home_price"
+      ]
+    }
+  ]
+}

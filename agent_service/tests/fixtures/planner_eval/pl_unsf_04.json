@@ -1,0 +1,14 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Newton",
+        "Brookline"
+      ],
+      "columns": [
+        "latest_home_price"
+      ]
+    }
+  ]
+}

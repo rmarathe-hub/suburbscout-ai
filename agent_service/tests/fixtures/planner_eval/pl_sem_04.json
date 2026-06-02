@@ -1,0 +1,9 @@
+{
+  "ops": [
+    {
+      "op": "semantic_search",
+      "query_text": "walkable downtown vibe near Boston",
+      "top_k": 15
+    }
+  ]
+}

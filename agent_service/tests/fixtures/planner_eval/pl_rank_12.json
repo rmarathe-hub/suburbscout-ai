@@ -1,0 +1,11 @@
+{
+  "ops": [
+    {
+      "op": "rank",
+      "preferences": {
+        "requires_coastal": true
+      },
+      "limit": 10
+    }
+  ]
+}

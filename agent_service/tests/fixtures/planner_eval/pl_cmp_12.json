@@ -1,0 +1,15 @@
+{
+  "ops": [
+    {
+      "op": "compare",
+      "towns": [
+        "Hingham",
+        "Cohasset"
+      ],
+      "columns": [
+        "is_coastal",
+        "latest_home_price"
+      ]
+    }
+  ]
+}
