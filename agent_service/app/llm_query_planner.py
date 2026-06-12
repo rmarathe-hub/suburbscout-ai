@@ -102,6 +102,7 @@ def _build_user_message(
     *,
     repair_error: str | None = None,
     previous_json: dict[str, Any] | None = None,
+    session_context: dict[str, Any] | None = None,
 ) -> str:
     from app.query_patterns import is_coastal_rank_query, is_dataset_membership_query
 
@@ -117,6 +118,9 @@ def _build_user_message(
             "prefer_coastal_rank": is_coastal_rank_query(query),
         },
     }
+    if session_context:
+        ctx["session_context"] = session_context
+        ctx["hints"]["follow_up"] = True
     parts = ["Build a QueryPlan for this suburb query.\n", json.dumps(ctx, indent=2)]
     if repair_error:
         parts.append(
@@ -151,6 +155,7 @@ async def plan_query_with_llm(
     entities: ExtractedEntities | None = None,
     max_repair_attempts: int | None = None,
     apply_normalizer: bool = True,
+    session_context: dict[str, Any] | None = None,
 ) -> QueryPlan:
     """
     Use the chat model to produce a validated QueryPlan.
@@ -187,6 +192,7 @@ async def plan_query_with_llm(
             entities,
             repair_error=repair_error,
             previous_json=previous,
+            session_context=session_context,
         )
         try:
             raw_text = await _call_planner_llm(user_msg)

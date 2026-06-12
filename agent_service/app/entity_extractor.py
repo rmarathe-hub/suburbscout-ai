@@ -8,7 +8,6 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from app.config import SUBURBS_JSON_PATH
 from app.constraint_parser import extract_town_mentions
 from app.town_normalizer import (
     TOWN_ALIASES,
@@ -278,11 +277,9 @@ class ExtractedEntities(BaseModel):
 
 @lru_cache(maxsize=1)
 def _dataset_towns() -> tuple[str, ...]:
-    import json
+    from app.ranking import load_suburbs
 
-    with open(SUBURBS_JSON_PATH, encoding="utf-8") as f:
-        suburbs = json.load(f)
-    return tuple(s["name"] for s in suburbs)
+    return tuple(s["name"] for s in load_suburbs())
 
 
 def is_junk_town_candidate(name: str) -> bool:

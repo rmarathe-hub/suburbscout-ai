@@ -11,9 +11,14 @@ class QueryRequest(BaseModel):
     """POST /api/query body."""
 
     prompt: str = Field(..., min_length=1, max_length=4000, description="Natural language suburb question")
+    session_id: str | None = Field(
+        default=None,
+        max_length=128,
+        description="Optional session id for follow-up preference context",
+    )
     save_audit: bool = Field(
         default=False,
-        description="Append turn to query_agent_audit.jsonl",
+        description="Append turn to query_agent_audit.jsonl when Postgres is unavailable",
     )
     debug: bool = Field(
         default=False,
@@ -42,3 +47,27 @@ class HealthResponse(BaseModel):
     status: str
     query_agent_configured: bool
     suburbs_dataset_loaded: bool
+    database: str = Field(
+        description="ok | unavailable | not_configured",
+    )
+
+
+class SearchSummary(BaseModel):
+    request_id: str
+    prompt: str
+    execution_status: str | None = None
+    message_code: str | None = None
+    latency_ms: int | None = None
+    session_id: str | None = None
+    created_at: str | None = None
+
+
+class SearchListResponse(BaseModel):
+    searches: list[SearchSummary]
+
+
+class SessionResponse(BaseModel):
+    session_id: str
+    latest_preferences: dict[str, Any] | None = None
+    created_at: str | None = None
+    updated_at: str | None = None

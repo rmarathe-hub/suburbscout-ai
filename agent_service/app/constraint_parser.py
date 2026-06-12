@@ -5,7 +5,6 @@ from __future__ import annotations
 import re
 from functools import lru_cache
 
-from app.config import SUBURBS_JSON_PATH
 from app.geo_enrichment import region_key_for_label
 from app.schemas import Preferences
 from app.town_normalizer import TOWN_ALIASES, canonical_town_name, normalize_key, resolve_town_in_dataset
@@ -174,10 +173,9 @@ DRIVE_TIME_UNDER_RE = re.compile(
 
 @lru_cache(maxsize=1)
 def _known_towns_by_length() -> tuple[str, ...]:
-    import json
+    from app.ranking import load_suburbs
 
-    with open(SUBURBS_JSON_PATH, encoding="utf-8") as f:
-        suburbs = json.load(f)
+    suburbs = load_suburbs()
     return tuple(sorted((s["name"] for s in suburbs), key=lambda n: len(n), reverse=True))
 
 

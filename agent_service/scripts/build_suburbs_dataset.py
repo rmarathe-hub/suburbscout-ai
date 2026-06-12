@@ -259,6 +259,15 @@ def main() -> None:
     print(f"  coastal (curated): {coastal}")
     print(f"Wrote {SUBURBS_CLEAN_CSV_PATH}")
 
+    try:
+        from app.suburb_store import upsert_suburbs
+
+        synced = upsert_suburbs(records)
+        if synced:
+            print(f"Synced {synced} towns to Postgres (suburbs table).")
+    except Exception:
+        pass
+
 
 if __name__ == "__main__":
     main()

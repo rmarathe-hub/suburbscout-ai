@@ -135,8 +135,11 @@ python scripts/verify_phase2_step6.py --live   # one live query
 
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
-| `/health` | GET | Liveness + `query_agent_configured` |
+| `/health` | GET | Liveness + `query_agent_configured` + `database` |
 | `/api/query` | POST | Run query agent |
+| `/api/searches` | GET | Recent searches (Phase 3A, needs `DATABASE_URL`) |
+| `/api/searches/{request_id}` | GET | Full search trace (Phase 3A) |
+| `/api/sessions/{session_id}` | GET | Session preferences (Phase 3A) |
 | `/docs` | GET | OpenAPI UI |
 
 **Request body:**
@@ -157,6 +160,76 @@ curl -s -X POST http://127.0.0.1:8000/api/query \
   -H 'Content-Type: application/json' \
   -d '{"prompt":"What is the commute from Maynard?"}'
 ```
+
+### Phase 3A — PostgreSQL persistence
+
+Adds durable search history, audit traces, and basic session memory **without changing** the Phase 2 query-agent brain. `suburbs.json` remains the ranking source of truth.
+
+```bash
+# Local Postgres
+docker compose up -d
+cp .env.example .env   # set DATABASE_URL + Azure keys
+python scripts/init_db.py
+python scripts/run_api.py
+python scripts/verify_phase3a.py
+python scripts/verify_phase3a.py --live-api   # Azure query + DB trace check
+python scripts/verify_phase3a.py --full       # + phase2-only eval suite (slow)
+bash scripts/manual_api_phase3_smoke.sh
+```
+
+| Env var | Default | Purpose |
+|---------|---------|---------|
+| `DATABASE_URL` | unset | Postgres connection string; unset = JSONL-only audit |
+| `save_audit` (API) | `false` | JSONL fallback when Postgres unavailable |
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/health` | GET | + `database`: `ok` \| `unavailable` \| `not_configured` |
+| `/api/query` | POST | + optional `session_id` for follow-ups |
+| `/api/searches` | GET | Recent persisted searches (`?limit=20`) |
+| `/api/searches/{request_id}` | GET | Full trace (plan, results, answer, audit) |
+| `/api/sessions/{session_id}` | GET | Stored session preferences |
+
+**Request body (with session):**
+
+```json
+{
+  "prompt": "Make commute more important than schools.",
+  "session_id": "demo-session-1",
+  "save_audit": false,
+  "debug": false
+}
+```
+
+**Behavior:**
+
+- When `DATABASE_URL` is set, every `/api/query` persists to Postgres (fail-soft — API still responds if DB is down).
+- Legacy orchestrator `save_search_tool` writes to Postgres first, then `saved_searches.jsonl`.
+- Session follow-ups load `latest_preferences` into planner context and merge updates after each turn.
+
+**Files:** `app/db.py`, `app/db_models.py`, `app/repositories.py`, `alembic/`, `docker-compose.yml`
+
+### Part 2 — Containerize API (Docker image for deploy)
+
+Packages the FastAPI query agent for Azure Container Apps (Part 3). Image includes `suburbs.json` and the local vector index.
+
+```bash
+cd agent_service
+docker build -t suburbscout-api .
+docker run --rm -p 8000:8000 --env-file .env suburbscout-api
+# other terminal:
+python scripts/verify_part2_docker.py
+curl -s -X POST http://127.0.0.1:8000/api/query \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt":"What is the commute from Maynard?"}'
+```
+
+| File | Purpose |
+|------|---------|
+| `Dockerfile` | Python 3.12 + uvicorn on port 8000 |
+| `.dockerignore` | Excludes `.env`, venv, tests, eval results |
+
+Run `alembic upgrade head` from your laptop (Part 1 / Supabase), not on container start. Use Supabase **transaction pooler** URL in `.env` for container/API runtime.
 
 ### Phase 0 — Query-plan agent prerequisites
 

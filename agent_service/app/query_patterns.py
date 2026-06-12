@@ -6,7 +6,6 @@ import re
 from dataclasses import dataclass
 from functools import lru_cache
 
-from app.config import SUBURBS_JSON_PATH
 from app.entity_extractor import ExtractedEntities, extract_entities, primary_town
 from app.town_normalizer import canonical_town_name, normalize_key, resolve_town_in_dataset
 
@@ -200,13 +199,13 @@ _LOOKUP_FIELD_MARKERS: tuple[tuple[str, str], ...] = (
 
 @lru_cache(maxsize=1)
 def _dataset_towns() -> tuple[str, ...]:
-    import json
+    from app.suburb_store import suburbs_dataset_available
 
-    if not SUBURBS_JSON_PATH.exists():
+    if not suburbs_dataset_available():
         return ()
-    with open(SUBURBS_JSON_PATH, encoding="utf-8") as f:
-        data = json.load(f)
-    return tuple(item.get("name", "") for item in data if item.get("name"))
+    from app.ranking import load_suburbs
+
+    return tuple(item.get("name", "") for item in load_suburbs() if item.get("name"))
 
 
 def is_town_in_exclude_context(query: str, match_start: int) -> bool:

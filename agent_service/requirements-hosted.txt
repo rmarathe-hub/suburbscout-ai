@@ -1,0 +1,2 @@
+# Foundry Hosted Agent only (Dockerfile.hosted). Not required for local FastAPI.
+agent-framework-foundry-hosting

@@ -84,6 +84,7 @@ async def handle_query_v2(
     prompt: str,
     *,
     save_searches: bool = False,
+    session_id: str | None = None,
 ) -> dict[str, Any]:
     """
     Two-stage query agent: LLM plan → dataset execution → grounded answer (or refusal).
@@ -99,10 +100,23 @@ async def handle_query_v2(
             "Query agent is not available. Enable USE_LLM_QUERY_AGENT and configure Azure OpenAI."
         )
 
+    session_context: dict[str, Any] | None = None
+    if session_id:
+        try:
+            from app.repositories import SearchRepository
+
+            session_context = SearchRepository().get_session_context(session_id)
+        except Exception:
+            logger.warning("failed to load session context", exc_info=True)
+
     request_id = str(uuid.uuid4())
     started = time.perf_counter()
 
-    raw_plan: QueryPlan = await plan_query_with_llm(query, apply_normalizer=False)
+    raw_plan: QueryPlan = await plan_query_with_llm(
+        query,
+        apply_normalizer=False,
+        session_context=session_context,
+    )
     from app.plan_normalizer import normalize_planned_query
 
     plan = normalize_planned_query(query, raw_plan)
@@ -110,7 +124,7 @@ async def handle_query_v2(
 
     if trust_gate and trust_gate.blocks_pipeline:
         latency_ms = int((time.perf_counter() - started) * 1000)
-        return _trust_gate_response(
+        payload = _trust_gate_response(
             query,
             plan,
             trust_gate,
@@ -118,6 +132,8 @@ async def handle_query_v2(
             request_id=request_id,
             latency_ms=latency_ms,
         )
+        _persist_turn(query, payload, session_id=session_id, save_searches=save_searches)
+        return payload
 
     execution: ExecutionResult = await execute_plan_async(plan, validate=False)
 
@@ -179,19 +195,29 @@ async def handle_query_v2(
         payload["trust_gate"] = trust_gate.gate_type
         payload["trust_gate_blocks"] = trust_gate.blocks_pipeline
 
-    if save_searches:
-        from app.query_agent_audit import save_query_agent_turn
-
-        save_query_agent_turn(
-            query,
-            payload,
-            plan=payload["plan"],
-            raw_plan=payload["raw_llm_plan"],
-            request_id=request_id,
-            latency_ms=latency_ms,
-        )
+    _persist_turn(query, payload, session_id=session_id, save_searches=save_searches)
 
     return payload
+
+
+def _persist_turn(
+    prompt: str,
+    payload: dict[str, Any],
+    *,
+    session_id: str | None,
+    save_searches: bool,
+) -> None:
+    from app.db import db_configured
+    from app.repositories import persist_query_turn
+
+    if not db_configured() and not save_searches:
+        return
+    persist_query_turn(
+        prompt,
+        payload,
+        session_id=session_id,
+        save_jsonl=save_searches,
+    )
 
 
 def _trust_gate_response(

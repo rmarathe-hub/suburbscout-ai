@@ -10,13 +10,13 @@ from typing import Annotated, Any
 from agent_framework import tool
 from pydantic import Field
 
-from app.config import SAVED_SEARCHES_PATH, SUBURBS_JSON_PATH
 from app.ranking import (
     describe_active_filters,
     load_suburbs,
     parse_preferences_from_query,
     rank_suburbs,
 )
+from app.suburb_store import suburbs_data_source
 from app.schemas import Preferences
 from app.town_normalizer import canonical_town_name, normalize_key, resolve_town_in_dataset
 from app.vector_store import search_towns_by_text
@@ -140,7 +140,7 @@ def get_town_facts(town_name: str, *, suburbs: list[dict[str, Any]] | None = Non
             "in_dataset": False,
             "message": "Town name is required.",
             "score_disclaimer": SCORE_DISCLAIMER,
-            "data_source": str(SUBURBS_JSON_PATH.name),
+            "data_source": suburbs_data_source(),
             "usage_note": (
                 "Direct town lookup only. Use for single-town facts or dataset membership checks. "
                 "Do not rank or answer about a different town when found=false."
@@ -154,7 +154,7 @@ def get_town_facts(town_name: str, *, suburbs: list[dict[str, Any]] | None = Non
     base = {
         "queried_name": queried,
         "score_disclaimer": SCORE_DISCLAIMER,
-        "data_source": str(SUBURBS_JSON_PATH.name),
+        "data_source": suburbs_data_source(),
         "usage_note": (
             "Direct town lookup only. Use for single-town facts or dataset membership checks. "
             "Do not rank or substitute another town when found=false."
@@ -278,7 +278,7 @@ def compare_suburbs_tool(
         "town_a": _public_suburb_record(a),
         "town_b": _public_suburb_record(b),
         "score_disclaimer": SCORE_DISCLAIMER,
-        "data_source": str(SUBURBS_JSON_PATH.name),
+        "data_source": suburbs_data_source(),
     }
     if resolved_a != town_a:
         payload["resolved_town_a"] = resolved_a
@@ -338,7 +338,7 @@ def compare_suburbs_multi_tool(
         "errors": errors,
         "town_count": len(rows),
         "score_disclaimer": SCORE_DISCLAIMER,
-        "data_source": str(SUBURBS_JSON_PATH.name),
+        "data_source": suburbs_data_source(),
     }
 
 
@@ -454,7 +454,7 @@ def save_search_tool(
         Field(description="Optional parsed preferences from parse_preferences_tool."),
     ] = None,
 ) -> dict[str, Any]:
-    """Append this search to saved_searches.jsonl for audit/history."""
+    """Append this search to Postgres (or saved_searches.jsonl fallback)."""
     results = results if results is not None else top_matches
     if results is None:
         results = []
@@ -463,21 +463,13 @@ def save_search_tool(
         if isinstance(preferences, dict) and preferences
         else _coerce_preferences(None, prompt).model_dump(exclude_none=True)
     )
-    record = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "prompt": prompt,
-        "preferences": prefs_dict,
-        "results": results,
-    }
-    SAVED_SEARCHES_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(SAVED_SEARCHES_PATH, "a", encoding="utf-8") as f:
-        f.write(json.dumps(record) + "\n")
+    from app.repositories import persist_legacy_search
 
-    return {
-        "saved": True,
-        "path": str(SAVED_SEARCHES_PATH),
-        "timestamp": record["timestamp"],
-    }
+    return persist_legacy_search(
+        prompt,
+        results=results,
+        preferences=prefs_dict,
+    )
 
 
 async def run_semantic_town_search(query: str, *, top_k: int = 15) -> dict[str, Any]:

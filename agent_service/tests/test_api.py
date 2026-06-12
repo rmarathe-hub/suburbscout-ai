@@ -28,6 +28,7 @@ class TestApiGateway(unittest.TestCase):
         data = resp.json()
         self.assertEqual(data["status"], "ok")
         self.assertTrue(data["suburbs_dataset_loaded"])
+        self.assertIn(data["database"], {"ok", "unavailable", "not_configured"})
 
     def test_query_mocked(self) -> None:
         mock_payload = {
@@ -44,9 +45,15 @@ class TestApiGateway(unittest.TestCase):
             },
         }
 
-        async def _fake_handle(prompt: str, *, save_searches: bool = False) -> dict:
+        async def _fake_handle(
+            prompt: str,
+            *,
+            save_searches: bool = False,
+            session_id: str | None = None,
+        ) -> dict:
             self.assertEqual(prompt, "What is the commute from Maynard?")
             self.assertFalse(save_searches)
+            self.assertIsNone(session_id)
             return mock_payload
 
         with patch("app.api._suburbs_dataset_loaded", return_value=True):

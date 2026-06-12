@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any
 
 from app.constraint_parser import parse_constraints
-from app.config import DEFAULT_RANKING_WEIGHTS, DEMO_MODE_FULL_DATA_ONLY, SUBURBS_JSON_PATH
+from app.config import DEFAULT_RANKING_WEIGHTS, DEMO_MODE_FULL_DATA_ONLY
 from app.schemas import Preferences
 from app.town_normalizer import matches_town, normalize_key
 from app.town_normalizer import canonical_town_name, normalize_key
@@ -22,9 +21,9 @@ FACTOR_MAP = {
 
 
 def load_suburbs(path: Path | None = None) -> list[dict[str, Any]]:
-    path = path or SUBURBS_JSON_PATH
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
+    from app.suburb_store import load_suburbs as _load_suburbs
+
+    return _load_suburbs(path)
 
 
 def parse_preferences_from_query(query: str) -> Preferences:

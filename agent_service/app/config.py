@@ -36,6 +36,9 @@ SCHOOLS_FILE = RAW_DIR / "MA_Public_Schools_2017.csv"
 
 load_dotenv(SERVICE_ROOT / ".env")
 
+# --- Phase 3A: PostgreSQL (optional — unset to skip DB persistence) ---
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip() or None
+
 # --- Day 2: Agent (Foundry-first, OpenAI fallback) ---
 FOUNDRY_PROJECT_ENDPOINT = os.getenv("FOUNDRY_PROJECT_ENDPOINT", "").rstrip("/")
 AGENT_NAME = "RealEstateRecommendationAgent"
