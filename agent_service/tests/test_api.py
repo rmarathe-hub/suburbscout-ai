@@ -56,16 +56,17 @@ class TestApiGateway(unittest.TestCase):
             self.assertIsNone(session_id)
             return mock_payload
 
-        with patch("app.api._suburbs_dataset_loaded", return_value=True):
-            with patch("app.query_agent.query_agent_available", return_value=True):
-                with patch(
-                    "app.query_agent.handle_query_v2",
-                    new=AsyncMock(side_effect=_fake_handle),
-                ):
-                    resp = self.client.post(
-                        "/api/query",
-                        json={"prompt": "What is the commute from Maynard?", "debug": True},
-                    )
+        with patch("app.api.config.BACKEND_AGENT_MODE", "local"):
+            with patch("app.api._suburbs_dataset_loaded", return_value=True):
+                with patch("app.query_agent.query_agent_available", return_value=True):
+                    with patch(
+                        "app.query_agent.handle_query_v2",
+                        new=AsyncMock(side_effect=_fake_handle),
+                    ):
+                        resp = self.client.post(
+                            "/api/query",
+                            json={"prompt": "What is the commute from Maynard?", "debug": True},
+                        )
 
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
@@ -75,9 +76,10 @@ class TestApiGateway(unittest.TestCase):
         self.assertIsNotNone(data.get("plan"))
 
     def test_query_not_configured(self) -> None:
-        with patch("app.api._suburbs_dataset_loaded", return_value=True):
-            with patch("app.query_agent.query_agent_available", return_value=False):
-                resp = self.client.post("/api/query", json={"prompt": "hello"})
+        with patch("app.api.config.BACKEND_AGENT_MODE", "local"):
+            with patch("app.api._suburbs_dataset_loaded", return_value=True):
+                with patch("app.query_agent.query_agent_available", return_value=False):
+                    resp = self.client.post("/api/query", json={"prompt": "hello"})
         self.assertEqual(resp.status_code, 503)
 
     def test_payload_mapper_debug_off(self) -> None:

@@ -124,7 +124,7 @@ Results: `app/evals/results/pr_gate_*.json`
 
 ### Phase 2 Step 6 — HTTP API (FastAPI)
 
-Thin gateway over `handle_query_v2` — same brain as `python -m app.chat`.
+Official backend entry for the React frontend. Supports **local** query-agent pipeline or **Foundry Hosted Agent** proxy — see [Phase 7 — FastAPI backend gateway](#phase-7--fastapi-backend-gateway) below.
 
 ```bash
 pip install -r requirements.txt
@@ -135,8 +135,8 @@ python scripts/verify_phase2_step6.py --live   # one live query
 
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
-| `/health` | GET | Liveness + `query_agent_configured` + `database` |
-| `/api/query` | POST | Run query agent |
+| `/health` | GET | Liveness + mode + `database` + Foundry config |
+| `/api/query` | POST | Run query (local pipeline or Foundry agent) |
 | `/api/searches` | GET | Recent searches (Phase 3A, needs `DATABASE_URL`) |
 | `/api/searches/{request_id}` | GET | Full search trace (Phase 3A) |
 | `/api/sessions/{session_id}` | GET | Session preferences (Phase 3A) |
@@ -147,18 +147,22 @@ python scripts/verify_phase2_step6.py --live   # one live query
 ```json
 {
   "prompt": "What is the commute from Maynard?",
+  "query": null,
+  "session_id": null,
   "save_audit": false,
   "debug": false
 }
 ```
 
-**Response (default):** `answer`, `execution_status`, `request_id`, `latency_ms`, optional `trust_gate`, `top_matches`. Set `"debug": true` to include `plan` and full `response`.
+Use **`prompt`** or **`query`** (alias) — at least one non-empty string is required.
+
+**Response (default):** `answer`, `execution_status`, `request_id`, `latency_ms`, `source`, optional `metadata`, `trust_gate`, `top_matches`, `comparison`, `tradeoff_warning`, `score_disclaimer`. Set `"debug": true` to include `plan` and full `response`.
 
 ```bash
-curl -s http://127.0.0.1:8000/health
+curl -s http://127.0.0.1:8000/health | jq
 curl -s -X POST http://127.0.0.1:8000/api/query \
   -H 'Content-Type: application/json' \
-  -d '{"prompt":"What is the commute from Maynard?"}'
+  -d '{"prompt":"What is the commute from Maynard?"}' | jq
 ```
 
 ### Phase 3A — PostgreSQL persistence
@@ -230,6 +234,161 @@ curl -s -X POST http://127.0.0.1:8000/api/query \
 | `.dockerignore` | Excludes `.env`, venv, tests, eval results |
 
 Run `alembic upgrade head` from your laptop (Part 1 / Supabase), not on container start. Use Supabase **transaction pooler** URL in `.env` for container/API runtime.
+
+### Phase 7 — FastAPI backend gateway
+
+FastAPI is the **single backend gateway** for SuburbScout. The React frontend (Phase 8) calls only `POST /api/query` — never the hosted agent URL directly.
+
+#### Architecture
+
+```text
+Frontend → POST /api/query → FastAPI (app/api.py)
+                              ├─ foundry → Foundry Hosted Agent (ACR container)
+                              │              → normalize → (persist) → QueryResponse
+                              └─ local   → handle_query_v2 → QueryResponse → (persist)
+```
+
+| Path | When | Backend |
+|------|------|---------|
+| **Primary (demo/cloud)** | `BACKEND_AGENT_MODE=foundry` | Deployed Foundry Hosted Agent (`suburbscout-hosted`) |
+| **Fallback / dev** | `BACKEND_AGENT_MODE=local` (default) | Local query planner + executor on `suburbs.json` |
+
+`hosted_main.py` is unchanged — it is the container entrypoint inside Foundry, not the FastAPI gateway.
+
+#### Environment variables
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `BACKEND_AGENT_MODE` | `local` | `local` \| `foundry` |
+| `FALLBACK_TO_LOCAL` | `false` | On Foundry failure, retry via local pipeline |
+| `FOUNDRY_PROJECT_ENDPOINT` | — | Foundry project URL (required for foundry mode) |
+| `FOUNDRY_AGENT_NAME` | `suburbscout-hosted` | Hosted agent name |
+| `FOUNDRY_AGENT_VERSION` | unset | Metadata only; routing uses Foundry’s **active** version selector |
+| `FOUNDRY_AGENT_RESPONSES_ENDPOINT` | unset | Optional full Responses URL override |
+| `FRONTEND_ALLOWED_ORIGINS` | `localhost:5173,3000` | CORS for React |
+| `DATABASE_URL` | unset | Postgres/Supabase — persist searches in both modes when set |
+
+**Foundry mode auth:** `az login` on your machine (or managed identity in Azure). FastAPI uses `DefaultAzureCredential` with the `https://ai.azure.com` token audience.
+
+**Demo `.env` example:**
+
+```bash
+BACKEND_AGENT_MODE=foundry
+FOUNDRY_PROJECT_ENDPOINT=https://YOUR_PROJECT.services.ai.azure.com/api/projects/YOUR_PROJECT
+FOUNDRY_AGENT_NAME=suburbscout-hosted
+FOUNDRY_AGENT_VERSION=3   # optional label in response metadata
+```
+
+#### Run locally
+
+**Local mode** (default — same brain as `python -m app.chat`):
+
+```bash
+cd agent_service
+source venv/bin/activate
+export BACKEND_AGENT_MODE=local
+uvicorn app.api:app --reload --host 127.0.0.1 --port 8000
+```
+
+**Foundry mode** (proxies to deployed hosted agent):
+
+```bash
+az login
+export BACKEND_AGENT_MODE=foundry
+# FOUNDRY_PROJECT_ENDPOINT + FOUNDRY_AGENT_NAME in .env
+uvicorn app.api:app --reload --host 127.0.0.1 --port 8000
+```
+
+**Bulletproof demos** (Foundry fail → local):
+
+```bash
+export BACKEND_AGENT_MODE=foundry
+export FALLBACK_TO_LOCAL=true
+uvicorn app.api:app --host 127.0.0.1 --port 8000
+```
+
+#### Health check
+
+```bash
+curl -s http://127.0.0.1:8000/health | jq
+```
+
+```json
+{
+  "status": "ok",
+  "backend_agent_mode": "foundry",
+  "foundry_agent_configured": true,
+  "foundry_agent_endpoint": "https://.../agents/suburbscout-hosted/endpoint/protocols/openai/responses",
+  "query_agent_configured": true,
+  "suburbs_dataset_loaded": true,
+  "database": "ok"
+}
+```
+
+#### Query examples
+
+```bash
+# Commute lookup
+curl -s -X POST http://127.0.0.1:8000/api/query \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt":"What is the commute from Maynard to Boston?"}' | jq
+
+# Frontend alias (same as prompt)
+curl -s -X POST http://127.0.0.1:8000/api/query \
+  -H 'Content-Type: application/json' \
+  -d '{"query":"What is the commute from Maynard to Boston?"}' | jq
+
+# Persist to Supabase (both modes)
+curl -s -X POST http://127.0.0.1:8000/api/query \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt":"What is the commute from Maynard?","save_audit":true}' | jq
+
+# Compare
+curl -s -X POST http://127.0.0.1:8000/api/query \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt":"Compare Acton and Burlington."}' | jq
+```
+
+#### Response shape
+
+Both modes return the same `QueryResponse` envelope. Check **`source`** to see which path ran:
+
+| Field | Local | Foundry |
+|-------|-------|---------|
+| `source` | `local_query_pipeline` | `foundry_hosted_agent` |
+| `metadata.backend_agent_mode` | `local` | `foundry` |
+| `metadata.agent_name` | — | e.g. `suburbscout-hosted` |
+| `metadata.agent_version` | — | e.g. `3` (if set in `.env`) |
+| `execution_status` | `ok`, `out_of_scope`, … | usually `ok` (errors → `error` + `error: foundry_agent_error`) |
+| `request_id` | UUID | Foundry response id |
+| `comparison`, `tradeoff_warning`, `score_disclaimer` | when applicable | when agent returns them |
+
+**Trust gates and refusals:** local mode is the regression source of truth (`execution_status: out_of_scope`, `message_code: unsupported_request` for live MLS/Zillow). Foundry may refuse in prose with `execution_status: ok`.
+
+#### Sessions (multi-turn)
+
+- **Local mode:** pass `session_id` on `/api/query`; preferences load/save via Postgres (`/api/sessions/{id}`).
+- **Foundry mode:** `session_id` is forwarded when provided, but **multi-turn follow-ups are local-first** for Phase 7. Use local mode for session demos until Foundry session threading is fully wired.
+
+#### Tests
+
+```bash
+cd agent_service
+source venv/bin/activate
+python -m unittest tests.test_foundry_client tests.test_api_foundry_mode tests.test_api -v
+```
+
+Foundry client tests are **mocked** — no live Azure in unit tests.
+
+#### Files
+
+| File | Role |
+|------|------|
+| `app/api.py` | Routing, CORS, health, mode switch |
+| `app/foundry_client.py` | Foundry Responses API client + normalizer |
+| `app/foundry_persistence.py` | Persist Foundry turns to Postgres |
+| `app/api_schemas.py` | `QueryRequest` / `QueryResponse` / `HealthResponse` |
+| `app/hosted_main.py` | **Unchanged** — Foundry container entrypoint (port 8088) |
 
 ### Phase 0 — Query-plan agent prerequisites
 
@@ -403,9 +562,9 @@ python scripts/check_plan_trust.py --plan tests/fixtures/golden_plans/phase2/mc_
 python -m unittest tests.test_plan_trust_gates -v
 ```
 
-### Phase 7 — Production wiring + eval
+### Query agent — production wiring + eval
 
-The query agent is the **default production path** (`USE_LLM_QUERY_AGENT=true` in `.env`).
+The query agent is the **default production path** (`USE_LLM_QUERY_AGENT=true` in `.env`). FastAPI gateway modes are documented in [Phase 7 — FastAPI backend gateway](#phase-7--fastapi-backend-gateway).
 
 | Entry point | Behavior |
 |-------------|----------|
@@ -803,6 +962,11 @@ agent_service/
     vector_store.py        # local cosine search
     tools.py               # Agent Framework @tool functions (7 tools)
     chat_client.py         # Foundry-first client factory
+    api.py                 # FastAPI gateway (local + foundry modes)
+    api_schemas.py         # HTTP request/response models
+    foundry_client.py      # Foundry Hosted Agent HTTP client
+    foundry_persistence.py # Persist Foundry turns to Postgres
+    hosted_main.py         # Foundry container entrypoint (Responses protocol)
     real_estate_agent.py   # Agent + orchestrator entry
     chat.py                # interactive CLI
     test_agent.py          # Phase 1 seven-prompt runner

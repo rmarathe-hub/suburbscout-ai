@@ -89,6 +89,27 @@ USE_LLM_ANSWER_VALIDATOR = os.getenv("USE_LLM_ANSWER_VALIDATOR", "true").lower()
     "yes",
 )
 
+# --- Phase 7: FastAPI gateway (local pipeline vs Foundry Hosted Agent) ---
+_BACKEND_AGENT_MODE_RAW = os.getenv("BACKEND_AGENT_MODE", "local").strip().lower()
+BACKEND_AGENT_MODE = (
+    _BACKEND_AGENT_MODE_RAW if _BACKEND_AGENT_MODE_RAW in ("local", "foundry") else "local"
+)
+FALLBACK_TO_LOCAL = os.getenv("FALLBACK_TO_LOCAL", "false").lower() in ("1", "true", "yes")
+
+FOUNDRY_AGENT_NAME = os.getenv("FOUNDRY_AGENT_NAME", "suburbscout-hosted").strip()
+_fv = os.getenv("FOUNDRY_AGENT_VERSION", "").strip()
+FOUNDRY_AGENT_VERSION: str | None = _fv or None
+FOUNDRY_AGENT_RESPONSES_ENDPOINT = os.getenv("FOUNDRY_AGENT_RESPONSES_ENDPOINT", "").strip() or None
+
+FRONTEND_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "FRONTEND_ALLOWED_ORIGINS",
+        "http://localhost:5173,http://localhost:3000",
+    ).split(",")
+    if origin.strip()
+]
+
 # Core fields required for data_quality_tier == "full"
 CORE_FIELDS = (
     "latest_home_price",

@@ -1,4 +1,4 @@
-"""Thin FastAPI gateway for the query agent (Phase 2 Step 6 + Phase 3A persistence).
+"""Thin FastAPI gateway for the query agent (Phase 2 Step 6 + Phase 7 gateway).
 
 Run from agent_service/:
   uvicorn app.api:app --reload --host 127.0.0.1 --port 8000
@@ -12,11 +12,14 @@ Run from agent_service/:
 from __future__ import annotations
 
 import logging
+import time
+import uuid
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
+from app import config
 from app.api_schemas import (
     HealthResponse,
     QueryRequest,
@@ -31,12 +34,12 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="SuburbScout Query Agent",
     description="Natural language → QueryPlan → deterministic execution → grounded answer",
-    version="0.2.0",
+    version="0.3.0",
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=config.FRONTEND_ALLOWED_ORIGINS or ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -57,9 +60,17 @@ def _database_status() -> str:
     return "ok" if db_available() else "unavailable"
 
 
-def payload_to_query_response(payload: dict[str, Any], *, debug: bool) -> QueryResponse:
+def payload_to_query_response(
+    payload: dict[str, Any],
+    *,
+    debug: bool,
+    source: str = "local_query_pipeline",
+) -> QueryResponse:
     """Map handle_query_v2 payload to API response."""
     response = payload.get("response") or {}
+    metadata = payload.get("metadata") or {
+        "backend_agent_mode": config.BACKEND_AGENT_MODE,
+    }
     return QueryResponse(
         answer=response.get("final_recommendation") or "",
         execution_status=str(payload.get("execution_status") or "unknown"),
@@ -73,24 +84,64 @@ def payload_to_query_response(payload: dict[str, Any], *, debug: bool) -> QueryR
         plan=payload.get("plan") if debug else None,
         raw_llm_plan=payload.get("raw_llm_plan") if debug else None,
         response=response if debug else None,
+        source=source,
+        metadata=metadata,
+        comparison=response.get("comparison"),
+        tradeoff_warning=response.get("tradeoff_warning"),
+        score_disclaimer=response.get("score_disclaimer"),
     )
 
 
-@app.get("/health", response_model=HealthResponse)
-async def health() -> HealthResponse:
-    from app.query_agent import query_agent_available
-
-    return HealthResponse(
-        status="ok",
-        query_agent_configured=query_agent_available(),
-        suburbs_dataset_loaded=_suburbs_dataset_loaded(),
-        database=_database_status(),
+def normalized_to_query_response(
+    normalized: dict[str, Any],
+    *,
+    debug: bool,
+) -> QueryResponse:
+    """Map Foundry normalized dict to API response."""
+    response = normalized.get("response") if debug else None
+    return QueryResponse(
+        answer=str(normalized.get("answer") or ""),
+        execution_status=str(normalized.get("execution_status") or "unknown"),
+        request_id=str(normalized.get("request_id") or ""),
+        latency_ms=normalized.get("latency_ms"),
+        message_code=normalized.get("message_code"),
+        used_answer_llm=bool(normalized.get("used_answer_llm")),
+        top_matches=list(normalized.get("top_matches") or [])[:10],
+        comparison=normalized.get("comparison"),
+        tradeoff_warning=normalized.get("tradeoff_warning"),
+        score_disclaimer=normalized.get("score_disclaimer"),
+        source=normalized.get("source") or "foundry_hosted_agent",
+        metadata=normalized.get("metadata"),
+        response=response,
+        error=normalized.get("error"),
     )
 
 
-@app.post("/api/query", response_model=QueryResponse)
-async def query_suburbs(body: QueryRequest) -> QueryResponse:
-    """Run the production query-agent pipeline on one prompt."""
+def foundry_error_response(exc: Any) -> QueryResponse:
+    """Clean client-facing error when Foundry gateway fails."""
+    from app.foundry_client import FoundryAgentError
+
+    message = (
+        "The hosted agent is unavailable right now. Try again later or "
+        "switch BACKEND_AGENT_MODE=local."
+    )
+    if isinstance(exc, FoundryAgentError):
+        message = exc.message or message
+
+    return QueryResponse(
+        answer=message,
+        execution_status="error",
+        request_id=str(uuid.uuid4()),
+        source="foundry_hosted_agent",
+        metadata={
+            "backend_agent_mode": "foundry",
+            "foundry_error_code": getattr(exc, "code", "unknown"),
+        },
+        error="foundry_agent_error",
+    )
+
+
+async def _query_via_local(body: QueryRequest) -> QueryResponse:
     from app.query_agent import handle_query_v2, query_agent_available
 
     if not _suburbs_dataset_loaded():
@@ -111,10 +162,7 @@ async def query_suburbs(body: QueryRequest) -> QueryResponse:
             ),
         )
 
-    prompt = body.prompt.strip()
-    if not prompt:
-        raise HTTPException(status_code=400, detail="prompt cannot be empty")
-
+    prompt = body.resolved_prompt()
     try:
         payload = await handle_query_v2(
             prompt,
@@ -127,7 +175,77 @@ async def query_suburbs(body: QueryRequest) -> QueryResponse:
         logger.exception("query agent failed")
         raise HTTPException(status_code=500, detail="query agent internal error") from exc
 
-    return payload_to_query_response(payload, debug=body.debug)
+    out = payload_to_query_response(payload, debug=body.debug, source="local_query_pipeline")
+    if out.metadata is None:
+        out.metadata = {"backend_agent_mode": "local"}
+    else:
+        out.metadata.setdefault("backend_agent_mode", "local")
+    return out
+
+
+async def _query_via_foundry(body: QueryRequest) -> QueryResponse:
+    from app.foundry_client import FoundryAgentError, call_foundry_agent, foundry_agent_configured
+    from app.foundry_persistence import persist_foundry_turn
+
+    if not foundry_agent_configured():
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Foundry Hosted Agent not configured. Set FOUNDRY_PROJECT_ENDPOINT, "
+                "FOUNDRY_AGENT_NAME, and optionally FOUNDRY_AGENT_VERSION."
+            ),
+        )
+
+    prompt = body.resolved_prompt()
+    t0 = time.perf_counter()
+    try:
+        normalized = await call_foundry_agent(prompt, session_id=body.session_id)
+    except FoundryAgentError as exc:
+        raise exc
+
+    latency_ms = int((time.perf_counter() - t0) * 1000)
+    normalized["latency_ms"] = latency_ms
+    persist_foundry_turn(
+        prompt,
+        normalized,
+        session_id=body.session_id,
+        save_audit=body.save_audit,
+        latency_ms=latency_ms,
+    )
+    return normalized_to_query_response(normalized, debug=body.debug)
+
+
+@app.get("/health", response_model=HealthResponse)
+async def health() -> HealthResponse:
+    from app.foundry_client import build_responses_endpoint, foundry_agent_configured
+    from app.query_agent import query_agent_available
+
+    return HealthResponse(
+        status="ok",
+        query_agent_configured=query_agent_available(),
+        suburbs_dataset_loaded=_suburbs_dataset_loaded(),
+        database=_database_status(),
+        backend_agent_mode=config.BACKEND_AGENT_MODE,
+        foundry_agent_configured=foundry_agent_configured(),
+        foundry_agent_endpoint=build_responses_endpoint(),
+    )
+
+
+@app.post("/api/query", response_model=QueryResponse)
+async def query_suburbs(body: QueryRequest) -> QueryResponse:
+    """Run query via local pipeline or Foundry Hosted Agent (BACKEND_AGENT_MODE)."""
+    from app.foundry_client import FoundryAgentError
+
+    if config.BACKEND_AGENT_MODE == "foundry":
+        try:
+            return await _query_via_foundry(body)
+        except FoundryAgentError as exc:
+            logger.warning("Foundry gateway failed: %s", exc.code, exc_info=True)
+            if config.FALLBACK_TO_LOCAL:
+                return await _query_via_local(body)
+            return foundry_error_response(exc)
+
+    return await _query_via_local(body)
 
 
 @app.get("/api/searches", response_model=SearchListResponse)
