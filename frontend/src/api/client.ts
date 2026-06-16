@@ -29,7 +29,14 @@ function apiBaseUrl(): string {
   if (import.meta.env.DEV) {
     return ''
   }
-  const base = import.meta.env.VITE_API_BASE_URL?.trim() || 'http://127.0.0.1:8000'
+  const base = import.meta.env.VITE_API_BASE_URL?.trim()
+  if (!base) {
+    throw new ApiError(
+      0,
+      'VITE_API_BASE_URL is not set — configure it in Vercel project settings.',
+      'missing_api_base_url',
+    )
+  }
   return base.replace(/\/$/, '')
 }
 
