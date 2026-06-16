@@ -1,6 +1,7 @@
 agent-framework
 agent-framework-foundry
 agent-framework-openai
+azure-identity>=1.19.0
 python-dotenv
 pydantic
 fastapi>=0.115.0
