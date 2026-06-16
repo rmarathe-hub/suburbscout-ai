@@ -110,32 +110,89 @@ def _parse_agent_json(text: str) -> dict[str, Any]:
     return data
 
 
+def _unwrap_hosted_agent_data(data: dict[str, Any]) -> dict[str, Any]:
+    """Flatten nested ``response`` dicts from alternate hosted-agent shapes."""
+    nested = data.get("response")
+    if isinstance(nested, dict):
+        top_level = {k: v for k, v in data.items() if k != "response"}
+        return {**nested, **top_level}
+    return data
+
+
+def _coerce_hosted_agent_data(data: dict[str, Any]) -> dict[str, Any]:
+    """Normalize shape and parse JSON embedded in recommendation text."""
+    data = _unwrap_hosted_agent_data(data)
+    rec = data.get("final_recommendation") or data.get("answer")
+    if isinstance(rec, str) and rec.strip().startswith("{"):
+        try:
+            inner = _parse_agent_json(rec)
+            if isinstance(inner, dict):
+                preserved = {
+                    k: v
+                    for k, v in data.items()
+                    if k not in ("final_recommendation", "answer", "response")
+                }
+                return {**inner, **preserved}
+        except (json.JSONDecodeError, ValueError):
+            pass
+    return data
+
+
+def _infer_trust_gate_blocks(data: dict[str, Any], execution_status: str) -> bool | None:
+    blocks = data.get("trust_gate_blocks")
+    if blocks is not None:
+        return bool(blocks)
+    if execution_status == "blocked":
+        return True
+    trust_gate = data.get("trust_gate")
+    message_code = data.get("message_code")
+    if trust_gate and message_code and str(trust_gate) == str(message_code):
+        return True
+    return None
+
+
 def normalize_foundry_payload(
     data: dict[str, Any],
     *,
     request_id: str | None = None,
 ) -> dict[str, Any]:
     """Map hosted agent JSON into fields for QueryResponse."""
+    data = _coerce_hosted_agent_data(data)
     answer = str(
         data.get("final_recommendation") or data.get("answer") or ""
     ).strip()
-    rid = request_id or str(uuid.uuid4())
+    rid = request_id or str(data.get("request_id") or uuid.uuid4())
+
+    raw_status = data.get("execution_status")
+    execution_status = (
+        str(raw_status) if raw_status else ("ok" if answer else "partial")
+    )
+    message_code = data.get("message_code")
+    trust_gate = data.get("trust_gate")
+    trust_gate_blocks = _infer_trust_gate_blocks(data, execution_status)
+
+    agent_metadata = data.get("metadata") if isinstance(data.get("metadata"), dict) else {}
+    metadata = {
+        **agent_metadata,
+        "agent_name": config.FOUNDRY_AGENT_NAME,
+        "agent_version": config.FOUNDRY_AGENT_VERSION,
+        "backend_agent_mode": "foundry",
+    }
 
     return {
         "answer": answer,
-        "execution_status": "ok" if answer else "partial",
+        "execution_status": execution_status,
         "request_id": rid,
+        "message_code": str(message_code) if message_code else None,
+        "trust_gate": str(trust_gate) if trust_gate else None,
+        "trust_gate_blocks": trust_gate_blocks,
         "top_matches": list(data.get("top_matches") or []),
         "comparison": data.get("comparison"),
         "tradeoff_warning": data.get("tradeoff_warning"),
         "score_disclaimer": data.get("score_disclaimer"),
         "source": "foundry_hosted_agent",
-        "metadata": {
-            "agent_name": config.FOUNDRY_AGENT_NAME,
-            "agent_version": config.FOUNDRY_AGENT_VERSION,
-            "backend_agent_mode": "foundry",
-        },
-        "used_answer_llm": True,
+        "metadata": metadata,
+        "used_answer_llm": bool(data.get("used_answer_llm", True)),
         "response": data,
     }
 

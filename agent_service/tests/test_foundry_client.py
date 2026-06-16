@@ -136,6 +136,64 @@ class TestFoundryNormalize(unittest.TestCase):
             normalize_foundry_http_response({"output": []})
         self.assertEqual(ctx.exception.code, "malformed")
 
+    def test_blocked_trust_gate_preserved(self) -> None:
+        raw = {
+            "final_recommendation": (
+                "I can't compare commute times to Providence — "
+                "our dataset only includes commutes to Boston."
+            ),
+            "execution_status": "blocked",
+            "message_code": "commute_destination_compare",
+            "trust_gate": "commute_destination_compare",
+            "trust_gate_blocks": True,
+            "top_matches": [],
+            "metadata": {"commute_destination": "Boston"},
+        }
+        with patch("app.foundry_client.config") as cfg:
+            cfg.FOUNDRY_AGENT_NAME = "suburbscout-hosted"
+            cfg.FOUNDRY_AGENT_VERSION = "5"
+            out = normalize_foundry_payload(raw)
+
+        self.assertEqual(out["execution_status"], "blocked")
+        self.assertEqual(out["message_code"], "commute_destination_compare")
+        self.assertEqual(out["trust_gate"], "commute_destination_compare")
+        self.assertTrue(out["trust_gate_blocks"])
+        self.assertEqual(out["top_matches"], [])
+        self.assertEqual(out["metadata"]["commute_destination"], "Boston")
+
+    def test_nested_response_dict(self) -> None:
+        raw = {
+            "response": {
+                "final_recommendation": "Somerville commute answer.",
+                "top_matches": [{"town": "Maynard"}],
+            },
+            "execution_status": "ok",
+            "metadata": {"commute_destination": "Somerville"},
+        }
+        with patch("app.foundry_client.config") as cfg:
+            cfg.FOUNDRY_AGENT_NAME = "suburbscout-hosted"
+            cfg.FOUNDRY_AGENT_VERSION = None
+            out = normalize_foundry_payload(raw)
+
+        self.assertIn("Somerville", out["answer"])
+        self.assertEqual(len(out["top_matches"]), 1)
+        self.assertEqual(out["metadata"]["commute_destination"], "Somerville")
+
+    def test_json_string_in_final_recommendation(self) -> None:
+        inner = {
+            "final_recommendation": "Parsed from embedded JSON.",
+            "top_matches": [],
+            "execution_status": "ok",
+        }
+        raw = {"final_recommendation": json.dumps(inner)}
+        with patch("app.foundry_client.config") as cfg:
+            cfg.FOUNDRY_AGENT_NAME = "suburbscout-hosted"
+            cfg.FOUNDRY_AGENT_VERSION = None
+            out = normalize_foundry_payload(raw)
+
+        self.assertEqual(out["answer"], "Parsed from embedded JSON.")
+        self.assertEqual(out["execution_status"], "ok")
+
 
 class TestCallFoundryAgent(unittest.IsolatedAsyncioTestCase):
     async def test_timeout_returns_clean_error(self) -> None:

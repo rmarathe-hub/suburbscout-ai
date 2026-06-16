@@ -105,6 +105,8 @@ def normalized_to_query_response(
         request_id=str(normalized.get("request_id") or ""),
         latency_ms=normalized.get("latency_ms"),
         message_code=normalized.get("message_code"),
+        trust_gate=normalized.get("trust_gate"),
+        trust_gate_blocks=normalized.get("trust_gate_blocks"),
         used_answer_llm=bool(normalized.get("used_answer_llm")),
         top_matches=list(normalized.get("top_matches") or [])[:10],
         comparison=normalized.get("comparison"),

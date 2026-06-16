@@ -173,6 +173,43 @@ class TestApiFoundryMode(unittest.TestCase):
         self.assertEqual(out.error, "foundry_agent_error")
         self.assertEqual(out.execution_status, "error")
 
+    def test_foundry_blocked_maps_trust_gate_fields(self) -> None:
+        normalized = {
+            "answer": "I can't compare commute to Providence.",
+            "execution_status": "blocked",
+            "request_id": "foundry-blocked-1",
+            "message_code": "commute_destination_compare",
+            "trust_gate": "commute_destination_compare",
+            "trust_gate_blocks": True,
+            "top_matches": [],
+            "source": "foundry_hosted_agent",
+            "metadata": {"backend_agent_mode": "foundry"},
+            "used_answer_llm": False,
+        }
+
+        with patch("app.api.config.BACKEND_AGENT_MODE", "foundry"):
+            with patch("app.foundry_client.foundry_agent_configured", return_value=True):
+                with patch(
+                    "app.foundry_client.call_foundry_agent",
+                    new=AsyncMock(return_value=normalized),
+                ):
+                    with patch(
+                        "app.foundry_persistence.persist_foundry_turn",
+                        return_value={"saved": False},
+                    ):
+                        resp = self.client.post(
+                            "/api/query",
+                            json={"prompt": "Acton vs Burlington if I work in Providence."},
+                        )
+
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data["execution_status"], "blocked")
+        self.assertEqual(data["trust_gate"], "commute_destination_compare")
+        self.assertTrue(data["trust_gate_blocks"])
+        self.assertEqual(data["top_matches"], [])
+        self.assertNotIn("{", data["answer"][:20])
+
 
 if __name__ == "__main__":
     unittest.main()

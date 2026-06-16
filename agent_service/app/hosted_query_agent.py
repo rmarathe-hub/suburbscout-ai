@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
-from collections.abc import AsyncIterator, Sequence
+from collections.abc import AsyncIterator, Awaitable, Sequence
 from typing import Any
 
 from agent_framework import AgentResponse, AgentResponseUpdate, Content, Message
@@ -56,6 +56,8 @@ def payload_to_hosted_agent_json(payload: dict[str, Any]) -> dict[str, Any]:
     }
     if payload.get("trust_gate"):
         body["trust_gate"] = payload["trust_gate"]
+    if payload.get("trust_gate_blocks") is not None:
+        body["trust_gate_blocks"] = payload["trust_gate_blocks"]
     if payload.get("metadata"):
         body["metadata"] = payload["metadata"]
     return body
@@ -69,17 +71,29 @@ class QueryPipelineHostedAgent:
     description = "SuburbScout planner-first query pipeline (handle_query_v2)"
     context_providers: list[Any] = []
 
-    async def run(
+    def run(
         self,
         messages: Sequence[Message] | Message | None = None,
         *,
         stream: bool = False,
         session: Any = None,
         **kwargs: Any,
-    ) -> AgentResponse | AsyncIterator[AgentResponseUpdate]:
+    ) -> Awaitable[AgentResponse] | AsyncIterator[AgentResponseUpdate]:
+        """
+        Agent Framework contract (ResponsesHostServer):
+
+        - stream=False → awaitable AgentResponse
+        - stream=True  → async iterable AgentResponseUpdate (NOT a coroutine)
+        """
         if stream:
             return self._run_stream(messages, **kwargs)
+        return self._run_non_stream(messages, **kwargs)
 
+    async def _run_non_stream(
+        self,
+        messages: Sequence[Message] | Message | None,
+        **kwargs: Any,
+    ) -> AgentResponse:
         text = await self._run_once(messages, **kwargs)
         return AgentResponse(
             messages=[
@@ -118,7 +132,8 @@ class QueryPipelineHostedAgent:
                 {
                     "final_recommendation": (
                         "Query agent is not configured. Set Azure OpenAI credentials "
-                        "and USE_LLM_QUERY_AGENT=true."
+                        "(AZURE_OPENAI_API_KEY, AZURE_OPENAI_DEPLOYMENT_NAME) and "
+                        "USE_LLM_QUERY_AGENT=true."
                     ),
                     "execution_status": "error",
                     "query_agent": True,
