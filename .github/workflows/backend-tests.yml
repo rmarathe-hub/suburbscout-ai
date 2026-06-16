@@ -1,0 +1,64 @@
+name: Backend tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+defaults:
+  run:
+    working-directory: agent_service
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      # Keep CI offline — no Azure, Foundry, Postgres, or Google API calls.
+      BACKEND_AGENT_MODE: local
+      USE_LLM_QUERY_AGENT: "false"
+      USE_LLM_QUERY_PLANNER: "false"
+      USE_LLM_ANSWER: "false"
+      USE_LLM_ANSWER_VALIDATOR: "false"
+      ENABLE_LLM_INTENT_FALLBACK: "false"
+      DATABASE_URL: ""
+      GOOGLE_MAPS_API_KEY: ""
+      AZURE_OPENAI_ENDPOINT: ""
+      AZURE_OPENAI_API_KEY: ""
+      AZURE_OPENAI_DEPLOYMENT_NAME: ""
+      FOUNDRY_PROJECT_ENDPOINT: ""
+      COMMUTE_DESTINATION: South Station, Boston, MA
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: agent_service/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+
+      - name: Phase 8.5 slice A verification
+        run: python scripts/verify_phase8_5_slice_a.py
+
+      - name: Run offline unit tests
+        run: |
+          python -m unittest \
+            tests.test_foundry_client \
+            tests.test_api_foundry_mode \
+            tests.test_plan_preferences \
+            tests.test_commute_intent \
+            tests.test_commute_service \
+            tests.test_trust_gate_layer \
+            tests.test_plan_trust_gates \
+            tests.test_plan_normalizer \
+            tests.test_town_resolution \
+            -v
+
+      - name: Run E2E expectation tests
+        run: python -m pytest tests/test_e2e_expect.py -v
