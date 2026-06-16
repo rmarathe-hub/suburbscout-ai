@@ -53,9 +53,19 @@ class TestPlanExpectTowns(unittest.TestCase):
 
     def test_pull_up_reading_normalized(self) -> None:
         phrase = "Pull up Reading."
-        raw = validate_plan({"ops": [{"op": "membership", "town": "North Reading"}]})
+        raw = validate_plan(
+            {
+                "ops": [
+                    {
+                        "op": "lookup",
+                        "items": [{"town": "Reading", "field": "summary"}],
+                    }
+                ]
+            }
+        )
         plan = normalize_planned_query(phrase, raw)
         assert isinstance(plan.ops[0], LookupOp)
+        self.assertEqual(plan.ops[0].items[0].town, "Reading")
         score = score_plan_against_expect(
             plan,
             {"expected_town": "Reading", "forbidden_towns": ["North Reading"]},

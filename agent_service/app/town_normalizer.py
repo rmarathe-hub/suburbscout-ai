@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import re
-from difflib import get_close_matches
+from dataclasses import dataclass
+from difflib import SequenceMatcher, get_close_matches
 
 # Canonical display name -> alternate normalized keys seen in source files
 TOWN_ALIASES: dict[str, list[str]] = {
@@ -69,25 +70,56 @@ def find_canonical_in_set(source_name: str, known_towns: list[str]) -> str | Non
     return None
 
 
-def resolve_town_in_dataset(name: str, known_towns: list[str]) -> str | None:
-    """Return canonical dataset town name for an exact or high-confidence fuzzy match."""
-    if not name or not known_towns:
-        return None
+@dataclass(frozen=True)
+class TownResolution:
+    """Result of resolving a user/planner town label against the dataset."""
+
+    queried: str
+    resolved: str | None
+    ambiguous: bool
+    candidates: tuple[str, ...]
+
+
+def _fuzzy_match_ratio(query_key: str, candidate_key: str) -> float:
+    return SequenceMatcher(None, query_key, candidate_key).ratio()
+
+
+def resolve_town_for_plan(name: str, known_towns: list[str]) -> TownResolution:
+    """
+    Resolve a town for plan normalization.
+
+    High-confidence matches are canonicalized; ambiguous multi-match typos are left
+    unresolved so execution can surface "Did you mean A or B?".
+    """
+    queried = (name or "").strip()
+    if not queried or not known_towns:
+        return TownResolution(queried=queried, resolved=None, ambiguous=False, candidates=())
+
     keys = [normalize_key(t) for t in known_towns]
     key_to_name = dict(zip(keys, known_towns))
-    query_key = normalize_key(canonical_town_name(name))
+    query_key = normalize_key(canonical_town_name(queried))
     if query_key in key_to_name:
-        return key_to_name[query_key]
+        return TownResolution(
+            queried=queried,
+            resolved=key_to_name[query_key],
+            ambiguous=False,
+            candidates=(),
+        )
 
     fuzzy = get_close_matches(query_key, keys, n=8, cutoff=0.72)
     if not fuzzy:
-        return None
+        return TownResolution(queried=queried, resolved=None, ambiguous=False, candidates=())
+
     if len(fuzzy) == 1:
-        return key_to_name[fuzzy[0]]
+        return TownResolution(
+            queried=queried,
+            resolved=key_to_name[fuzzy[0]],
+            ambiguous=False,
+            candidates=(),
+        )
 
     query_tokens = [t for t in query_key.split() if len(t) > 2]
-    best_key: str | None = None
-    best_score = -1
+    scored: list[tuple[int, float, str]] = []
     for candidate in fuzzy:
         score = len(candidate)
         if query_tokens and all(t in candidate for t in query_tokens):
@@ -96,10 +128,33 @@ def resolve_town_in_dataset(name: str, known_towns: list[str]) -> str | None:
             score += 50
         if len(query_tokens) >= 2 and candidate.count(" ") >= 1:
             score += 25
-        if score > best_score:
-            best_score = score
-            best_key = candidate
-    return key_to_name[best_key or fuzzy[0]]
+        scored.append((score, _fuzzy_match_ratio(query_key, candidate), candidate))
+
+    scored.sort(key=lambda item: (item[0], item[1]), reverse=True)
+    best_score, best_ratio, best_key = scored[0]
+    second_score, second_ratio, second_key = scored[1]
+    candidates = tuple(key_to_name[key] for _, _, key in scored[:3])
+
+    # Ambiguous when heuristic scores tie or string similarity is too close.
+    if best_score == second_score or abs(best_ratio - second_ratio) < 0.06:
+        return TownResolution(
+            queried=queried,
+            resolved=None,
+            ambiguous=True,
+            candidates=candidates,
+        )
+
+    return TownResolution(
+        queried=queried,
+        resolved=key_to_name[best_key],
+        ambiguous=False,
+        candidates=(),
+    )
+
+
+def resolve_town_in_dataset(name: str, known_towns: list[str]) -> str | None:
+    """Return canonical dataset town name for an exact or high-confidence fuzzy match."""
+    return resolve_town_for_plan(name, known_towns).resolved
 
 
 def towns_equivalent(expected: str, actual: str) -> bool:

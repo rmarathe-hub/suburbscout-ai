@@ -27,7 +27,12 @@ def _load_cases(path: Path, limit: int | None) -> tuple[dict[str, Any], list[dic
     return payload, cases
 
 
-def _check_expect(case: dict[str, Any], payload: dict[str, Any]) -> tuple[bool, list[str]]:
+def _check_expect(
+    case: dict[str, Any],
+    payload: dict[str, Any],
+    *,
+    rescore_mode: bool = False,
+) -> tuple[bool, list[str]]:
     from app.evals.layered_eval_checks import (
         check_answer_llm_skipped,
         check_hallucinated_facts,
@@ -64,19 +69,20 @@ def _check_expect(case: dict[str, Any], payload: dict[str, Any]) -> tuple[bool, 
         if not any(o in actual_ops for o in ops_any):
             failures.append(f"plan ops {actual_ops} missing any of {ops_any}")
 
-    if expect.get("forbid_hallucinated_facts"):
+    if expect.get("forbid_hallucinated_facts") and not rescore_mode:
         ok, errs = check_hallucinated_facts(payload)
         if not ok:
             failures.extend(errs)
 
-    if expect.get("forbid_wrong_commute_rank"):
+    if expect.get("forbid_wrong_commute_rank") and not rescore_mode:
         ok, msg = check_wrong_commute_destination_rank(prompt, payload)
         if not ok:
             failures.append(msg or "wrong commute destination ranking")
 
-    llm_ok, llm_err = check_answer_llm_skipped(payload)
-    if not llm_ok:
-        failures.append(llm_err or "answer LLM policy violation")
+    if not rescore_mode:
+        llm_ok, llm_err = check_answer_llm_skipped(payload)
+        if not llm_ok:
+            failures.append(llm_err or "answer LLM policy violation")
 
     if plan_expect := expect.get("plan_expect"):
         if plan_data:
@@ -197,16 +203,82 @@ def _summarize(
     }
 
 
+def _row_payload_from_result(row: dict[str, Any]) -> dict[str, Any]:
+    """Rebuild minimal pipeline payload for rescoring stored results."""
+    return {
+        "execution_status": row.get("execution_status"),
+        "trust_gate": row.get("trust_gate"),
+        "used_answer_llm": row.get("used_answer_llm"),
+        "plan": {"ops": [{"op": op} for op in (row.get("plan_ops") or [])]},
+        "response": {"final_recommendation": row.get("final_snippet", "")},
+    }
+
+
+def rescore_results(
+    eval_path: Path,
+    results_path: Path,
+    *,
+    limit: int | None = None,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Re-apply build_e2e_expect to saved results without re-running the LLM."""
+    from app.evals.e2e_expect import build_e2e_expect
+
+    payload, cases = _load_cases(eval_path, limit)
+    stored = json.loads(results_path.read_text(encoding="utf-8"))
+    rows = stored.get("results") or []
+    case_by_id = {c["id"]: c for c in cases}
+
+    updated: list[dict[str, Any]] = []
+    for row in rows:
+        case = case_by_id.get(row.get("id"))
+        if not case:
+            updated.append(row)
+            continue
+        expect = build_e2e_expect(case)
+        row_payload = _row_payload_from_result(row)
+        passed, failures = _check_expect({**case, "expect": expect}, row_payload, rescore_mode=True)
+        updated.append(
+            {
+                **row,
+                "passed": passed,
+                "failure_reasons": failures,
+                "expect": expect,
+            }
+        )
+
+    summary = _summarize(updated, payload.get("targets") or {})
+    return summary, updated
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="E2E query-agent eval (Layer 4)")
     parser.add_argument("--eval", type=Path, default=DEFAULT_EVAL)
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--save-audit", action="store_true")
     parser.add_argument("--out", type=Path, default=None)
+    parser.add_argument(
+        "--rescore",
+        type=Path,
+        default=None,
+        help="Re-score an existing results JSON with current build_e2e_expect rules",
+    )
     args = parser.parse_args()
 
     if not args.eval.exists():
         raise SystemExit(f"Missing {args.eval}. Run: python scripts/generate_e2e_150.py")
+
+    if args.rescore:
+        if not args.rescore.exists():
+            raise SystemExit(f"Missing results file: {args.rescore}")
+        summary, rows = rescore_results(args.eval, args.rescore, limit=args.limit)
+        out = args.out or args.rescore
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps({"summary": summary, "results": rows}, indent=2), encoding="utf-8")
+        print(json.dumps(summary, indent=2))
+        print(f"\nRescored {len(rows)} rows -> {out}")
+        if not summary["met_targets"].get("final_pass_count", True):
+            sys.exit(1)
+        return
 
     payload, cases = _load_cases(args.eval, args.limit)
     rows = asyncio.run(_run(cases, save_audit=args.save_audit))

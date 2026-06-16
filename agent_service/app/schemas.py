@@ -37,6 +37,7 @@ class Preferences(BaseModel):
     similar_to_town: str | None = None
     candidate_towns: list[str] | None = None
     exclude_towns: list[str] | None = None
+    commute_destination_town: str | None = None
     raw_query: str | None = None
 
 

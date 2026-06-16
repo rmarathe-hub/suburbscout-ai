@@ -15,6 +15,12 @@ export function SourceBadges({ response, className }: SourceBadgesProps) {
   const agentVersion = response.metadata?.agent_version
   const agentName = response.metadata?.agent_name
 
+  const commuteDestination =
+    typeof response.metadata?.commute_destination === 'string'
+      ? response.metadata.commute_destination
+      : null
+  const commuteIsDefault = response.metadata?.commute_destination_is_default !== false
+
   return (
     <div className={cn('flex flex-wrap gap-2', className)}>
       <Badge
@@ -50,6 +56,12 @@ export function SourceBadges({ response, className }: SourceBadgesProps) {
         <Gauge className="size-3" aria-hidden />
         Scores: percentile-based
       </Badge>
+
+      {commuteDestination && !commuteIsDefault && (
+        <Badge variant="outline" className="gap-1 font-normal text-primary">
+          Destination: {commuteDestination}
+        </Badge>
+      )}
 
       {response.execution_status && response.execution_status !== 'ok' && (
         <Badge

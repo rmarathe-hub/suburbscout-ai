@@ -7,7 +7,7 @@
     {"id": "demo_03", "prompt": "How far is Acton from Boston?", "expect_intent": "lookup_single_town"},
     {"id": "demo_04", "prompt": "Compare Newton and Needham on commute", "expect_intent": "compare_towns"},
     {"id": "demo_05", "prompt": "Is Newton in the dataset?", "expect_intent": "dataset_membership"},
-    {"id": "demo_06", "prompt": "Towns within 30 minutes of Cambridge", "expect_gate": "commute_destination_rank"},
+    {"id": "demo_06", "prompt": "Towns within 30 minutes of Cambridge", "expect_intent": "recommend_structured"},
     {"id": "demo_07", "prompt": "Which is more walkable, Newton or Brookline?", "expect_gate": "unsupported_compare"},
     {"id": "demo_08", "prompt": "Compare Newton, Needham, and Wellesley on schools", "expect_intent": "compare_multi_town"},
     {"id": "demo_09", "prompt": "Recommend towns under $600k but not Framingham", "expect_intent": "recommend_structured"},

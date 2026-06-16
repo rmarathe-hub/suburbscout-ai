@@ -550,7 +550,7 @@ Legacy orchestrator is **fallback only** (`--orchestrator` or `USE_LLM_QUERY_AGE
 
 - Plan limits (max 20 lookups / compares)
 - Reuses orchestrator trust rules via `plan_to_query_route` → `evaluate_trust_gate`
-- Blocks silent-wrong cases: unsupported compare fields, wrong commute destination, too many towns, etc.
+- Blocks silent-wrong cases: unsupported compare fields, out-of-dataset commute destinations, too many towns, etc.
 - Non-blocking warnings (e.g. partial unsupported rank) surface as `tradeoff_warning`
 
 Executor hybrid: if `semantic_search` runs before `rank`, candidate towns auto-limit ranking even when `use_semantic_candidates` was omitted.
@@ -561,6 +561,31 @@ python scripts/check_plan_trust.py --plan tests/fixtures/golden_plans/phase2/mc_
 
 python -m unittest tests.test_plan_trust_gates -v
 ```
+
+### Phase 8.5 — Dynamic commute destinations (Slice A)
+
+Town-to-town commutes within the 200-town `suburbs.json` dataset. Boston/South Station remains the default when no destination is specified.
+
+| Module | Role |
+|--------|------|
+| `app/commute_destination.py` | Detect destination town from prompt (`within 35 min of Cambridge`, `commute to Waltham`, `from Maynard to Cambridge`) |
+| `app/commute_service.py` | JSON cache + on-demand Google Distance Matrix fetches (max 200 pairs/request) |
+| `app/plan_normalizer.py` | Rewrites point-to-point prompts to `commute_pair` op |
+| `app/ranking.py` | Filters/ranks by `drive_minutes_to_destination` for non-default destinations |
+
+Boston commute continues to use precomputed `drive_minutes_to_boston` — no re-fetch. Out-of-dataset destinations (e.g. Hartford) are refused politely. Requires `GOOGLE_MAPS_API_KEY` for new destination cache misses.
+
+```bash
+python -m unittest tests.test_commute_service -v
+python scripts/verify_phase8_5_slice_a.py
+```
+
+Acceptance prompts:
+
+- `What is the commute from Maynard to Cambridge?` — concrete minutes (lookup)
+- `Find safe towns under 900k within 35 minutes of Cambridge` — ranked, filtered to Cambridge
+- `Find suburbs close to Boston with good schools` — Boston default unchanged
+- `Commute from Maynard to Hartford` — polite refusal
 
 ### Query agent — production wiring + eval
 

@@ -15,7 +15,9 @@ SERVICE_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SERVICE_ROOT))
 
 from app.evals.runner import DEFAULT_PROMPTS_PATH, evaluate_case, load_eval_cases  # noqa: E402
-from app.orchestrator import handle_query  # noqa: E402
+
+sys.path.insert(0, str(SERVICE_ROOT / "scripts"))
+from eval_query_agent import run_query_agent_prompt  # noqa: E402
 
 
 async def _run_cases(
@@ -25,13 +27,14 @@ async def _run_cases(
 ) -> list[dict[str, Any]]:
     results: list[dict[str, Any]] = []
     for case in cases:
-        payload = await handle_query(case["prompt"], save_searches=save_searches)
+        payload = await run_query_agent_prompt(case["prompt"], save_searches=save_searches)
         passed, failures = evaluate_case(case, payload)
         results.append({
             "case": case,
             "passed": passed,
             "failures": failures,
-            "route_intent": (payload.get("route") or {}).get("intent"),
+            "route_intent": payload.get("response", {}).get("route_intent"),
+            "execution_status": payload.get("execution_status"),
         })
     return results
 

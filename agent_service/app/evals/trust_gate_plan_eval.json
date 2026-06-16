@@ -1,15 +1,15 @@
 {
   "description": "Layer 3 — trust gates on hand-written QueryPlans (no LLM planner)",
-  "prompt_count": 32,
+  "prompt_count": 33,
   "target_pass_rate": 0.95,
   "cases": [
     {
       "id": "tg_dest_rank_01",
       "category": "commute_destination",
       "prompt": "Towns within 30 minutes of Cambridge",
-      "expect_gate": "commute_destination_rank",
-      "expect_blocks": true,
-      "expect_execution_status": "blocked",
+      "expect_gate": null,
+      "expect_blocks": false,
+      "expect_execution_status": "ok",
       "plan": {
         "ops": [
           {
@@ -24,9 +24,9 @@
       "id": "tg_dest_rank_02",
       "category": "commute_destination",
       "prompt": "I work in Burlington, find affordable towns",
-      "expect_gate": "commute_destination_rank",
-      "expect_blocks": true,
-      "expect_execution_status": "blocked",
+      "expect_gate": null,
+      "expect_blocks": false,
+      "expect_execution_status": "ok",
       "plan": {
         "ops": [
           {
@@ -41,9 +41,9 @@
       "id": "tg_dest_lookup_01",
       "category": "commute_destination",
       "prompt": "How far is Acton from Cambridge?",
-      "expect_gate": "commute_destination_lookup",
-      "expect_blocks": true,
-      "expect_execution_status": "blocked",
+      "expect_gate": null,
+      "expect_blocks": false,
+      "expect_execution_status": "ok",
       "plan": {
         "ops": [
           {
@@ -57,9 +57,9 @@
       "id": "tg_dest_lookup_02",
       "category": "commute_destination",
       "prompt": "How far is Shrewsbury from Worcester?",
-      "expect_gate": "commute_destination_lookup",
-      "expect_blocks": true,
-      "expect_execution_status": "blocked",
+      "expect_gate": null,
+      "expect_blocks": false,
+      "expect_execution_status": "ok",
       "plan": {
         "ops": [
           {
@@ -70,18 +70,38 @@
       }
     },
     {
+      "id": "tg_dest_hartford",
+      "category": "commute_destination",
+      "prompt": "Commute from Maynard to Hartford",
+      "expect_gate": "commute_destination_lookup",
+      "expect_blocks": true,
+      "expect_execution_status": "blocked",
+      "plan": {
+        "commute_intent": {
+          "commute_destination_town": "Hartford",
+          "commute_context": "unsupported"
+        },
+        "ops": [
+          {
+            "op": "lookup",
+            "items": [{ "town": "Maynard", "field": "commute" }]
+          }
+        ]
+      }
+    },
+    {
       "id": "tg_walk_01",
       "category": "unsupported_compare",
       "prompt": "Which is more walkable, Newton or Needham?",
-      "expect_gate": "unsupported_compare",
+      "expect_gate": "unsupported",
       "expect_blocks": true,
       "expect_execution_status": "blocked",
       "plan": {
         "ops": [
           {
-            "op": "compare",
-            "towns": ["Newton", "Needham"],
-            "columns": ["latest_home_price"]
+            "op": "unsupported",
+            "category": "lifestyle",
+            "reason": "walkability not in dataset"
           }
         ]
       }
@@ -90,14 +110,15 @@
       "id": "tg_walk_02",
       "category": "unsupported_compare",
       "prompt": "Compare Framingham and Quincy on diversity.",
-      "expect_gate": "unsupported_compare",
+      "expect_gate": "unsupported_demographics",
       "expect_blocks": true,
       "expect_execution_status": "blocked",
       "plan": {
         "ops": [
           {
-            "op": "compare",
-            "towns": ["Framingham", "Quincy"]
+            "op": "unsupported",
+            "category": "demographics",
+            "reason": "demographics not in dataset"
           }
         ]
       }
@@ -106,15 +127,15 @@
       "id": "tg_live_01",
       "category": "live_market",
       "prompt": "Show me current Zillow listings in Newton right now",
-      "expect_gate": "unsupported_rank",
+      "expect_gate": "unsupported_live_market",
       "expect_blocks": true,
       "expect_execution_status": "blocked",
       "plan": {
         "ops": [
           {
-            "op": "rank",
-            "preferences": {},
-            "limit": 5
+            "op": "unsupported",
+            "category": "live_market",
+            "reason": "live MLS listings"
           }
         ]
       }
@@ -123,15 +144,15 @@
       "id": "tg_live_02",
       "category": "live_market",
       "prompt": "Show Zillow listings for Acton right now",
-      "expect_gate": "unsupported_rank",
+      "expect_gate": "unsupported_live_market",
       "expect_blocks": true,
       "expect_execution_status": "blocked",
       "plan": {
         "ops": [
           {
-            "op": "rank",
-            "preferences": {},
-            "limit": 5
+            "op": "unsupported",
+            "category": "live_market",
+            "reason": "live MLS listings"
           }
         ]
       }
@@ -146,9 +167,9 @@
       "plan": {
         "ops": [
           {
-            "op": "rank",
-            "preferences": {},
-            "limit": 10
+            "op": "unsupported",
+            "category": "neighborhood",
+            "reason": "neighborhood-level detail"
           }
         ]
       }
@@ -157,15 +178,15 @@
       "id": "tg_rank_unsup_01",
       "category": "unsupported_rank",
       "prompt": "Most walkable towns near Boston",
-      "expect_gate": "unsupported_rank",
+      "expect_gate": "unsupported",
       "expect_blocks": true,
       "expect_execution_status": "blocked",
       "plan": {
         "ops": [
           {
-            "op": "rank",
-            "preferences": {},
-            "limit": 10
+            "op": "unsupported",
+            "category": "lifestyle",
+            "reason": "walkability not in dataset"
           }
         ]
       }
@@ -174,15 +195,15 @@
       "id": "tg_rank_unsup_02",
       "category": "unsupported_rank",
       "prompt": "Best towns for MBTA access",
-      "expect_gate": "unsupported_rank",
+      "expect_gate": "unsupported_transit",
       "expect_blocks": true,
       "expect_execution_status": "blocked",
       "plan": {
         "ops": [
           {
-            "op": "rank",
-            "preferences": {},
-            "limit": 10
+            "op": "unsupported",
+            "category": "transit",
+            "reason": "MBTA transit not in dataset"
           }
         ]
       }

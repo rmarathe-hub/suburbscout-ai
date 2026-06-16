@@ -484,6 +484,17 @@ async def run_semantic_town_search(query: str, *, top_k: int = 15) -> dict[str, 
             "candidate_town_names": [],
             "usage_note": "Run scripts/build_vector_index.py before semantic search.",
         }
+    except Exception as exc:
+        return {
+            "query": query,
+            "error": f"Semantic search unavailable: {exc}",
+            "candidates": [],
+            "candidate_town_names": [],
+            "usage_note": (
+                "Semantic search could not run. Check Azure embedding deployment "
+                "or use structured rank filters instead."
+            ),
+        }
 
     candidates = []
     for match in matches:

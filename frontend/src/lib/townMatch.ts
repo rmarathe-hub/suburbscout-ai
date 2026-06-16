@@ -39,7 +39,18 @@ export function parseTownMatch(raw: Record<string, unknown>): TownMatch {
     price: asNumber(data.latest_home_price ?? raw.latest_home_price),
     schoolScore: asNumber(data.school_score ?? raw.school_score),
     safetyScore: asNumber(data.safety_score ?? raw.safety_score),
-    commuteMinutes: asNumber(data.drive_minutes_to_boston ?? raw.drive_minutes_to_boston),
+  commuteMinutes: asNumber(
+      data.drive_minutes_to_destination ??
+        raw.drive_minutes_to_destination ??
+        data.drive_minutes_to_boston ??
+        raw.drive_minutes_to_boston,
+    ),
+    commuteDestinationLabel:
+      typeof data.commute_destination_label === 'string'
+        ? data.commute_destination_label
+        : typeof raw.commute_destination_label === 'string'
+          ? raw.commute_destination_label
+          : null,
     dataQualityTier:
       typeof data.data_quality_tier === 'string'
         ? data.data_quality_tier

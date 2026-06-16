@@ -13,42 +13,10 @@ from typing import Any
 SERVICE_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SERVICE_ROOT))
 
+from app.evals.e2e_expect import build_e2e_expect  # noqa: E402
 from app.evals.prompt_templates import generate_eval_pool, prompts_to_cases  # noqa: E402
 
 DEFAULT_OUT = SERVICE_ROOT / "app" / "evals" / "e2e_query_agent_150.json"
-
-
-def _e2e_expect(case: dict[str, Any]) -> dict[str, Any]:
-    """Lightweight expectations for full pipeline (not strict plan JSON)."""
-    cat = case.get("category", "")
-    intent = case.get("expected_intent", "")
-    expect: dict[str, Any] = {
-        "forbid_hallucinated_facts": True,
-        "forbid_wrong_commute_rank": True,
-    }
-
-    if intent == "refuse_out_of_scope" or cat in ("membership",):
-        if "providence" in case.get("prompt", "").lower() or "nashua" in case.get("prompt", "").lower():
-            expect["execution_status_in"] = ["not_found", "out_of_scope", "blocked"]
-            expect["expect_used_answer_llm"] = False
-        else:
-            expect["execution_status_in"] = ["ok", "not_found", "out_of_scope", "blocked"]
-    elif cat == "semantic":
-        expect["plan_ops_contains"] = ["semantic_search"]
-        expect["execution_status_in"] = ["ok", "partial", "no_rows"]
-    elif cat == "compare":
-        expect["plan_ops_contains"] = ["compare"]
-        expect["execution_status_in"] = ["ok", "partial", "blocked"]
-    elif cat in ("budget", "commute", "coastal", "inverted"):
-        expect["plan_ops_contains_any"] = ["rank", "semantic_search"]
-        expect["execution_status_in"] = ["ok", "partial", "no_rows", "blocked"]
-    elif cat == "lookup" or cat == "typo":
-        expect["plan_ops_contains"] = ["lookup"]
-        expect["execution_status_in"] = ["ok", "partial", "not_found"]
-    else:
-        expect["execution_status_in"] = ["ok", "partial", "not_found", "no_rows", "blocked", "out_of_scope"]
-
-    return expect
 
 
 def main() -> None:
@@ -72,7 +40,7 @@ def main() -> None:
                 "category": case.get("category"),
                 "prompt": case["prompt"],
                 "source_id": case.get("id"),
-                "expect": _e2e_expect(case),
+                "expect": build_e2e_expect(case),
             }
         )
 

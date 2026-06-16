@@ -5,19 +5,19 @@
     {
       "id": "dest_rank_01",
       "category": "commute_destination",
-      "expect_gate": "commute_destination_rank",
+      "expect_gate": null,
       "prompt": "Towns within 30 minutes of Cambridge"
     },
     {
       "id": "dest_rank_02",
       "category": "commute_destination",
-      "expect_gate": "commute_destination_rank",
+      "expect_gate": null,
       "prompt": "I work in Burlington, find affordable towns"
     },
     {
       "id": "dest_rank_03",
       "category": "commute_destination",
-      "expect_gate": "commute_destination_rank",
+      "expect_gate": null,
       "prompt": "Find towns within 35 minutes of Waltham"
     },
     {
@@ -29,13 +29,13 @@
     {
       "id": "dest_lookup_01",
       "category": "commute_destination",
-      "expect_gate": "commute_destination_lookup",
+      "expect_gate": null,
       "prompt": "How far is Shrewsbury from Worcester?"
     },
     {
       "id": "dest_lookup_02",
       "category": "commute_destination",
-      "expect_gate": "commute_destination_lookup",
+      "expect_gate": null,
       "prompt": "How far is Acton from Cambridge?"
     },
     {
@@ -77,7 +77,7 @@
     {
       "id": "rank_unsup_04",
       "category": "unsupported_rank",
-      "expect_gate": "commute_destination_rank",
+      "expect_gate": null,
       "prompt": "Towns near Worcester with good schools"
     },
     {

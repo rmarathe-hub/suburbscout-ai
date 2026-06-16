@@ -16,6 +16,7 @@ from typing import Any
 
 SERVICE_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SERVICE_ROOT))
+sys.path.insert(0, str(SERVICE_ROOT / "scripts"))
 
 DEFAULT_PROMPTS = SERVICE_ROOT / "app" / "evals" / "quality_check_150_prompts.json"
 DEFAULT_OUT_DIR = SERVICE_ROOT / "app" / "evals" / "results"
@@ -108,16 +109,16 @@ async def run_check(
     *,
     save_searches: bool = False,
 ) -> list[dict[str, Any]]:
-    from app.orchestrator import handle_query
+    from eval_query_agent import run_query_agent_prompt
 
     results: list[dict[str, Any]] = []
     total = len(cases)
     for i, case in enumerate(cases, start=1):
         print(f"[{i}/{total}] {case['id']}: {case['prompt'][:70]}...", flush=True)
-        payload = await handle_query(case["prompt"], save_searches=save_searches)
+        payload = await run_query_agent_prompt(case["prompt"], save_searches=save_searches)
         compact = _compact_response(case, payload)
         compact["full_response"] = payload.get("response")
-        compact["full_route"] = payload.get("route")
+        compact["full_plan"] = payload.get("plan")
         results.append(compact)
     return results
 

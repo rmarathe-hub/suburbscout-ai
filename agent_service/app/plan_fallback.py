@@ -105,7 +105,11 @@ def build_rule_fallback_plan(
         raise PlanValidationError("Query not eligible for rule-based plan fallback.")
 
     entities = entities or extract_entities(text)
-    prefs = normalize_rank_preferences(text, parse_constraints(text))
+    prefs = normalize_rank_preferences(
+        text,
+        parse_constraints(text),
+        regex_fallback=True,
+    )
 
     ops: list[RankOp | SemanticSearchOp] = []
     if is_semantic_vibe_query(text) and not is_coastal_rank_query(text):

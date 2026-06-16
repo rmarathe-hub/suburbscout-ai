@@ -8,9 +8,12 @@ from dataclasses import dataclass
 from app.commute_destination import (
     CommuteDestinationResult,
     build_commute_destination_limitation,
-    detect_commute_destination,
+    detect_compare_commute_destination_result,
+    entity_towns_for_compare_gate,
+    extract_compare_commute_destination,
     is_non_boston_destination_query,
 )
+from app.commute_intent import CommuteContext, ResolvedCommuteIntent, resolve_commute_intent
 from app.constraint_parser import parse_constraints
 from app.entity_extractor import ExtractedEntities, extract_entities
 from app.lookup_schema import AVAILABLE_FIELDS_BLURB, extract_unsupported_attribute
@@ -20,7 +23,7 @@ from app.query_patterns import (
     build_too_many_compare_message,
     build_too_many_lookup_message,
 )
-from app.query_router import QueryRoute
+from app.query_route_types import QueryRoute
 
 
 @dataclass(frozen=True)
@@ -72,6 +75,8 @@ def _has_supported_rank_constraints(query: str) -> bool:
 
 def _compare_field_is_unsupported(query: str) -> bool:
     """True when compare asks about a field outside stored schema."""
+    if extract_compare_commute_destination(query):
+        return False
     lower = query.lower()
     if extract_unsupported_attribute(query):
         return True
@@ -145,10 +150,12 @@ def evaluate_trust_gate(
     route: QueryRoute,
     *,
     entities: ExtractedEntities | None = None,
+    resolved: ResolvedCommuteIntent | None = None,
 ) -> TrustGateResult | None:
     """Return a trust gate when pipeline would silently use wrong data."""
     entities = entities or extract_entities(query)
-    dest = detect_commute_destination(query, entities)
+    resolved = resolved or resolve_commute_intent(query)
+    dest = resolved.to_destination_result()
     lower = query.lower()
 
     if route.intent == "lookup_multi_town" and len(route.lookup_specs) > MAX_MULTI_LOOKUP_SPECS:
@@ -167,19 +174,53 @@ def evaluate_trust_gate(
             blocks_pipeline=True,
         )
 
+    compare_town_count = len(
+        entity_towns_for_compare_gate(
+            entities,
+            query,
+            compare_towns=route.compare_towns
+            or ([route.compare_town_a, route.compare_town_b] if route.compare_town_a else None),
+            commute_destination=resolved.commute_destination_town,
+        )
+    )
     if (
-        len(entities.valid_towns) > 2
+        compare_town_count > 2
         and re.search(r"\b(?:compare|versus|vs\.?)\b", lower)
-        and route.intent not in ("compare_multi_town", "lookup_multi_town")
+        and route.intent not in ("compare_multi_town", "lookup_multi_town", "compare_towns")
     ):
         return TrustGateResult(
             gate_type="multi_compare",
-            message=build_multi_compare_message(entities.valid_towns),
+            message=build_multi_compare_message(
+                entity_towns_for_compare_gate(
+                    entities,
+                    query,
+                    commute_destination=resolved.commute_destination_town,
+                )
+            ),
             blocks_pipeline=True,
         )
 
     # --- Compare gates ---
     if route.intent in ("compare_towns", "compare_multi_town"):
+        compare_dest = detect_compare_commute_destination_result(query) or (
+            dest if resolved.has_non_default_destination() else None
+        )
+        if compare_dest and not compare_dest.is_default:
+            if not compare_dest.in_dataset or not compare_dest.data_available:
+                return TrustGateResult(
+                    gate_type="commute_destination_compare",
+                    message=build_commute_destination_limitation(compare_dest, context="lookup"),
+                    blocks_pipeline=True,
+                )
+        if resolved.commute_context == CommuteContext.UNSUPPORTED and re.search(
+            r"\b(?:compare|versus|vs\.?|or|better|which)\b",
+            lower,
+        ):
+            return TrustGateResult(
+                gate_type="commute_destination_compare",
+                message=build_commute_destination_limitation(dest, context="lookup"),
+                blocks_pipeline=True,
+            )
         if _compare_field_is_unsupported(query):
             match = extract_unsupported_attribute(query)
             field = match.label if match else "that attribute"
@@ -193,14 +234,14 @@ def evaluate_trust_gate(
             )
         return None
 
-    # --- Lookup: wrong destination (e.g. Shrewsbury from Worcester) ---
+    # --- Lookup: wrong destination or unavailable dynamic commute ---
     if route.intent == "lookup_single_town" and not route.unsupported_field:
         lower = query.lower()
         if is_non_boston_destination_query(query, entities) and re.search(
             r"\b(?:how far|distance|commute|drive|from .+ to|to .+ from)\b",
             lower,
         ):
-            if not dest.data_available:
+            if not dest.in_dataset or not dest.data_available:
                 return TrustGateResult(
                     gate_type="commute_destination_lookup",
                     message=build_commute_destination_limitation(dest, context="lookup"),
@@ -220,7 +261,9 @@ def evaluate_trust_gate(
                 blocks_pipeline=True,
             )
 
-        if is_non_boston_destination_query(query, entities) and not dest.data_available:
+        if is_non_boston_destination_query(query, entities) and (
+            not dest.in_dataset or not dest.data_available
+        ):
             if re.search(
                 r"\b(?:within|under|less than|minutes|commute|work in|work at|near)\b",
                 query.lower(),

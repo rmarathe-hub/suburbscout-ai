@@ -108,6 +108,8 @@ def validate_ranked_results(
         data = _match_data(row)
         price = data.get("latest_home_price", row.get("latest_home_price"))
         minutes = data.get("drive_minutes_to_boston", row.get("drive_minutes_to_boston"))
+        if prefs.commute_destination_town:
+            minutes = data.get("drive_minutes_to_destination", row.get("drive_minutes_to_destination"))
         county = data.get("county", row.get("county"))
         region = data.get("region", row.get("region"))
         is_coastal = data.get("is_coastal", row.get("is_coastal"))

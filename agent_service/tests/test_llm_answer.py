@@ -106,11 +106,17 @@ class TestQueryAgentOffline(unittest.IsolatedAsyncioTestCase):
         )
         with patch("app.query_agent.query_agent_available", return_value=True):
             with patch("app.query_agent.plan_query_with_llm", return_value=plan):
-                payload = await handle_query_v2("show me zillow listings now")
+                with patch(
+                    "app.plan_normalizer.normalize_planned_query",
+                    return_value=plan,
+                ):
+                    payload = await handle_query_v2("show me zillow listings now")
 
-        self.assertEqual(payload["execution_status"], "out_of_scope")
+        self.assertEqual(payload["execution_status"], "blocked")
+        self.assertEqual(payload.get("trust_gate"), "unsupported_live_market")
         self.assertFalse(payload.get("used_answer_llm"))
-        self.assertIn("dataset", payload["response"]["final_recommendation"].lower())
+        final = payload["response"]["final_recommendation"].lower()
+        self.assertTrue("zillow" in final or "live" in final or "listing" in final)
 
 
 if __name__ == "__main__":

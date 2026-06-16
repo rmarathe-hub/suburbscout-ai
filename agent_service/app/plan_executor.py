@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 
 from app.query_plan import (
     CompareOp,
+    CommutePairOp,
     DEFAULT_COMPARE_COLUMNS,
     LookupFieldKind,
     LookupOp,
@@ -22,6 +23,7 @@ from app.query_plan import (
     lookup_field_dataset_keys,
     validate_plan,
 )
+from app.commute_service import commute_destination_label, get_commute_minutes
 from app.ranking import describe_active_filters, rank_suburbs
 from app.schemas import Preferences
 from app.tools import (
@@ -255,6 +257,45 @@ async def _execute_membership(op: MembershipOp) -> OpExecutionResult:
     )
 
 
+async def _execute_commute_pair(op: CommutePairOp) -> OpExecutionResult:
+    result = get_commute_minutes(op.origin_town, op.destination_town)
+    dest_label = commute_destination_label(op.destination_town)
+    if result.drive_minutes is None:
+        return OpExecutionResult(
+            op="commute_pair",
+            status=ExecutionStatus.PARTIAL,
+            data={
+                "origin_town": op.origin_town,
+                "destination_town": op.destination_town,
+                "commute_destination_label": dest_label,
+                "drive_minutes_to_destination": None,
+                "error": result.error,
+            },
+            errors=[result.error or "Commute time unavailable"],
+        )
+
+    snippet = (
+        f"Drive from {op.origin_town} to {dest_label}: {result.drive_minutes} min"
+        + (f" ({result.drive_miles} mi)" if result.drive_miles is not None else "")
+        + "."
+    )
+    return OpExecutionResult(
+        op="commute_pair",
+        status=ExecutionStatus.OK,
+        data={
+            "origin_town": op.origin_town,
+            "destination_town": op.destination_town,
+            "commute_destination_label": dest_label,
+            "drive_minutes_to_destination": result.drive_minutes,
+            "drive_miles_to_destination": result.drive_miles,
+            "source": result.source,
+            "snippets": [snippet],
+            "score_disclaimer": SCORE_DISCLAIMER,
+        },
+        errors=[],
+    )
+
+
 async def _execute_lookup(op: LookupOp) -> OpExecutionResult:
     items_out: list[dict[str, Any]] = []
     errors: list[str] = []
@@ -306,6 +347,28 @@ async def _execute_lookup(op: LookupOp) -> OpExecutionResult:
 def _execute_compare(op: CompareOp) -> OpExecutionResult:
     columns = list(op.columns) if op.columns else list(DEFAULT_COMPARE_COLUMNS)
     payload = compare_suburbs_multi_tool(op.towns, columns=columns)
+    if op.commute_destination_town:
+        from app.commute_service import commute_destination_label, get_commute_minutes
+
+        dest = op.commute_destination_town
+        dest_label = commute_destination_label(dest)
+        for row in payload.get("comparison_table") or []:
+            town = row.get("town")
+            if not town:
+                continue
+            result = get_commute_minutes(town, dest)
+            row["drive_minutes_to_destination"] = result.drive_minutes
+        cols = list(payload.get("columns") or [])
+        if not any(c.get("key") == "drive_minutes_to_destination" for c in cols):
+            cols.append(
+                {
+                    "key": "drive_minutes_to_destination",
+                    "label": f"Drive to {dest_label} (min)",
+                }
+            )
+        payload["columns"] = cols
+        payload["commute_destination_town"] = dest
+        payload["commute_destination_label"] = dest_label
     errors = list(payload.get("errors") or [])
     row_count = int(payload.get("town_count") or 0)
 
@@ -372,12 +435,13 @@ def _execute_rank(op: RankOp, *, semantic_candidates: list[str] | None) -> OpExe
 async def _execute_semantic(op: SemanticSearchOp) -> OpExecutionResult:
     payload = await run_semantic_town_search(op.query_text, top_k=op.top_k)
     if payload.get("error"):
-        if "Vector index not found" in str(payload.get("error")):
+        err = str(payload.get("error"))
+        if "Vector index not found" in err or "Semantic search unavailable" in err:
             return OpExecutionResult(
                 op="semantic_search",
                 status=ExecutionStatus.NO_ROWS,
                 data=payload,
-                errors=[str(payload["error"])],
+                errors=[err],
             )
         return OpExecutionResult(
             op="semantic_search",
@@ -487,6 +551,8 @@ def _build_answer_context(
         elif op_result.op == "compare":
             entry["comparison_table"] = op_result.data.get("comparison_table", [])
             entry["columns"] = op_result.data.get("columns", [])
+            entry["commute_destination_town"] = op_result.data.get("commute_destination_town")
+            entry["commute_destination_label"] = op_result.data.get("commute_destination_label")
             entry["errors"] = op_result.errors
         elif op_result.op == "rank":
             entry["top_matches"] = op_result.data.get("top_matches", [])
@@ -494,6 +560,17 @@ def _build_answer_context(
         elif op_result.op == "semantic_search":
             entry["candidates"] = op_result.data.get("candidates", [])
             entry["candidate_town_names"] = op_result.data.get("candidate_town_names", [])
+        elif op_result.op == "commute_pair":
+            entry.update(
+                {
+                    "origin_town": op_result.data.get("origin_town"),
+                    "destination_town": op_result.data.get("destination_town"),
+                    "commute_destination_label": op_result.data.get("commute_destination_label"),
+                    "drive_minutes_to_destination": op_result.data.get("drive_minutes_to_destination"),
+                    "drive_miles_to_destination": op_result.data.get("drive_miles_to_destination"),
+                    "snippets": op_result.data.get("snippets", []),
+                }
+            )
         elif op_result.op == "unsupported":
             entry["reason"] = op_result.data.get("reason")
             ctx["reason"] = op_result.data.get("reason")
@@ -557,6 +634,8 @@ async def execute_plan_async(
             if semantic_candidates and not rank_op.use_semantic_candidates:
                 rank_op = rank_op.model_copy(update={"use_semantic_candidates": True})
             op_result = _execute_rank(rank_op, semantic_candidates=semantic_candidates)
+        elif isinstance(op, CommutePairOp):
+            op_result = await _execute_commute_pair(op)
         else:
             continue
 

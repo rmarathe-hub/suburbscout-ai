@@ -73,7 +73,7 @@ def _walk_collect_facts(obj: Any, prices: set[int], towns: set[str], floats: set
                     prices.add(int(float(value)))
                 except (TypeError, ValueError):
                     pass
-            elif key in ("drive_minutes_to_boston", "school_score", "safety_score", "crime_rate_per_1000"):
+            elif key in ("drive_minutes_to_boston", "drive_minutes_to_destination", "school_score", "safety_score", "crime_rate_per_1000"):
                 if value is not None:
                     try:
                         floats.add(round(float(value), 2))

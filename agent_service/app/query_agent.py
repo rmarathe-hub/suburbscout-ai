@@ -22,6 +22,21 @@ from app.trust_gates import TrustGateResult
 logger = logging.getLogger(__name__)
 
 
+def _commute_metadata(query: str, plan: QueryPlan | None = None) -> dict[str, Any]:
+    from app.commute_intent import resolve_commute_intent
+
+    dest = resolve_commute_intent(
+        query,
+        plan.commute_intent if plan else None,
+        plan=plan,
+    ).to_destination_result()
+    return {
+        "commute_destination": dest.label,
+        "commute_destination_is_default": dest.is_default,
+        "commute_destination_town": dest.commute_destination_town,
+    }
+
+
 def query_agent_available() -> bool:
     from app import config
 
@@ -59,6 +74,18 @@ def _extract_structured_fields(execution: ExecutionResult) -> dict[str, Any]:
                 }
             else:
                 lookup_payload = {"multi": items}
+        elif op_result.op == "commute_pair":
+            data = op_result.data
+            lookup_payload = {
+                "found": data.get("drive_minutes_to_destination") is not None,
+                "queried_name": data.get("origin_town"),
+                "town": {
+                    "name": data.get("origin_town"),
+                    "drive_minutes_to_destination": data.get("drive_minutes_to_destination"),
+                    "commute_destination_label": data.get("commute_destination_label"),
+                    "commute_destination_town": data.get("destination_town"),
+                },
+            }
         elif op_result.op == "semantic_search":
             semantic_candidates = {
                 k: op_result.data.get(k)
@@ -190,6 +217,7 @@ async def handle_query_v2(
         "message_code": execution.message_code,
         "used_answer_llm": used_answer_llm,
         "query_agent": True,
+        "metadata": _commute_metadata(query, plan),
     }
     if trust_gate:
         payload["trust_gate"] = trust_gate.gate_type
@@ -263,6 +291,7 @@ def _trust_gate_response(
         "query_agent": True,
         "trust_gate": gate.gate_type,
         "trust_gate_blocks": gate.blocks_pipeline,
+        "metadata": _commute_metadata(query, plan),
     }
 
 

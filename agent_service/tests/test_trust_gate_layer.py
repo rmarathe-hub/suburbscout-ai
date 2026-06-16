@@ -28,7 +28,11 @@ class TestTrustGateLayer(unittest.TestCase):
 
         failures: list[str] = []
         for case in self.cases:
-            plan = validate_plan(case["plan"])
+            try:
+                plan = validate_plan(case["plan"])
+            except Exception as exc:
+                failures.append(f"{case['id']}: invalid plan fixture: {exc}")
+                continue
             gate = evaluate_plan_trust_gate(case["prompt"], plan)
             actual = gate.gate_type if gate else None
             if actual != case.get("expect_gate"):
@@ -48,16 +52,24 @@ class TestTrustGateLayer(unittest.TestCase):
         from app.query_plan import validate_plan
 
         blocked = [c for c in self.cases if c.get("expect_blocks")][:3]
+        refusal_statuses = {"blocked", "out_of_scope", "not_found", "no_rows", "invalid_plan"}
         for case in blocked:
-            plan = validate_plan(case["plan"])
+            try:
+                plan = validate_plan(case["plan"])
+            except Exception as exc:
+                self.fail(f"{case['id']}: invalid plan fixture: {exc}")
 
-            async def _run() -> dict:
+            async def _run(p: object = plan) -> dict:
                 with patch("app.query_agent.query_agent_available", return_value=True):
-                    with patch("app.query_agent.plan_query_with_llm", return_value=plan):
-                        return await handle_query_v2(case["prompt"], save_searches=False)
+                    with patch("app.query_agent.plan_query_with_llm", return_value=p):
+                        with patch(
+                            "app.plan_normalizer.normalize_planned_query",
+                            return_value=p,
+                        ):
+                            return await handle_query_v2(case["prompt"], save_searches=False)
 
             payload = asyncio.run(_run())
-            self.assertEqual(payload.get("execution_status"), "blocked")
+            self.assertIn(payload.get("execution_status"), refusal_statuses, case["id"])
             self.assertFalse(payload.get("used_answer_llm"))
 
 

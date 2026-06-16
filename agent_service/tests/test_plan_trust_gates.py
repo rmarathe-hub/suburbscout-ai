@@ -13,7 +13,7 @@ if str(SERVICE_ROOT) not in sys.path:
 
 from app.plan_executor import execute_plan  # noqa: E402
 from app.plan_trust_gates import evaluate_plan_trust_gate, plan_to_query_route  # noqa: E402
-from app.query_plan import validate_plan  # noqa: E402
+from app.query_plan import CompareOp, QueryPlan, validate_plan  # noqa: E402
 
 
 class TestPlanTrustGates(unittest.TestCase):
@@ -36,16 +36,13 @@ class TestPlanTrustGates(unittest.TestCase):
         self.assertEqual(len(route.lookup_specs), 2)
 
     def test_unsupported_compare_field_blocks(self) -> None:
-        plan = validate_plan(
-            {
-                "ops": [
-                    {
-                        "op": "compare",
-                        "towns": ["Newton", "Needham"],
-                        "columns": ["latest_home_price"],
-                    }
-                ]
-            }
+        plan = QueryPlan(
+            ops=[
+                CompareOp.model_construct(
+                    towns=["Newton", "Needham"],
+                    columns=["walkability"],
+                )
+            ]
         )
         gate = evaluate_plan_trust_gate(
             "Which is more walkable, Newton or Needham?",
@@ -92,19 +89,21 @@ class TestQueryAgentTrustGate(unittest.IsolatedAsyncioTestCase):
     async def test_trust_gate_blocks_before_execute(self) -> None:
         from app.query_agent import handle_query_v2
 
-        plan = validate_plan(
-            {
-                "ops": [
-                    {
-                        "op": "compare",
-                        "towns": ["Newton", "Needham"],
-                    }
-                ]
-            }
+        plan = QueryPlan(
+            ops=[
+                CompareOp.model_construct(
+                    towns=["Newton", "Needham"],
+                    columns=["walkability"],
+                )
+            ]
         )
         with patch("app.query_agent.query_agent_available", return_value=True):
             with patch("app.query_agent.plan_query_with_llm", return_value=plan):
-                payload = await handle_query_v2("Compare Newton vs Needham on walkability")
+                with patch(
+                    "app.plan_normalizer.normalize_planned_query",
+                    return_value=plan,
+                ):
+                    payload = await handle_query_v2("Compare Newton vs Needham on walkability")
 
         self.assertEqual(payload.get("trust_gate"), "unsupported_compare")
         self.assertEqual(payload.get("execution_status"), "blocked")

@@ -100,17 +100,26 @@ def _failure_reason(
 
 
 async def run_holdout(cases: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    from app.orchestrator import handle_query
+    from eval_query_agent import run_query_agent_prompt
+    from app.plan_trust_gates import plan_to_query_route
+    from app.query_plan import validate_plan
 
-    # Reuse compact response from existing runner
     from run_150_quality_check import _compact_response
 
     results: list[dict[str, Any]] = []
     total = len(cases)
     for i, case in enumerate(cases, start=1):
         print(f"[{i}/{total}] {case['id']}: {case['prompt'][:70]}...", flush=True)
-        payload = await handle_query(case["prompt"], save_searches=False)
+        payload = await run_query_agent_prompt(case["prompt"], save_searches=False)
         row = _compact_response(case, payload)
+        plan_raw = payload.get("plan")
+        if plan_raw:
+            try:
+                plan = validate_plan(plan_raw)
+                row["route_intent"] = plan_to_query_route(case["prompt"], plan).intent
+            except Exception:
+                pass
+        row["route_intent"] = row.get("route_intent") or payload.get("response", {}).get("route_intent")
         expected = case.get("expected_intent", "")
         actual = row.get("route_intent") or ""
         validation = row.get("validation") or {}

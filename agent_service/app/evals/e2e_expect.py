@@ -20,9 +20,10 @@ def _is_compare_prompt(prompt: str) -> bool:
 
 
 def build_e2e_expect(case: dict[str, Any]) -> dict[str, Any]:
-    """Build expect dict from category + prompt heuristics."""
+    """Build expect dict from category, prompt heuristics, and template intent."""
     cat = case.get("category", "")
     prompt = case.get("prompt", "")
+    expected_intent = case.get("expected_intent", "")
     expect: dict[str, Any] = {
         "forbid_hallucinated_facts": True,
         "forbid_wrong_commute_rank": True,
@@ -54,7 +55,11 @@ def build_e2e_expect(case: dict[str, Any]) -> dict[str, Any]:
         expect["execution_status_in"] = ["ok", "partial", "no_rows"]
         return expect
 
-    if cat in ("membership", "membership_typo") or is_dataset_membership_query(prompt):
+    if (
+        expected_intent == "dataset_membership"
+        or cat in ("membership", "membership_typo")
+        or is_dataset_membership_query(prompt)
+    ):
         expect["plan_ops_contains"] = ["membership"]
         expect["plan_ops_max"] = 1
         expect["execution_status_in"] = ["ok", "not_found", "out_of_scope", "blocked"]
@@ -62,6 +67,7 @@ def build_e2e_expect(case: dict[str, Any]) -> dict[str, Any]:
 
     if cat == "semantic" or (
         re.search(r"\b(?:vibe|feel|similar to|[- ]like)\b", prompt, re.I)
+        and expected_intent != "dataset_membership"
         and not is_dataset_membership_query(prompt)
     ):
         expect["plan_ops_contains"] = ["semantic_search"]
@@ -69,12 +75,22 @@ def build_e2e_expect(case: dict[str, Any]) -> dict[str, Any]:
         expect["execution_status_in"] = ["ok", "partial", "no_rows"]
         return expect
 
-    if cat == "compare" or (cat == "typo" and _is_compare_prompt(prompt)):
+    if (
+        cat == "compare"
+        or expected_intent == "compare_towns"
+        or (cat == "typo" and _is_compare_prompt(prompt))
+    ):
         expect["plan_ops_contains"] = ["compare"]
         expect["execution_status_in"] = ["ok", "partial", "blocked"]
         return expect
 
-    if cat == "lookup" or (cat == "typo" and not _is_compare_prompt(prompt)):
+    if cat == "typo" and not _is_compare_prompt(prompt):
+        # Typos may resolve via membership (scope check) or lookup (field card).
+        expect["plan_ops_contains_any"] = ["lookup", "membership"]
+        expect["execution_status_in"] = ["ok", "partial", "not_found"]
+        return expect
+
+    if cat == "lookup" or expected_intent == "lookup_single_town":
         expect["plan_ops_contains"] = ["lookup"]
         expect["execution_status_in"] = ["ok", "partial", "not_found"]
         return expect

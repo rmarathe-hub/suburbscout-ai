@@ -13,8 +13,11 @@ from typing import Annotated, Any, Literal, Union
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
+from app.commute_intent import CommuteIntent
+from app.commute_service import resolve_dataset_town
 from app.query_patterns import MAX_MULTI_COMPARE_TOWNS, MAX_MULTI_LOOKUP_SPECS
 from app.schemas import Preferences
+from app.town_normalizer import canonical_town_name
 
 MAX_PLAN_OPS = 12
 MAX_RANK_LIMIT = 30
@@ -176,6 +179,10 @@ class CompareOp(BaseModel):
         default=None,
         description="suburbs.json column keys; defaults to core compare columns if omitted",
     )
+    commute_destination_town: str | None = Field(
+        default=None,
+        description="When set, compare includes drive time to this dataset town",
+    )
 
     @field_validator("towns", mode="before")
     @classmethod
@@ -222,6 +229,21 @@ class MembershipOp(BaseModel):
         return value
 
 
+class CommutePairOp(BaseModel):
+    """Point-to-point commute between two dataset towns (Phase 8.5)."""
+
+    op: Literal["commute_pair"] = "commute_pair"
+    origin_town: str = Field(min_length=1, max_length=120)
+    destination_town: str = Field(min_length=1, max_length=120)
+
+    @field_validator("origin_town", "destination_town", mode="before")
+    @classmethod
+    def _strip_towns(cls, value: Any) -> Any:
+        if isinstance(value, str):
+            return value.strip()
+        return value
+
+
 class UnsupportedOp(BaseModel):
     op: Literal["unsupported"] = "unsupported"
     category: UnsupportedCategory = UnsupportedCategory.OTHER
@@ -241,7 +263,15 @@ class UnsupportedOp(BaseModel):
 
 
 PlanOp = Annotated[
-    Union[LookupOp, CompareOp, RankOp, SemanticSearchOp, MembershipOp, UnsupportedOp],
+    Union[
+        LookupOp,
+        CompareOp,
+        RankOp,
+        SemanticSearchOp,
+        MembershipOp,
+        CommutePairOp,
+        UnsupportedOp,
+    ],
     Field(discriminator="op"),
 ]
 
@@ -250,6 +280,10 @@ class QueryPlan(BaseModel):
     """Ordered operations to run against suburbs.json (+ optional vector index)."""
 
     ops: list[PlanOp] = Field(min_length=1, max_length=MAX_PLAN_OPS)
+    commute_intent: CommuteIntent | None = Field(
+        default=None,
+        description="Planner-emitted commute slots; validated before execution",
+    )
     user_intent_summary: str | None = Field(
         default=None,
         max_length=500,
@@ -371,7 +405,16 @@ def _normalize_compare_op(op: CompareOp) -> CompareOp:
         if not cols:
             raise PlanValidationError("Compare op columns list cannot be empty when provided.")
         columns = cols
-    return CompareOp(towns=towns, columns=columns)
+    dest_town = op.commute_destination_town
+    if dest_town:
+        resolved = resolve_dataset_town(dest_town)
+        if resolved:
+            dest_town = canonical_town_name(resolved)
+    return CompareOp(
+        towns=towns,
+        columns=columns,
+        commute_destination_town=dest_town,
+    )
 
 
 def _count_towns_in_plan(plan: QueryPlan) -> int:
@@ -421,6 +464,14 @@ def validate_plan(raw: QueryPlan | dict[str, Any]) -> QueryPlan:
         elif isinstance(op, MembershipOp):
             unsupported_only = False
             normalized_ops.append(MembershipOp(town=assert_valid_plan_town_name(op.town)))
+        elif isinstance(op, CommutePairOp):
+            unsupported_only = False
+            normalized_ops.append(
+                CommutePairOp(
+                    origin_town=assert_valid_plan_town_name(op.origin_town),
+                    destination_town=assert_valid_plan_town_name(op.destination_town),
+                )
+            )
         elif isinstance(op, UnsupportedOp):
             normalized_ops.append(op)
         else:
@@ -431,7 +482,11 @@ def validate_plan(raw: QueryPlan | dict[str, Any]) -> QueryPlan:
             "Multiple unsupported ops in one plan; combine into a single unsupported op."
         )
 
-    normalized = QueryPlan(ops=normalized_ops, user_intent_summary=plan.user_intent_summary)
+    normalized = QueryPlan(
+        ops=normalized_ops,
+        commute_intent=plan.commute_intent,
+        user_intent_summary=plan.user_intent_summary,
+    )
     town_count = _count_towns_in_plan(normalized)
     if town_count > MAX_MULTI_COMPARE_TOWNS:
         raise PlanValidationError(
@@ -468,11 +523,24 @@ def plan_schema_prompt_block() -> str:
     """Compact schema description for system prompts."""
     return (
         "QueryPlan JSON: { "
-        f'"ops": [1-{MAX_PLAN_OPS} op], optional "user_intent_summary" }}. '
+        f'"ops": [1-{MAX_PLAN_OPS} op], optional "commute_intent", optional "user_intent_summary" }}. '
+        "commute_intent (always include when commute/workplace/proximity is mentioned): "
+        "{ commute_destination_town, commute_origin_town, compare_towns[], "
+        'commute_context: "default_boston" | "destination_town" | "unsupported", '
+        "optional max_commute_minutes }. "
+        "When user states a drive-time cap, set max_commute_minutes on commute_intent AND rank preferences. "
+        "Plain compare with no workplace → commute_context=default_boston only (omit commute_destination_town). "
+        "Multi-town compare on schools/safety/price → op compare with columns, not lookup. "
+        "Set commute_context=destination_town only for towns in the 200-town dataset; "
+        "unsupported for Providence/Hartford/Manhattan/Logan Airport etc. "
+        "compare_towns = the two towns being compared (NOT the workplace destination). "
+        "Rank preferences semantics: max_commute_minutes = drive TIME (e.g. 30 for 'under 30 minutes'); "
+        "budget_max = home price in dollars (e.g. 850000 for 850k). "
+        "Never encode minute caps as budget_max (e.g. budget_max=30000 for 'drive under 30' is wrong). "
         "Ops (discriminator 'op'): "
         f'lookup — items[{{town, field}}], max {MAX_MULTI_LOOKUP_SPECS} items, '
         f"fields one of: {', '.join(sorted(ALLOWED_LOOKUP_FIELDS))}; "
-        f"compare — towns[2-{MAX_MULTI_COMPARE_TOWNS}], optional columns (dataset keys); "
+        f"compare — towns[2-{MAX_MULTI_COMPARE_TOWNS}], optional columns, optional commute_destination_town; "
         f"rank — preferences object, limit 1-{MAX_RANK_LIMIT}; "
         f"semantic_search — query_text, top_k 1-{MAX_SEMANTIC_TOP_K}; "
         "membership — town (yes/no dataset scope, NOT summary lookup); "

@@ -117,6 +117,7 @@ export interface TownMatch {
   schoolScore: number | null
   safetyScore: number | null
   commuteMinutes: number | null
+  commuteDestinationLabel: string | null
   dataQualityTier: string | null
   raw: Record<string, unknown>
 }

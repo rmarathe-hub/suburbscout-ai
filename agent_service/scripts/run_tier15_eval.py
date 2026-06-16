@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run Tier 1.5 eval (routing + trust gates + key probes)."""
+"""Run Tier 1.5 eval against query-agent pipeline (Phase 9)."""
 
 from __future__ import annotations
 
@@ -12,30 +12,39 @@ from pathlib import Path
 
 SERVICE_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SERVICE_ROOT))
+sys.path.insert(0, str(SERVICE_ROOT / "scripts"))
+
+from eval_query_agent import run_query_agent_prompt  # noqa: E402
 
 DEFAULT = SERVICE_ROOT / "app" / "evals" / "tier15_eval.json"
 
 
-async def run_cases(cases: list[dict]) -> list[dict]:
-    from app.hybrid_intent_router import classify_query_hybrid
-    from app.intent_classifier import classify_user_intent
-    from app.orchestrator import handle_query
-    from app.trust_gates import evaluate_trust_gate
+def _route_intent(payload: dict) -> str | None:
+    from app.plan_trust_gates import plan_to_query_route
+    from app.query_plan import validate_plan
 
+    plan_raw = payload.get("plan")
+    if not plan_raw:
+        return None
+    try:
+        plan = validate_plan(plan_raw)
+        query = (payload.get("response") or {}).get("query") or ""
+        return plan_to_query_route(query, plan).intent
+    except Exception:
+        return None
+
+
+async def run_cases(cases: list[dict]) -> list[dict]:
     rows = []
     for case in cases:
         prompt = case["prompt"]
-        py = classify_user_intent(prompt)
-        route = await classify_query_hybrid(prompt)
-        gate = evaluate_trust_gate(prompt, route)
-        payload = await handle_query(prompt, save_searches=False)
-        resp = payload["response"]
+        payload = await run_query_agent_prompt(prompt, save_searches=False)
+        resp = payload.get("response") or {}
         final = (resp.get("final_recommendation") or "").lower()
         rows.append({
             **case,
-            "python_intent": py.intent,
-            "route_intent": route.intent,
-            "trust_gate": gate.gate_type if gate else payload.get("trust_gate"),
+            "route_intent": _route_intent(payload),
+            "trust_gate": payload.get("trust_gate"),
             "final_snippet": final[:200],
             "mentions_framingham_dest": "framingham / natick" in final and "cannot rank" in final,
             "mentions_sharon_wrong": "sharon" in final and case["id"] == "typo_01",
@@ -53,7 +62,7 @@ def score(rows: list[dict]) -> dict:
         ok = True
         if row.get("expect_intent"):
             accepted = row.get("accept_intents") or [row["expect_intent"]]
-            ok = row.get("python_intent") in accepted
+            ok = row.get("route_intent") in accepted
         expect_gate = row.get("expect_gate")
         if expect_gate is not None:
             ok = ok and row.get("trust_gate") == expect_gate
@@ -72,7 +81,7 @@ def score(rows: list[dict]) -> dict:
             by_cat[cat]["passed"] += 1
         else:
             failures.append({k: row[k] for k in row if k in (
-                "id", "category", "prompt", "python_intent", "route_intent",
+                "id", "category", "prompt", "route_intent",
                 "trust_gate", "expect_intent", "expect_gate", "final_snippet",
             )})
     return {

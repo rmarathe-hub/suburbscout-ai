@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from app.constraint_parser import parse_constraints
+from app.commute_service import commute_destination_label, ensure_destination_matrix
 from app.config import DEFAULT_RANKING_WEIGHTS, DEMO_MODE_FULL_DATA_ONLY
 from app.schemas import Preferences
 from app.town_normalizer import matches_town, normalize_key
@@ -41,10 +42,23 @@ def _suburb_by_name(name: str | None, suburbs: list[dict[str, Any]]) -> dict[str
     return None
 
 
+def _commute_minutes_for_suburb(
+    suburb: dict[str, Any],
+    preferences: Preferences,
+    dynamic_matrix: dict[str, float | None] | None,
+) -> float | None:
+    if preferences.commute_destination_town and dynamic_matrix is not None:
+        return dynamic_matrix.get(suburb.get("name"))
+    minutes = suburb.get("drive_minutes_to_boston")
+    return float(minutes) if minutes is not None else None
+
+
 def _passes_hard_filters(
     suburb: dict[str, Any],
     preferences: Preferences,
     suburbs: list[dict[str, Any]],
+    *,
+    dynamic_matrix: dict[str, float | None] | None = None,
 ) -> bool:
     """Exclude towns that violate explicit hard constraints."""
     if preferences.requires_coastal and not suburb.get("is_coastal"):
@@ -62,7 +76,7 @@ def _passes_hard_filters(
         if suburb.get("region_key") != preferences.region_key:
             return False
 
-    minutes = suburb.get("drive_minutes_to_boston")
+    minutes = _commute_minutes_for_suburb(suburb, preferences, dynamic_matrix)
     if preferences.max_commute_minutes is not None:
         if minutes is None or minutes > preferences.max_commute_minutes:
             return False
@@ -128,7 +142,12 @@ def describe_active_filters(preferences: Preferences) -> list[str]:
     if preferences.region_preference:
         labels.append(f"region={preferences.region_preference}")
     if preferences.max_commute_minutes is not None:
-        labels.append(f"commute<={preferences.max_commute_minutes} min")
+        dest = (
+            commute_destination_label(preferences.commute_destination_town)
+            if preferences.commute_destination_town
+            else "Boston"
+        )
+        labels.append(f"commute<={preferences.max_commute_minutes} min to {dest}")
     if preferences.min_commute_minutes is not None:
         labels.append(f"commute>={preferences.min_commute_minutes} min")
     if preferences.budget_max is not None:
@@ -198,13 +217,22 @@ def rank_suburbs(
     if demo_full:
         candidates = [s for s in candidates if s.get("data_quality_tier") == "full"]
 
+    dynamic_matrix: dict[str, float | None] | None = None
+    dest_label = commute_destination_label(preferences.commute_destination_town)
+    if preferences.commute_destination_town:
+        candidate_names = [s["name"] for s in candidates]
+        dynamic_matrix = ensure_destination_matrix(
+            preferences.commute_destination_town,
+            candidate_names,
+        )
+
     ranked: list[dict[str, Any]] = []
 
     for suburb in candidates:
         name = suburb["name"]
         missing = suburb.get("missing_fields") or []
 
-        if not _passes_hard_filters(suburb, preferences, suburbs):
+        if not _passes_hard_filters(suburb, preferences, suburbs, dynamic_matrix=dynamic_matrix):
             continue
 
         if budget_query and preferences.require_housing_for_budget:
@@ -279,11 +307,15 @@ def rank_suburbs(
         elif "latest_home_price" in missing:
             reasons.append("Housing price data unavailable for this town.")
 
-        if suburb.get("drive_minutes_to_boston") is not None:
+        if suburb.get("drive_minutes_to_boston") is not None and not preferences.commute_destination_town:
             reasons.append(
                 f"Drive to Boston: {suburb['drive_minutes_to_boston']} min "
                 f"({suburb.get('drive_distance_miles_to_boston')} mi)"
             )
+
+        dynamic_minutes = _commute_minutes_for_suburb(suburb, preferences, dynamic_matrix)
+        if preferences.commute_destination_town and dynamic_minutes is not None:
+            reasons.append(f"Drive to {dest_label}: {dynamic_minutes} min")
 
         if suburb.get("crime_rate_per_1000") is not None:
             reasons.append(f"Crime rate: {suburb['crime_rate_per_1000']} per 1,000")
@@ -295,10 +327,36 @@ def rank_suburbs(
             tradeoffs.append(
                 f"Partial data quality — missing: {', '.join(missing) if missing else 'none'}"
             )
-        if preferences.max_commute_minutes and suburb.get("drive_minutes_to_boston"):
+        if preferences.max_commute_minutes and dynamic_minutes is not None:
+            tradeoffs.append(
+                f"Commute {dynamic_minutes} min vs your {preferences.max_commute_minutes} min target to {dest_label}"
+            )
+        elif preferences.max_commute_minutes and suburb.get("drive_minutes_to_boston"):
             tradeoffs.append(
                 f"Commute {suburb['drive_minutes_to_boston']} min vs your {preferences.max_commute_minutes} min target"
             )
+
+        data_payload = {
+            "region": suburb.get("region"),
+            "region_key": suburb.get("region_key"),
+            "county": suburb.get("county"),
+            "is_coastal": suburb.get("is_coastal"),
+            "data_quality_tier": suburb.get("data_quality_tier"),
+            "latest_home_price": suburb.get("latest_home_price"),
+            "school_score": suburb.get("school_score"),
+            "safety_score": suburb.get("safety_score"),
+            "commute_score": suburb.get("commute_score"),
+            "affordability_score": suburb.get("affordability_score"),
+            "economic_score": suburb.get("economic_score"),
+            "family_score": suburb.get("family_score"),
+            "drive_minutes_to_boston": suburb.get("drive_minutes_to_boston"),
+            "crime_rate_per_1000": suburb.get("crime_rate_per_1000"),
+            "missing_fields": missing,
+        }
+        if preferences.commute_destination_town:
+            data_payload["drive_minutes_to_destination"] = dynamic_minutes
+            data_payload["commute_destination_label"] = dest_label
+            data_payload["commute_destination_town"] = preferences.commute_destination_town
 
         ranked.append(
             {
@@ -307,23 +365,7 @@ def rank_suburbs(
                 "matched_factors": matched_factors,
                 "reasons": reasons,
                 "tradeoffs": tradeoffs,
-                "data": {
-                    "region": suburb.get("region"),
-                    "region_key": suburb.get("region_key"),
-                    "county": suburb.get("county"),
-                    "is_coastal": suburb.get("is_coastal"),
-                    "data_quality_tier": suburb.get("data_quality_tier"),
-                    "latest_home_price": suburb.get("latest_home_price"),
-                    "school_score": suburb.get("school_score"),
-                    "safety_score": suburb.get("safety_score"),
-                    "commute_score": suburb.get("commute_score"),
-                    "affordability_score": suburb.get("affordability_score"),
-                    "economic_score": suburb.get("economic_score"),
-                    "family_score": suburb.get("family_score"),
-                    "drive_minutes_to_boston": suburb.get("drive_minutes_to_boston"),
-                    "crime_rate_per_1000": suburb.get("crime_rate_per_1000"),
-                    "missing_fields": missing,
-                },
+                "data": data_payload,
             }
         )
 
@@ -355,6 +397,16 @@ def rank_suburbs(
         )
     else:
         ranked.sort(key=lambda x: x["score"], reverse=True)
+
+    if preferences.max_commute_minutes is not None and preferences.commute_destination_town:
+        cap = preferences.max_commute_minutes
+        ranked = [
+            item
+            for item in ranked
+            if (item.get("data") or {}).get("drive_minutes_to_destination") is not None
+            and float((item.get("data") or {})["drive_minutes_to_destination"]) <= cap
+        ]
+
     for i, item in enumerate(ranked[:top_n], start=1):
         item["rank"] = i
 

@@ -63,7 +63,7 @@ export function TownCard({ town, rank, className }: TownCardProps) {
           />
           <MetricPill
             icon={Car}
-            label="Commute"
+            label={town.commuteDestinationLabel ? `To ${town.commuteDestinationLabel.replace('Boston / South Station', 'Boston')}` : 'Commute'}
             value={formatCommute(town.commuteMinutes)}
             tone="neutral"
           />

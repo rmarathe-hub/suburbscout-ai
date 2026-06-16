@@ -142,7 +142,11 @@ def extract_exclude_towns(query: str) -> list[str]:
                 seen.add(key)
     return towns
 MAX_COMMUTE_RE = re.compile(
-    r"(?:under|within|less than|max|up to|no more than|(?:only|just)\s+)\s*(\d+)\s*(?:mins?|minutes)\b",
+    r"(?:under|below|within|less than|max|up to|no more than|(?:only|just)\s+)\s*(\d+)\s*(?:mins?|minutes)\b",
+    re.IGNORECASE,
+)
+DRIVE_COMMUTE_UNDER_RE = re.compile(
+    r"\b(?:drive|commute)\s+(?:under|below|less than|within|max|up to)\s+(\d+)\b(?:\s*(?:mins?|minutes))?",
     re.IGNORECASE,
 )
 MIN_COMMUTE_RE = re.compile(
@@ -300,6 +304,24 @@ def extract_town_mentions(query: str) -> tuple[list[str], list[str]]:
     return known, unknown
 
 
+def _looks_like_commute_amount(text: str, match: re.Match[str]) -> bool:
+    tail = text[match.end() : match.end() + 16]
+    if re.match(r"\s*(?:mins?|minutes)\b", tail, re.IGNORECASE):
+        return True
+    if re.match(r"\s*(?:k|m\b|million|\$)", tail, re.IGNORECASE):
+        return False
+    amount = (match.group(1) or "").replace(",", "").strip()
+    if not amount:
+        return True
+    if float(amount) > 120:
+        return False
+    prefix = text[max(0, match.start() - 32) : match.start()]
+    local = prefix + text[match.start() : match.end() + len(tail)]
+    if re.search(r"\b(?:drive|commute)\b", local, re.IGNORECASE):
+        return True
+    return False
+
+
 def _parse_budget(text: str) -> int | None:
     if ONE_MILLION_RE.search(text):
         return 1_000_000
@@ -313,6 +335,8 @@ def _parse_budget(text: str) -> int | None:
             if re.match(r"\s*(?:mins?|minutes)\b", tail, re.IGNORECASE):
                 continue
             if re.match(r"\s*(?:million|mil|m)\b", tail, re.IGNORECASE):
+                continue
+            if _looks_like_commute_amount(text, match):
                 continue
             return _parse_money(match.group(1))
     match = BUDGET_BELOW_K_RE.search(text)
@@ -349,6 +373,10 @@ def _parse_commute_bounds(text: str) -> tuple[int | None, int | None]:
     drive_under = DRIVE_TIME_UNDER_RE.search(text)
     if drive_under:
         max_minutes = int(drive_under.group(1))
+
+    drive_commute_under = DRIVE_COMMUTE_UNDER_RE.search(text)
+    if drive_commute_under:
+        max_minutes = int(drive_commute_under.group(1))
 
     farther = FARTHER_THAN_COMMUTE_RE.search(text)
     if farther:
@@ -570,5 +598,11 @@ def parse_constraints(query: str) -> Preferences:
 
     if prefs.budget_max is not None:
         prefs.require_housing_for_budget = True
+
+    from app.commute_destination import detect_commute_destination
+
+    dest = detect_commute_destination(query)
+    if not dest.is_default and dest.in_dataset:
+        prefs.commute_destination_town = dest.destination_town
 
     return prefs
