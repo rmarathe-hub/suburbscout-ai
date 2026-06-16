@@ -22,7 +22,8 @@ jobs:
       USE_LLM_ANSWER_VALIDATOR: "false"
       ENABLE_LLM_INTENT_FALLBACK: "false"
       DATABASE_URL: ""
-      GOOGLE_MAPS_API_KEY: ""
+      # Dummy key only; CI tests use cached/static data and must not call Google APIs.
+      GOOGLE_MAPS_API_KEY: dummy-ci-google-key
       AZURE_OPENAI_ENDPOINT: ""
       AZURE_OPENAI_API_KEY: ""
       AZURE_OPENAI_DEPLOYMENT_NAME: ""
