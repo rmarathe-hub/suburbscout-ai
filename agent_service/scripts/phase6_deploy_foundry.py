@@ -143,21 +143,23 @@ def main() -> int:
 
     try:
         from azure.ai.projects import AIProjectClient
-        from azure.ai.projects.models import AgentProtocol, HostedAgentDefinition, ProtocolVersionRecord
+        from azure.ai.projects.models import AgentProtocol, ProtocolVersionRecord
         from azure.identity import DefaultAzureCredential
+
+        from app.hosted_env import build_phase6_container_env_vars
     except ImportError as exc:
         _fail(f"pip install 'azure-ai-projects>=2.1.0' — {exc}")
 
-    env_vars = {"AZURE_AI_MODEL_DEPLOYMENT_NAME": model}
-    db_url = os.getenv("DATABASE_URL", "").strip()
-    if db_url:
-        env_vars["DATABASE_URL"] = db_url
+    env_vars = build_phase6_container_env_vars()
+    if not env_vars.get("AZURE_AI_MODEL_DEPLOYMENT_NAME"):
+        _fail("Set AZURE_AI_MODEL_DEPLOYMENT_NAME or AZURE_OPENAI_DEPLOYMENT_NAME")
 
     print(f"=== Phase 6: create hosted agent version ===")
     print(f"  endpoint: {endpoint}")
     print(f"  agent:    {args.agent_name}")
     print(f"  image:    {args.image}")
     print(f"  model:    {model}")
+    print(f"  container env keys: {sorted(env_vars.keys())}")
 
     protocol_versions = [
         ProtocolVersionRecord(protocol=AgentProtocol.RESPONSES, version="1.0.0")

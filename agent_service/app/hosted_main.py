@@ -13,55 +13,32 @@ Test:
 from __future__ import annotations
 
 import logging
-import os
 
 from agent_framework_foundry_hosting import ResponsesHostServer
-from dotenv import load_dotenv
 
-from app.config import SERVICE_ROOT
+from app.hosted_env import bootstrap_hosted_env, query_agent_config_status
 from app.hosted_query_agent import QueryPipelineHostedAgent
-from app.query_agent import query_agent_available
 
 logger = logging.getLogger(__name__)
 
 
-def _bootstrap_env() -> None:
-    """Align Foundry container env vars with local config expectations."""
-    load_dotenv(SERVICE_ROOT / ".env")
-
-    if not os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "").strip():
-        model = (
-            os.getenv("AZURE_AI_MODEL_DEPLOYMENT_NAME")
-            or os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
-            or ""
-        ).strip()
-        if model:
-            os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"] = model
-
-    os.environ.setdefault("USE_LLM_QUERY_AGENT", "true")
-    os.environ.setdefault("USE_LLM_QUERY_PLANNER", "true")
-    os.environ.setdefault("USE_LLM_ANSWER", "true")
-
-    # Reload config module values after env bootstrap.
-    from app import config
-
-    config.CHAT_MODEL_DEPLOYMENT = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "")
-    config.AZURE_OPENAI_DEPLOYMENT_NAME = config.CHAT_MODEL_DEPLOYMENT
-
-
 def create_hosted_agent() -> QueryPipelineHostedAgent:
     """SuburbScout hosted agent — full query pipeline (not legacy tool-calling)."""
-    if not query_agent_available():
+    status = query_agent_config_status()
+    if not status["query_agent_available"]:
         logger.warning(
-            "Query agent not fully configured (Azure OpenAI + USE_LLM_QUERY_AGENT). "
-            "Hosted /responses will return a configuration error until env is set."
+            "Query agent not fully configured for hosted /responses: %s",
+            {k: v for k, v in status.items() if k != "query_agent_available"},
         )
+    else:
+        logger.info("Query agent configured for hosted pipeline")
     return QueryPipelineHostedAgent()
 
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO)
-    _bootstrap_env()
+    env_status = bootstrap_hosted_env()
+    logger.info("Hosted env bootstrap: %s", env_status)
     server = ResponsesHostServer(create_hosted_agent())
     logger.info(
         "SuburbScout query pipeline hosted agent listening on port 8088 (/responses)"
