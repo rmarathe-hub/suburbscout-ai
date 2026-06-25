@@ -1,7 +1,5 @@
 import { AlertCircle } from 'lucide-react'
 
-import { getApiBaseUrl } from '@/api/client'
-
 interface ApiOfflineBannerProps {
   message: string
 }
@@ -15,8 +13,8 @@ export function ApiOfflineBanner({ message }: ApiOfflineBannerProps) {
       <div className="mx-auto flex max-w-7xl items-start gap-2 sm:px-2">
         <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden />
         <p>
-          <span className="font-medium">API unreachable.</span> {message} Start the backend at{' '}
-          <span className="font-mono text-xs">{getApiBaseUrl()}</span>
+          <span className="font-medium">API unreachable.</span> {message} The demo server may still
+          be waking up — try your search again in a moment.
         </p>
       </div>
     </div>

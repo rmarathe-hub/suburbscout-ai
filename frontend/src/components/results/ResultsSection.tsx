@@ -10,6 +10,7 @@ import { detectRefusal } from '@/lib/refusal'
 
 interface ResultsSectionProps {
   isLoading: boolean
+  loadingMessage?: string | null
   response: QueryResponse | null
   isFoundryMode?: boolean
   hasSearched?: boolean
@@ -18,6 +19,7 @@ interface ResultsSectionProps {
 
 export function ResultsSection({
   isLoading,
+  loadingMessage = null,
   response,
   isFoundryMode = false,
   hasSearched = false,
@@ -37,6 +39,7 @@ export function ResultsSection({
 
           <AnswerCard
             isLoading={isLoading}
+            loadingMessage={loadingMessage}
             loadingStepIndex={stepIndex}
             response={response}
             isFoundryMode={isFoundryMode}

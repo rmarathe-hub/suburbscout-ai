@@ -217,7 +217,58 @@ def _lookup_snippet(name: str, town: dict[str, Any], field: str) -> str:
         return f"{name}: missing fields {', '.join(missing) if missing else 'none recorded'}."
     if field == LookupFieldKind.TIER.value:
         return f"{name}: data quality tier '{town.get('data_quality_tier')}'."
-    return f"{name}: see summary fields in execution payload."
+    if field == LookupFieldKind.SUMMARY.value:
+        return _format_town_summary_snippet(name, town)
+    return f"{name}: town data is available in the dataset."
+
+
+def _format_town_summary_snippet(name: str, town: dict[str, Any]) -> str:
+    """User-facing summary for open-town / profile lookups (field=summary)."""
+    sentences: list[str] = [f"{name} is in our curated 200-town Boston-area dataset."]
+    region = town.get("region")
+    county = town.get("county")
+    if region or county:
+        loc_bits: list[str] = []
+        if region:
+            loc_bits.append(str(region))
+        if county:
+            loc_bits.append(f"{county} County")
+        sentences.append(f"It is located in {', '.join(loc_bits)}.")
+    price = town.get("latest_home_price")
+    year = town.get("home_price_year")
+    if price is not None:
+        year_bit = f" ({year})" if year else ""
+        sentences.append(f"The latest median home price is {_format_price(price)}{year_bit}.")
+    school = town.get("school_score")
+    if school is not None:
+        sentences.append(f"The school score is {school}/10 (dataset percentile).")
+    safety = town.get("safety_score")
+    crime = town.get("crime_rate_per_1000")
+    if safety is not None:
+        if crime is not None:
+            sentences.append(
+                f"The safety score is {safety}/10, with a crime rate of {crime} per 1,000 residents."
+            )
+        else:
+            sentences.append(f"The safety score is {safety}/10.")
+    minutes = town.get("drive_minutes_to_boston")
+    miles = town.get("drive_distance_miles_to_boston")
+    if minutes is not None:
+        miles_bit = f"{miles} miles" if miles is not None else "distance unavailable"
+        sentences.append(
+            f"Drive time to South Station, Boston is about {minutes} minutes ({miles_bit})."
+        )
+    tier = town.get("data_quality_tier")
+    missing = town.get("missing_fields") or []
+    if tier == "partial" or missing:
+        if missing:
+            sentences.append(
+                f"Data quality is {tier or 'partial'}; missing fields include "
+                f"{', '.join(str(m) for m in missing[:5])}."
+            )
+        else:
+            sentences.append(f"Data quality tier is {tier or 'partial'}.")
+    return " ".join(sentences)
 
 
 async def _execute_membership(op: MembershipOp) -> OpExecutionResult:
@@ -580,6 +631,27 @@ def _build_answer_context(
 
     if unknown:
         ctx["unknown_towns"] = unknown
+    for op_result in ops_results:
+        if op_result.op == "compare":
+            label = op_result.data.get("commute_destination_label")
+            town = op_result.data.get("commute_destination_town")
+            if label:
+                ctx["commute_destination_label"] = label
+            if town:
+                ctx["commute_destination_town"] = town
+            break
+    if "commute_destination_label" not in ctx and plan.commute_intent:
+        from app.commute_intent import resolve_commute_intent
+
+        resolved = resolve_commute_intent(
+            plan.user_intent_summary or "",
+            plan.commute_intent,
+            plan=plan,
+        )
+        dest = resolved.to_destination_result()
+        if dest.label and not dest.is_default:
+            ctx["commute_destination_label"] = dest.label
+            ctx["commute_destination_town"] = dest.commute_destination_town
     for op_result in ops_results:
         if op_result.op == "rank":
             ctx["filters_applied"] = op_result.data.get("filters_applied")

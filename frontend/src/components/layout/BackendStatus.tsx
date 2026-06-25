@@ -8,7 +8,7 @@ export function BackendStatus() {
   if (health.status === 'loading') {
     return (
       <Badge variant="secondary" className="shrink-0">
-        Connecting…
+        {health.message}
       </Badge>
     )
   }

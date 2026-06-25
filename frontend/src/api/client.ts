@@ -9,6 +9,11 @@ import type {
 
 const DEFAULT_LOCAL_TIMEOUT_MS = 60_000
 const DEFAULT_FOUNDRY_TIMEOUT_MS = 120_000
+const HEALTH_TIMEOUT_MS = 30_000
+const HEALTH_MAX_ATTEMPTS = 4
+const HEALTH_RETRY_BASE_DELAY_MS = 2_500
+const QUERY_MAX_ATTEMPTS = 3
+const QUERY_RETRY_BASE_DELAY_MS = 2_000
 
 export class ApiError extends Error {
   readonly status: number
@@ -116,6 +121,36 @@ async function request<T>(
   }
 }
 
+function isRetryableApiError(error: unknown): boolean {
+  if (!(error instanceof ApiError)) return false
+  if (error.code === 'network' || error.code === 'timeout') return true
+  if (error.status === 0 || error.status === 408) return true
+  return error.status === 502 || error.status === 503 || error.status === 504
+}
+
+async function delay(ms: number): Promise<void> {
+  await new Promise((resolve) => window.setTimeout(resolve, ms))
+}
+
+async function requestWithRetry<T>(
+  path: string,
+  init: RequestInit & { timeoutMs?: number },
+  options: { maxAttempts: number; baseDelayMs: number },
+): Promise<T> {
+  let lastError: unknown
+  for (let attempt = 1; attempt <= options.maxAttempts; attempt += 1) {
+    try {
+      return await request<T>(path, init)
+    } catch (error) {
+      lastError = error
+      const canRetry = attempt < options.maxAttempts && isRetryableApiError(error)
+      if (!canRetry) throw error
+      await delay(options.baseDelayMs * attempt)
+    }
+  }
+  throw lastError
+}
+
 export function getApiBaseUrl(): string {
   if (import.meta.env.DEV) {
     const target = import.meta.env.VITE_API_BASE_URL?.trim() || 'http://127.0.0.1:8000'
@@ -125,7 +160,18 @@ export function getApiBaseUrl(): string {
 }
 
 export async function getHealth(): Promise<HealthResponse> {
-  return request<HealthResponse>('/health', { method: 'GET', timeoutMs: 10_000 })
+  return requestWithRetry<HealthResponse>(
+    '/health',
+    { method: 'GET', timeoutMs: HEALTH_TIMEOUT_MS },
+    { maxAttempts: HEALTH_MAX_ATTEMPTS, baseDelayMs: HEALTH_RETRY_BASE_DELAY_MS },
+  )
+}
+
+/** Fire-and-forget warmup ping (e.g. on app load). Swallows errors. */
+export function warmupBackend(): void {
+  void getHealth().catch(() => {
+    /* Retries and UI state are handled by useHealth */
+  })
 }
 
 export async function postQuery(
@@ -150,11 +196,15 @@ export async function postQuery(
       ? Number(import.meta.env.VITE_FOUNDRY_TIMEOUT_MS)
       : DEFAULT_FOUNDRY_TIMEOUT_MS)
 
-  return request<QueryResponse>('/api/query', {
-    method: 'POST',
-    body: JSON.stringify(body),
-    timeoutMs,
-  })
+  return requestWithRetry<QueryResponse>(
+    '/api/query',
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+      timeoutMs,
+    },
+    { maxAttempts: QUERY_MAX_ATTEMPTS, baseDelayMs: QUERY_RETRY_BASE_DELAY_MS },
+  )
 }
 
 export async function listSearches(limit = 10): Promise<SearchListResponse> {

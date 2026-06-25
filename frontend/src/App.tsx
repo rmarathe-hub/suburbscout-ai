@@ -25,6 +25,7 @@ export default function App() {
     submit,
     loadSavedSearch,
     isLoading,
+    loadingMessage,
     loadingRequestId,
     error,
     response,
@@ -70,6 +71,7 @@ export default function App() {
 
       <ResultsSection
         isLoading={isLoading}
+        loadingMessage={loadingMessage}
         response={response}
         isFoundryMode={isFoundryMode}
         hasSearched={hasSearched}

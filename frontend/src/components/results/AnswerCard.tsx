@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils'
 
 interface AnswerCardProps {
   isLoading: boolean
+  loadingMessage?: string | null
   loadingStepIndex: number
   response: QueryResponse | null
   isFoundryMode?: boolean
@@ -24,6 +25,7 @@ const DEFAULT_SCORE_DISCLAIMER =
 
 export function AnswerCard({
   isLoading,
+  loadingMessage = null,
   loadingStepIndex,
   response,
   isFoundryMode = false,
@@ -45,7 +47,7 @@ export function AnswerCard({
             <CardTitle className="text-lg">SuburbScout answer</CardTitle>
             <CardDescription>
               {isLoading
-                ? 'Working on your question…'
+                ? loadingMessage ?? 'Working on your question…'
                 : showAnswer
                   ? subtitleForResponse(response)
                   : 'Ask a question to get a grounded recommendation'}

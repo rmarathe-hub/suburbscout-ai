@@ -89,6 +89,62 @@ class TestLlmAnswer(unittest.TestCase):
         self.assertTrue(result.valid)
 
 
+class TestWestfordSummary(unittest.TestCase):
+    def test_open_westford_summary_no_internal_wording(self) -> None:
+        plan = validate_plan(
+            {
+                "ops": [
+                    {
+                        "op": "lookup",
+                        "items": [{"town": "Westford", "field": "summary"}],
+                    }
+                ]
+            }
+        )
+        execution = execute_plan(plan)
+        self.assertEqual(execution.status, ExecutionStatus.OK)
+        snippets = execution.ops_results[0].data.get("snippets") or []
+        self.assertTrue(snippets)
+        text = template_answer_from_execution(execution)
+        combined = f"{snippets[0]} {text}".lower()
+        self.assertIn("westford", combined)
+        self.assertNotIn("execution payload", combined)
+        self.assertNotIn("summary fields", combined)
+        self.assertTrue(
+            any(token in combined for token in ("price", "school", "dataset", "located")),
+            combined,
+        )
+
+
+class TestCompareCommuteDestinationNarration(unittest.TestCase):
+    def test_compare_non_boston_destination_in_answer_context(self) -> None:
+        plan = validate_plan(
+            {
+                "ops": [
+                    {
+                        "op": "compare",
+                        "towns": ["Shrewsbury", "Framingham", "Marlborough"],
+                        "commute_destination_town": "Cambridge",
+                    }
+                ]
+            }
+        )
+        execution = execute_plan(plan)
+        self.assertIn(
+            execution.status,
+            {ExecutionStatus.OK, ExecutionStatus.PARTIAL},
+        )
+        ctx = execution.answer_context
+        self.assertEqual(ctx.get("commute_destination_label"), "Cambridge")
+        text = template_answer_from_execution(execution)
+        self.assertIn("Cambridge", text)
+        self.assertNotIn("commute comparison for drive times to boston", text.lower())
+        self.assertNotRegex(
+            text.lower(),
+            r"drive times to (south station|boston)",
+        )
+
+
 class TestQueryAgentOffline(unittest.IsolatedAsyncioTestCase):
     async def test_unsupported_uses_refusal_not_answer_llm(self) -> None:
         from app.query_agent import handle_query_v2

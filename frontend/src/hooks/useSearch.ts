@@ -7,6 +7,7 @@ import { traceToQueryResponse } from '@/lib/searchTrace'
 export interface SearchState {
   prompt: string
   isLoading: boolean
+  loadingMessage: string | null
   loadingRequestId: string | null
   error: string | null
   response: QueryResponse | null
@@ -22,6 +23,7 @@ function readErrorMessage(err: unknown): string {
 export function useSearch(onSuccess?: (response: QueryResponse) => void) {
   const [prompt, setPrompt] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState<string | null>(null)
   const [loadingRequestId, setLoadingRequestId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [response, setResponse] = useState<QueryResponse | null>(null)
@@ -52,10 +54,17 @@ export function useSearch(onSuccess?: (response: QueryResponse) => void) {
 
       setPrompt(query)
       setIsLoading(true)
+      setLoadingMessage('Connecting to server…')
       setLoadingRequestId(null)
       setError(null)
       setResponse(null)
       setHasSearched(true)
+
+      const wakeTimer = window.setTimeout(() => {
+        setLoadingMessage((current) =>
+          current === 'Connecting to server…' ? 'Waking up demo server…' : current,
+        )
+      }, 2_500)
 
       try {
         await runQuery(query)
@@ -63,7 +72,9 @@ export function useSearch(onSuccess?: (response: QueryResponse) => void) {
         setResponse(null)
         setError(readErrorMessage(err))
       } finally {
+        window.clearTimeout(wakeTimer)
         setIsLoading(false)
+        setLoadingMessage(null)
       }
     },
     [prompt, isLoading, runQuery],
@@ -106,6 +117,7 @@ export function useSearch(onSuccess?: (response: QueryResponse) => void) {
 
       if (fallbackToLiveQuery) {
         setIsLoading(true)
+        setLoadingMessage('Connecting to server…')
         try {
           await runQuery(search.prompt)
         } catch (err) {
@@ -113,6 +125,7 @@ export function useSearch(onSuccess?: (response: QueryResponse) => void) {
           setError(readErrorMessage(err))
         } finally {
           setIsLoading(false)
+          setLoadingMessage(null)
         }
       }
     },
@@ -127,6 +140,7 @@ export function useSearch(onSuccess?: (response: QueryResponse) => void) {
     submit,
     loadSavedSearch,
     isLoading,
+    loadingMessage,
     loadingRequestId,
     error,
     response,

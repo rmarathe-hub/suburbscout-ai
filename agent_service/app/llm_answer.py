@@ -34,7 +34,8 @@ Rules (strict):
 - For semantic_search results: describe matches as "semantic profile match" from stored town profiles only.
   Do NOT infer demographics, diversity, walkability, nightlife, or lifestyle traits unless those exact fields appear in execution_results.
 - For membership op: give a direct yes/no about dataset inclusion using snippets in execution_results.
-- Do not mention internal JSON keys or "execution_results".
+- For commute comparisons: when execution_results include commute_destination_label (top-level or on a compare op), name that destination consistently in every commute sentence. Do not mention Boston or South Station unless commute_destination_label is exactly "Boston / South Station" or the user clearly asked for Boston.
+- Do not mention internal JSON keys, field names, "execution_results", "execution payload", or "summary fields".
 - End with this disclaimer on its own line: {SCORE_DISCLAIMER}
 
 Write a clear, helpful paragraph (or short bullet list for comparisons). No markdown code fences.
@@ -159,6 +160,9 @@ def template_answer_from_execution(execution: ExecutionResult) -> str:
             if snippet:
                 parts.append(str(snippet))
         if op.get("op") == "compare":
+            dest_label = op.get("commute_destination_label")
+            if dest_label:
+                parts.append(f"Commute comparison for drive times to {dest_label}:")
             table = op.get("comparison_table") or []
             if table:
                 cols = op.get("columns") or []
@@ -203,14 +207,24 @@ def template_answer_from_execution(execution: ExecutionResult) -> str:
 
 
 def _build_answer_user_message(query: str, execution: ExecutionResult) -> str:
+    ctx = execution.answer_context
+    commute_note = ""
+    dest_label = ctx.get("commute_destination_label")
+    if dest_label:
+        commute_note = (
+            f"\nCommute destination for this answer: {dest_label}. "
+            "Use this destination name in all commute wording; do not default to Boston "
+            "unless that is the requested destination.\n"
+        )
     payload = {
         "user_question": query,
         "execution_status": execution.status.value,
         "message_code": execution.message_code,
-        "execution_results": execution.answer_context,
+        "execution_results": ctx,
     }
     return (
-        "Write the user-facing answer.\n\n"
+        "Write the user-facing answer.\n"
+        f"{commute_note}\n"
         f"{json.dumps(payload, indent=2)}"
     )
 
