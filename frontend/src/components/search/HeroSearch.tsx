@@ -11,6 +11,8 @@ interface HeroSearchProps {
   onPromptChange: (value: string) => void
   onSubmit: (prompt?: string) => void
   isLoading?: boolean
+  isSubmitDisabled?: boolean
+  submitHint?: string | null
   error?: string | null
 }
 
@@ -19,6 +21,8 @@ export function HeroSearch({
   onPromptChange,
   onSubmit,
   isLoading = false,
+  isSubmitDisabled = false,
+  submitHint = null,
   error = null,
 }: HeroSearchProps) {
   const handleSubmit = (event: FormEvent) => {
@@ -26,7 +30,10 @@ export function HeroSearch({
     onSubmit()
   }
 
+  const submitBlocked = isLoading || isSubmitDisabled || !prompt.trim()
+
   const handleChipSelect = (text: string) => {
+    if (isSubmitDisabled) return
     onPromptChange(text)
     onSubmit(text)
   }
@@ -62,7 +69,7 @@ export function HeroSearch({
               value={prompt}
               onChange={(e) => onPromptChange(e.target.value)}
               placeholder={SEARCH_PLACEHOLDER}
-              disabled={isLoading}
+              disabled={isLoading || isSubmitDisabled}
               autoComplete="off"
               maxLength={4000}
               className={cn(
@@ -76,7 +83,7 @@ export function HeroSearch({
           <Button
             type="submit"
             size="lg"
-            disabled={isLoading || !prompt.trim()}
+            disabled={submitBlocked}
             className="h-12 shrink-0 rounded-xl px-6 sm:min-w-[120px]"
           >
             {isLoading ? (
@@ -84,11 +91,19 @@ export function HeroSearch({
                 <Loader2 className="size-4 motion-safe:animate-spin" aria-hidden />
                 Searching…
               </>
+            ) : isSubmitDisabled ? (
+              'Please wait…'
             ) : (
               'Search'
             )}
           </Button>
         </div>
+
+        {submitHint && !isLoading && (
+          <p className="mt-3 text-sm text-muted-foreground" role="status">
+            {submitHint}
+          </p>
+        )}
 
         {error && (
           <p className="mt-3 text-sm text-destructive" role="alert">
@@ -97,7 +112,7 @@ export function HeroSearch({
         )}
       </form>
 
-      <PromptChips onSelect={handleChipSelect} disabled={isLoading} />
+      <PromptChips onSelect={handleChipSelect} disabled={isLoading || isSubmitDisabled} />
     </section>
   )
 }

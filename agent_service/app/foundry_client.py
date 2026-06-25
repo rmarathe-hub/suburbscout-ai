@@ -20,6 +20,11 @@ _FOUNDRY_PREVIEW_FEATURES = "HostedAgents=V1Preview"
 _DEFAULT_TIMEOUT_S = float(
     __import__("os").getenv("FOUNDRY_REQUEST_TIMEOUT_S", "120")
 )
+_WARM_TIMEOUT_S = float(
+    __import__("os").getenv("FOUNDRY_WARM_TIMEOUT_S", "90")
+)
+# Minimal membership lookup — wakes hosted agent without heavy tool work.
+_FOUNDRY_WARM_PROMPT = "Is Acton in the dataset?"
 _JSON_FENCE_RE = re.compile(r"^```(?:json)?\s*\n?(.*?)\n?```\s*$", re.DOTALL | re.IGNORECASE)
 
 
@@ -302,3 +307,11 @@ async def call_foundry_agent(
         raise FoundryAgentError("malformed", "Foundry Hosted Agent returned unexpected payload")
 
     return normalize_foundry_http_response(raw)
+
+
+async def warm_foundry_agent(*, timeout_s: float | None = None) -> dict[str, Any]:
+    """Run a lightweight hosted-agent query to reduce cold-start latency for real traffic."""
+    return await call_foundry_agent(
+        _FOUNDRY_WARM_PROMPT,
+        timeout_s=timeout_s if timeout_s is not None else _WARM_TIMEOUT_S,
+    )

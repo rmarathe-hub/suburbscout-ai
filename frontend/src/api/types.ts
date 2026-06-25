@@ -51,6 +51,13 @@ export interface HealthResponse {
   foundry_agent_endpoint?: string | null
 }
 
+export interface WarmHealthResponse {
+  status: 'ok' | 'error' | 'skipped'
+  warmed: boolean
+  latency_ms?: number | null
+  message?: string | null
+}
+
 export interface SearchSummary {
   request_id: string
   prompt: string

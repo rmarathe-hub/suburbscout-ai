@@ -62,8 +62,8 @@ export function AgentLoadingSteps({
 
       {isFoundryMode && (
         <p className="rounded-lg border border-primary/15 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
-          Hosted agent mode can take up to a minute while tools and the cloud container
-          run your query.
+          The demo server and cloud query agent may take up to two minutes on first load
+          after idle time. Your search will start automatically once both are ready.
         </p>
       )}
     </div>

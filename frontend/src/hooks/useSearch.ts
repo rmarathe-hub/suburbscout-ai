@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 
-import { ApiError, getSearch, postQuery } from '@/api/client'
+import { ApiError, ensureFoundryWarm, getSearch, postQuery } from '@/api/client'
 import type { QueryResponse, SearchSummary } from '@/api/types'
 import { traceToQueryResponse } from '@/lib/searchTrace'
 
@@ -20,7 +20,11 @@ function readErrorMessage(err: unknown): string {
   return 'Search failed. Please try again.'
 }
 
-export function useSearch(onSuccess?: (response: QueryResponse) => void) {
+export function useSearch(
+  onSuccess?: (response: QueryResponse) => void,
+  options: { isFoundryMode?: boolean } = {},
+) {
+  const { isFoundryMode = false } = options
   const [prompt, setPrompt] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null)
@@ -61,23 +65,37 @@ export function useSearch(onSuccess?: (response: QueryResponse) => void) {
       setHasSearched(true)
 
       const wakeTimer = window.setTimeout(() => {
-        setLoadingMessage((current) =>
-          current === 'Connecting to server…' ? 'Waking up demo server…' : current,
-        )
+        setLoadingMessage((current) => {
+          if (current === 'Connecting to server…') return 'Waking up demo server…'
+          if (current === 'Waking up demo server…') return 'Starting query agent…'
+          return current
+        })
       }, 2_500)
 
+      const agentTimer = window.setTimeout(() => {
+        setLoadingMessage((current) =>
+          current === 'Starting query agent…' ? 'Running your query…' : current,
+        )
+      }, 12_000)
+
       try {
+        if (isFoundryMode) {
+          setLoadingMessage('Starting query agent…')
+          await ensureFoundryWarm()
+        }
+        setLoadingMessage('Running your query…')
         await runQuery(query)
       } catch (err) {
         setResponse(null)
         setError(readErrorMessage(err))
       } finally {
         window.clearTimeout(wakeTimer)
+        window.clearTimeout(agentTimer)
         setIsLoading(false)
         setLoadingMessage(null)
       }
     },
-    [prompt, isLoading, runQuery],
+    [prompt, isLoading, runQuery, isFoundryMode],
   )
 
   const loadSavedSearch = useCallback(

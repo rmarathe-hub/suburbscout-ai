@@ -1,8 +1,13 @@
 import { MapPin } from 'lucide-react'
 
 import { BackendStatus } from '@/components/layout/BackendStatus'
+import type { HealthState } from '@/hooks/useHealth'
 
-export function Header() {
+interface HeaderProps {
+  health: HealthState
+}
+
+export function Header({ health }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-card/90 shadow-sm backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4">
@@ -20,7 +25,7 @@ export function Header() {
             </p>
           </div>
         </div>
-        <BackendStatus />
+        <BackendStatus health={health} />
       </div>
     </header>
   )

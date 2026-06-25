@@ -168,6 +168,28 @@ class TestApiFoundryMode(unittest.TestCase):
         self.assertEqual(data["backend_agent_mode"], "local")
         self.assertFalse(data["foundry_agent_configured"])
 
+    def test_warm_skipped_in_local_mode(self) -> None:
+        with patch("app.api.config.BACKEND_AGENT_MODE", "local"):
+            resp = self.client.post("/health/warm")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data["status"], "skipped")
+        self.assertFalse(data["warmed"])
+
+    def test_warm_foundry_ok(self) -> None:
+        with patch("app.api.config.BACKEND_AGENT_MODE", "foundry"):
+            with patch("app.foundry_client.foundry_agent_configured", return_value=True):
+                with patch(
+                    "app.foundry_client.warm_foundry_agent",
+                    new=AsyncMock(return_value={"answer": "yes"}),
+                ):
+                    resp = self.client.post("/health/warm")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data["status"], "ok")
+        self.assertTrue(data["warmed"])
+        self.assertIsNotNone(data["latency_ms"])
+
     def test_foundry_error_response_helper(self) -> None:
         out = foundry_error_response(FoundryAgentError("auth", "bad token"))
         self.assertEqual(out.error, "foundry_agent_error")

@@ -5,7 +5,7 @@ import { ApiOfflineBanner } from '@/components/layout/ApiOfflineBanner'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ResultsSection } from '@/components/results/ResultsSection'
 import { HeroSearch } from '@/components/search/HeroSearch'
-import { useHealth } from '@/hooks/useHealth'
+import { useHealth, isBackendBusy, isBackendReady } from '@/hooks/useHealth'
 import { useSavedSearches } from '@/hooks/useSavedSearches'
 import { useSearch } from '@/hooks/useSearch'
 import type { SearchSummary } from '@/api/types'
@@ -19,6 +19,14 @@ export default function App() {
     setSearchRefreshKey((k) => k + 1)
   }, [])
 
+  const isFoundryMode =
+    health.status !== 'loading' &&
+    health.status !== 'error' &&
+    health.data.backend_agent_mode === 'foundry'
+
+  const backendReady = isBackendReady(health)
+  const backendBusy = isBackendBusy(health)
+
   const {
     prompt,
     setPrompt,
@@ -30,10 +38,7 @@ export default function App() {
     error,
     response,
     hasSearched,
-  } = useSearch(handleQuerySuccess)
-
-  const isFoundryMode =
-    health.status === 'ok' && health.data.backend_agent_mode === 'foundry'
+  } = useSearch(handleQuerySuccess, { isFoundryMode })
 
   const handleSelectSearch = useCallback(
     (search: SearchSummary) => {
@@ -48,6 +53,7 @@ export default function App() {
 
   return (
     <AppShell
+      health={health}
       sidebar={
         <Sidebar
           savedSearches={savedSearches.state}
@@ -66,6 +72,14 @@ export default function App() {
         onPromptChange={setPrompt}
         onSubmit={submit}
         isLoading={isLoading}
+        isSubmitDisabled={backendBusy || !backendReady}
+        submitHint={
+          backendBusy
+            ? health.status === 'warming'
+              ? 'Starting query agent — almost ready…'
+              : 'Connecting to demo server…'
+            : null
+        }
         error={error}
       />
 

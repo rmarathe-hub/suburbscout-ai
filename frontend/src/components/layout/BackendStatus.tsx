@@ -1,11 +1,13 @@
 import { Badge } from '@/components/ui/badge'
-import { useHealth } from '@/hooks/useHealth'
+import type { HealthState } from '@/hooks/useHealth'
 import { backendModeLabel } from '@/lib/format'
 
-export function BackendStatus() {
-  const health = useHealth()
+interface BackendStatusProps {
+  health: HealthState
+}
 
-  if (health.status === 'loading') {
+export function BackendStatus({ health }: BackendStatusProps) {
+  if (health.status === 'loading' || health.status === 'warming') {
     return (
       <Badge variant="secondary" className="shrink-0">
         {health.message}

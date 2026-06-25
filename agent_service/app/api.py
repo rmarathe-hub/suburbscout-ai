@@ -27,6 +27,7 @@ from app.api_schemas import (
     SearchListResponse,
     SearchSummary,
     SessionResponse,
+    WarmHealthResponse,
 )
 
 logger = logging.getLogger(__name__)
@@ -231,6 +232,41 @@ async def health() -> HealthResponse:
         foundry_agent_configured=foundry_agent_configured(),
         foundry_agent_endpoint=build_responses_endpoint(),
     )
+
+
+@app.post("/health/warm", response_model=WarmHealthResponse)
+async def warm_health() -> WarmHealthResponse:
+    """Wake the Foundry hosted agent after ACA is up (reduces first-query cold start)."""
+    if config.BACKEND_AGENT_MODE != "foundry":
+        return WarmHealthResponse(status="skipped", warmed=False, message="local backend mode")
+
+    from app.foundry_client import (
+        FoundryAgentError,
+        foundry_agent_configured,
+        warm_foundry_agent,
+    )
+
+    if not foundry_agent_configured():
+        return WarmHealthResponse(
+            status="skipped",
+            warmed=False,
+            message="foundry hosted agent not configured",
+        )
+
+    t0 = time.perf_counter()
+    try:
+        await warm_foundry_agent()
+        latency_ms = int((time.perf_counter() - t0) * 1000)
+        return WarmHealthResponse(status="ok", warmed=True, latency_ms=latency_ms)
+    except FoundryAgentError as exc:
+        latency_ms = int((time.perf_counter() - t0) * 1000)
+        logger.warning("Foundry warm-up failed: %s", exc.code)
+        return WarmHealthResponse(
+            status="error",
+            warmed=False,
+            latency_ms=latency_ms,
+            message=exc.message,
+        )
 
 
 @app.post("/api/query", response_model=QueryResponse)

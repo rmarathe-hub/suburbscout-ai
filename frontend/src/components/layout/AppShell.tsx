@@ -2,17 +2,19 @@ import type { ReactNode } from 'react'
 
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
+import type { HealthState } from '@/hooks/useHealth'
 
 interface AppShellProps {
   children: ReactNode
   sidebar?: ReactNode
   banner?: ReactNode
+  health: HealthState
 }
 
-export function AppShell({ children, sidebar, banner }: AppShellProps) {
+export function AppShell({ children, sidebar, banner, health }: AppShellProps) {
   return (
     <div className="flex min-h-svh flex-col bg-[linear-gradient(180deg,hsl(var(--background))_0%,hsl(214_45%_95%)_42%,hsl(210_40%_98%)_100%)]">
-      <Header />
+      <Header health={health} />
       {banner}
 
       <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 sm:py-10">

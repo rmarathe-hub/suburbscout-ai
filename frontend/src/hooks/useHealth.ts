@@ -1,15 +1,28 @@
 import { useEffect, useState } from 'react'
 
-import { ApiError, getHealth, warmupBackend } from '@/api/client'
+import {
+  ApiError,
+  ensureFoundryWarm,
+  getHealth,
+  startFoundryWarmup,
+} from '@/api/client'
 import type { HealthResponse } from '@/api/types'
 
 export type HealthState =
   | { status: 'loading'; message: string }
+  | { status: 'warming'; message: string; data: HealthResponse }
   | { status: 'ok'; data: HealthResponse }
   | { status: 'error'; message: string }
 
 const CONNECTING_MESSAGE = 'Connecting to server…'
 const WAKING_MESSAGE = 'Waking up demo server…'
+const WARMING_AGENT_MESSAGE = 'Starting query agent…'
+
+function needsFoundryWarm(health: HealthResponse): boolean {
+  return (
+    health.backend_agent_mode === 'foundry' && Boolean(health.foundry_agent_configured)
+  )
+}
 
 export function useHealth(): HealthState {
   const [state, setState] = useState<HealthState>({
@@ -19,8 +32,6 @@ export function useHealth(): HealthState {
 
   useEffect(() => {
     let cancelled = false
-
-    warmupBackend()
 
     const wakeTimer = window.setTimeout(() => {
       if (!cancelled) {
@@ -33,8 +44,24 @@ export function useHealth(): HealthState {
     }, 2_500)
 
     getHealth()
-      .then((data) => {
-        if (!cancelled) setState({ status: 'ok', data })
+      .then(async (data) => {
+        if (cancelled) return
+
+        if (!needsFoundryWarm(data)) {
+          setState({ status: 'ok', data })
+          return
+        }
+
+        setState({
+          status: 'warming',
+          message: WARMING_AGENT_MESSAGE,
+          data,
+        })
+        startFoundryWarmup()
+        await ensureFoundryWarm()
+        if (!cancelled) {
+          setState({ status: 'ok', data })
+        }
       })
       .catch((error: unknown) => {
         if (cancelled) return
@@ -57,4 +84,12 @@ export function useHealth(): HealthState {
   }, [])
 
   return state
+}
+
+export function isBackendReady(health: HealthState): boolean {
+  return health.status === 'ok'
+}
+
+export function isBackendBusy(health: HealthState): boolean {
+  return health.status === 'loading' || health.status === 'warming'
 }

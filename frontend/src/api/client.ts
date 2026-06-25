@@ -5,13 +5,15 @@ import type {
   QueryResponse,
   SearchListResponse,
   SearchTrace,
+  WarmHealthResponse,
 } from '@/api/types'
 
 const DEFAULT_LOCAL_TIMEOUT_MS = 60_000
-const DEFAULT_FOUNDRY_TIMEOUT_MS = 120_000
+const DEFAULT_FOUNDRY_TIMEOUT_MS = 180_000
 const HEALTH_TIMEOUT_MS = 30_000
 const HEALTH_MAX_ATTEMPTS = 4
 const HEALTH_RETRY_BASE_DELAY_MS = 2_500
+const WARM_TIMEOUT_MS = 120_000
 const QUERY_MAX_ATTEMPTS = 3
 const QUERY_RETRY_BASE_DELAY_MS = 2_000
 
@@ -167,7 +169,28 @@ export async function getHealth(): Promise<HealthResponse> {
   )
 }
 
-/** Fire-and-forget warmup ping (e.g. on app load). Swallows errors. */
+let foundryWarmPromise: Promise<void> | null = null
+
+/** Background Foundry hosted-agent warm-up (ACA health alone does not wake the agent). */
+export function startFoundryWarmup(): void {
+  if (foundryWarmPromise) return
+  foundryWarmPromise = request<WarmHealthResponse>('/health/warm', {
+    method: 'POST',
+    timeoutMs: WARM_TIMEOUT_MS,
+  })
+    .then(() => undefined)
+    .catch(() => undefined)
+}
+
+/** Wait for in-flight Foundry warm-up before the user's first query. */
+export async function ensureFoundryWarm(): Promise<void> {
+  startFoundryWarmup()
+  if (foundryWarmPromise) {
+    await foundryWarmPromise
+  }
+}
+
+/** @deprecated Use getHealth + startFoundryWarmup */
 export function warmupBackend(): void {
   void getHealth().catch(() => {
     /* Retries and UI state are handled by useHealth */

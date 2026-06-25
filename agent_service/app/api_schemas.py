@@ -88,6 +88,15 @@ class HealthResponse(BaseModel):
     foundry_agent_endpoint: str | None = None
 
 
+class WarmHealthResponse(BaseModel):
+    """POST /health/warm — lightweight Foundry hosted-agent wake-up."""
+
+    status: Literal["ok", "error", "skipped"] = "skipped"
+    warmed: bool = False
+    latency_ms: int | None = None
+    message: str | None = None
+
+
 class SearchSummary(BaseModel):
     request_id: str
     prompt: str
