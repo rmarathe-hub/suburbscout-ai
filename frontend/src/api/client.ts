@@ -190,6 +190,11 @@ export async function ensureFoundryWarm(): Promise<void> {
   }
 }
 
+/** Clear warm-up state so a reconnect runs a fresh hosted-agent wake-up. */
+export function resetFoundryWarmup(): void {
+  foundryWarmPromise = null
+}
+
 /** @deprecated Use getHealth + startFoundryWarmup */
 export function warmupBackend(): void {
   void getHealth().catch(() => {

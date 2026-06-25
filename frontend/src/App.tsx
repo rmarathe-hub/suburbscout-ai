@@ -11,7 +11,7 @@ import { useSearch } from '@/hooks/useSearch'
 import type { SearchSummary } from '@/api/types'
 
 export default function App() {
-  const health = useHealth()
+  const { health, retry: retryHealth } = useHealth()
   const [searchRefreshKey, setSearchRefreshKey] = useState(0)
   const savedSearches = useSavedSearches(searchRefreshKey)
 
@@ -38,18 +38,24 @@ export default function App() {
     error,
     response,
     hasSearched,
-  } = useSearch(handleQuerySuccess, { isFoundryMode })
+  } = useSearch(handleQuerySuccess, { isFoundryMode, backendReady })
 
   const handleSelectSearch = useCallback(
     (search: SearchSummary) => {
+      if (!backendReady) return
       void loadSavedSearch(search)
     },
-    [loadSavedSearch],
+    [loadSavedSearch, backendReady],
   )
 
   const handleRetry = useCallback(() => {
+    if (!backendReady) return
     if (prompt.trim()) submit(prompt)
-  }, [prompt, submit])
+  }, [prompt, submit, backendReady])
+
+  const handleRetryConnection = useCallback(() => {
+    retryHealth()
+  }, [retryHealth])
 
   return (
     <AppShell
@@ -64,7 +70,12 @@ export default function App() {
         />
       }
       banner={
-        health.status === 'error' ? <ApiOfflineBanner message={health.message} /> : null
+        health.status === 'error' ? (
+          <ApiOfflineBanner
+            message={health.message}
+            onRetry={handleRetryConnection}
+          />
+        ) : null
       }
     >
       <HeroSearch
@@ -74,10 +85,12 @@ export default function App() {
         isLoading={isLoading}
         isSubmitDisabled={backendBusy || !backendReady}
         submitHint={
-          backendBusy
-            ? health.status === 'warming'
-              ? 'Starting query agent — almost ready…'
-              : 'Connecting to demo server…'
+          !backendReady
+            ? health.status === 'error'
+              ? 'Connection failed — use Retry connection above, then search again.'
+              : health.status === 'warming'
+                ? 'Starting query agent — almost ready…'
+                : 'Connecting to demo server…'
             : null
         }
         error={error}

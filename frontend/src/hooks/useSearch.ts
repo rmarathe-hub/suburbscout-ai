@@ -22,9 +22,9 @@ function readErrorMessage(err: unknown): string {
 
 export function useSearch(
   onSuccess?: (response: QueryResponse) => void,
-  options: { isFoundryMode?: boolean } = {},
+  options: { isFoundryMode?: boolean; backendReady?: boolean } = {},
 ) {
-  const { isFoundryMode = false } = options
+  const { isFoundryMode = false, backendReady = true } = options
   const [prompt, setPrompt] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null)
@@ -54,7 +54,7 @@ export function useSearch(
   const submit = useCallback(
     async (text?: string) => {
       const query = (text ?? prompt).trim()
-      if (!query || isLoading) return
+      if (!query || isLoading || !backendReady) return
 
       setPrompt(query)
       setIsLoading(true)
@@ -95,12 +95,12 @@ export function useSearch(
         setLoadingMessage(null)
       }
     },
-    [prompt, isLoading, runQuery, isFoundryMode],
+    [prompt, isLoading, runQuery, isFoundryMode, backendReady],
   )
 
   const loadSavedSearch = useCallback(
     async (search: SearchSummary) => {
-      if (isLoading) return
+      if (isLoading || !backendReady) return
 
       setPrompt(search.prompt)
       setHasSearched(true)
@@ -137,6 +137,9 @@ export function useSearch(
         setIsLoading(true)
         setLoadingMessage('Connecting to server…')
         try {
+          if (isFoundryMode) {
+            await ensureFoundryWarm()
+          }
           await runQuery(search.prompt)
         } catch (err) {
           setResponse(null)
@@ -147,7 +150,7 @@ export function useSearch(
         }
       }
     },
-    [isLoading, cacheResponse, runQuery],
+    [isLoading, cacheResponse, runQuery, backendReady, isFoundryMode],
   )
 
   const clearError = useCallback(() => setError(null), [])

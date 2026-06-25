@@ -27,13 +27,14 @@ export function HeroSearch({
 }: HeroSearchProps) {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
+    if (isSubmitDisabled || isLoading || !prompt.trim()) return
     onSubmit()
   }
 
   const submitBlocked = isLoading || isSubmitDisabled || !prompt.trim()
 
   const handleChipSelect = (text: string) => {
-    if (isSubmitDisabled) return
+    if (isSubmitDisabled || isLoading) return
     onPromptChange(text)
     onSubmit(text)
   }
